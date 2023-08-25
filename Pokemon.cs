@@ -15,18 +15,21 @@ namespace PokemonCalculator
     public class Pokemon
     {
         private string name;
+        private List<NameLanguage> names;
         private List<Types> types;
 
         public Pokemon() { }
 
-        public Pokemon(string nom, List<Types> types)
+        public Pokemon(string nom, List<Types> types, List<NameLanguage> names)
         {
             this.Name = nom;
             this.Types = types;
+            this.Names = names;
         }
 
         public string Name { get => name; set => name = value.Substring(0, 1).ToUpper() + value.Substring(1).ToLower(); }
         public List<Types> Types { get => types; set => types = value; }
+        public List<NameLanguage> Names { get => names; set => names = value; }
 
         public string GetType(int type)
         {
@@ -44,6 +47,12 @@ namespace PokemonCalculator
         public bool HasTwoTypes()
         {
             return this.Types.Count == 2 ? true : false;
+        }
+
+        public string ToFrString()
+        {
+            string frName = names.Find(x => x.Language.Name == "fr").Name;
+            return frName;
         }
     }
 }

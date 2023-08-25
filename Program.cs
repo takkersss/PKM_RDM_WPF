@@ -13,7 +13,7 @@ namespace PokemonCalculator
     {
         public static Pokemon currentPokemon;
 
-        public static double[,] table = new double[18,18]
+        public static double[,] table = new double[18, 18]
         {
             { 0.5, 2, 0.5, 1, 1, 0.5, 2, 0.5, 0.5, 0.5, 0.5, 0, 0.5, 0.5, 2, 1, 1, 0.5 }, // attaque sur Acier
             { 1, 1, 1, 1, 1, 2, 1, 1, 0.5, 1, 1, 1, 2, 0.5, 1, 1, 0.5, 2 }, // Combat
@@ -37,9 +37,10 @@ namespace PokemonCalculator
 
         static async Task Main(string[] args)
         {
-            string userEntry ="";
+            string userEntry = "";
             string type1, type2, typeAtk, pkmName;
-            do{
+            do
+            {
                 Console.Clear();
                 Console.WriteLine("1. Calculer multiplicateur");
                 Console.WriteLine("=============================");
@@ -54,15 +55,18 @@ namespace PokemonCalculator
                 Console.WriteLine("=============================");
                 Console.WriteLine("8. Résumé d'un pokémon (grâce au nom)");
                 Console.WriteLine("=============================");
+                Console.WriteLine("9. Team Aléatoire");
+                Console.WriteLine("=============================");
                 Console.WriteLine("q. Quitter");
                 Console.WriteLine("=============================");
                 userEntry = Console.ReadLine();
-                switch(userEntry){
+                switch (userEntry)
+                {
                     case "1":
                         Console.Clear();
                         AskPokemonTypes(out type1, out type2);
                         AskType(out typeAtk, false);
-                        Console.WriteLine("Multiplicateur : " + CalculMultiplicator(type1,type2,typeAtk));
+                        Console.WriteLine("Multiplicateur : " + CalculMultiplicator(type1, type2, typeAtk));
                         Console.ReadLine();
                         break;
                     /*
@@ -96,7 +100,7 @@ namespace PokemonCalculator
                         AskPokemonTypes(out type1, out type2);
                         AfficheDictionnaire(GetFaiblesses(type1, type2));
                         Console.ReadLine();
-                        break;  
+                        break;
                     case "7":
                         Console.Clear();
                         AskPokemonTypes(out type1, out type2);
@@ -112,11 +116,19 @@ namespace PokemonCalculator
                         ResumeUnPokemon(currentPokemon);
                         Console.ReadLine();
                         break;
+                    case "9":
+                        Console.Clear();
+                        foreach (Pokemon p in await GetRandomPokemonTeam())
+                        {
+                            Console.WriteLine(p.ToFrString());
+                        }
+                        Console.ReadLine();
+                        break;
                     case "q":
-                    break;
+                        break;
                 }
 
-            }while(userEntry.ToLower() != "q");
+            } while (userEntry.ToLower() != "q");
         }
 
         public static double CalculMultiplicator(TypeP type1, TypeP type2, TypeP typeAtk)
@@ -130,14 +142,17 @@ namespace PokemonCalculator
             TypeP deuxiemeType;
             TypeP atkType = TexteToType(typeAtk);
 
-            if(!String.IsNullOrEmpty(type2)){
+            if (!String.IsNullOrEmpty(type2))
+            {
                 deuxiemeType = TexteToType(type2);
-            }else{
-                return table[(int)premierType,(int)atkType];
             }
-            return table[(int)premierType,(int)atkType] * table[(int)deuxiemeType,(int)atkType];
+            else
+            {
+                return table[(int)premierType, (int)atkType];
+            }
+            return table[(int)premierType, (int)atkType] * table[(int)deuxiemeType, (int)atkType];
         }
-        
+
         /*
         public static TypeP StringToType(string type)
         {
@@ -160,9 +175,11 @@ namespace PokemonCalculator
 
         public static void AskType(out string type, bool isPokemon)
         {
-            if(isPokemon){
+            if (isPokemon)
+            {
                 Console.WriteLine("Type du pokemon :");
-            }else Console.WriteLine("Type de l'attaque :");
+            }
+            else Console.WriteLine("Type de l'attaque :");
             type = Console.ReadLine();
         }
 
@@ -219,7 +236,7 @@ namespace PokemonCalculator
             {
                 return GetResistancesAuType(type1);
             }
-        
+
             Dictionary<TypeP, double> resistances = new Dictionary<TypeP, double>();
             Dictionary<TypeP, double> resType1 = GetResistancesAuType(type1);
             Dictionary<TypeP, double> resType2 = GetResistancesAuType(type2);
@@ -229,17 +246,19 @@ namespace PokemonCalculator
             // On ajoute automatiquement les immunités des 2 types
             foreach (KeyValuePair<TypeP, double> item in resType2)
             {
-                if(item.Value == 0){
+                if (item.Value == 0)
+                {
                     resistances.Add(item.Key, 0);
                 }
             }
             foreach (KeyValuePair<TypeP, double> item in resType1)
             {
-                if(item.Value == 0){
+                if (item.Value == 0)
+                {
                     resistances.Add(item.Key, 0);
                 }
             }
-        
+
             // Ajouter les résistances du type1 qui ne sont pas faibles contre le type2
             foreach (KeyValuePair<TypeP, double> res in resType1)
             {
@@ -248,7 +267,7 @@ namespace PokemonCalculator
                     resistances[res.Key] = res.Value;
                 }
             }
-        
+
             // Ajouter les résistances du type2 qui ne sont pas faibles contre le type1
             foreach (KeyValuePair<TypeP, double> res in resType2)
             {
@@ -266,10 +285,10 @@ namespace PokemonCalculator
                     }
                 }
             }
-        
+
             return resistances;
         }
-    
+
 
         public static Dictionary<TypeP, double> GetFaiblessesAuType(TypeP type)
         {
@@ -291,11 +310,11 @@ namespace PokemonCalculator
                 double typeM = extractedRow[i];
                 if (typeM > 1)
                 {
-                    faiblesses.Add(values[i], 2);;
+                    faiblesses.Add(values[i], 2); ;
                 }
             }
 
-        return faiblesses;
+            return faiblesses;
         }
 
         public static Dictionary<TypeP, double> GetResistancesAuType(TypeP type)
@@ -305,7 +324,7 @@ namespace PokemonCalculator
 
         public static Dictionary<TypeP, double> GetResistancesAuType(string type)
         {
-            Dictionary<TypeP, double> resistances = new Dictionary<TypeP, double>(); 
+            Dictionary<TypeP, double> resistances = new Dictionary<TypeP, double>();
             double[] extractedRow = new double[table.GetLength(1)]; // On crée un tableau de longueur du nb de type
             for (int i = 0; i < table.GetLength(1); i++)
             {
@@ -316,12 +335,12 @@ namespace PokemonCalculator
             for (int i = 0; i < extractedRow.Length; i++)
             {
                 double typeM = extractedRow[i];
-                
+
                 if (typeM == 0)
                 {
                     resistances.Add(values[i], 0);
                 }
-                else if(typeM < 1)
+                else if (typeM < 1)
                 {
                     resistances.Add(values[i], 0.5);
                 }
@@ -400,11 +419,12 @@ namespace PokemonCalculator
             }
         }
 
-        public static void AfficheDictionnaire(Dictionary<TypeP, double> d){
+        public static void AfficheDictionnaire(Dictionary<TypeP, double> d)
+        {
             int i = 0;
-            foreach(KeyValuePair<TypeP, double> paire in d)
+            foreach (KeyValuePair<TypeP, double> paire in d)
             {
-                Console.Write(paire.Key + " x"+paire.Value);
+                Console.Write(paire.Key + " x" + paire.Value);
                 // Vérifier si c'est le dernier élément
                 if (i < d.Count - 1)
                 {
@@ -414,7 +434,7 @@ namespace PokemonCalculator
             }
         }
 
-        
+
         public static Dictionary<TypeP, double> ListToDictionary(List<TypeP> list, bool isResistance)
         {
             double multiplicator = isResistance ? 0.5 : 2;
@@ -424,7 +444,7 @@ namespace PokemonCalculator
             {
                 if (dictionary.ContainsKey(type))
                 {
-                    dictionary[type]*=multiplicator;
+                    dictionary[type] *= multiplicator;
                 }
                 else
                 {
@@ -442,7 +462,7 @@ namespace PokemonCalculator
             {
                 if (dictionary.ContainsKey(type))
                 {
-                    dictionary[type]*=multiplicator;
+                    dictionary[type] *= multiplicator;
                 }
                 else
                 {
@@ -455,11 +475,11 @@ namespace PokemonCalculator
         public static Dictionary<TypeP, double> AddDictionaryToDictionary(Dictionary<TypeP, double> sourceDictionary, Dictionary<TypeP, double> targetDictionary, bool isResistance)
         {
             double multiplicator = isResistance ? 0.5 : 2;
-        
+
             foreach (KeyValuePair<TypeP, double> kvp in sourceDictionary)
             {
                 TypeP type = kvp.Key;
-        
+
                 if (targetDictionary.ContainsKey(type))
                 {
                     targetDictionary[type] *= multiplicator;
@@ -469,46 +489,30 @@ namespace PokemonCalculator
                     targetDictionary[type] = multiplicator;
                 }
             }
-        
+
             return targetDictionary;
         }
 
-        public static bool TypeFaibleA(TypeP typeDefense, TypeP typeAttaque){
+        public static bool TypeFaibleA(TypeP typeDefense, TypeP typeAttaque)
+        {
             List<TypeP> list = DictionaryToTypeList(GetResistancesAuType(typeDefense));
-            if(list.Contains(typeAttaque)){
+            if (list.Contains(typeAttaque))
+            {
                 return true;
-            }else return false;
+            }
+            else return false;
         }
 
-        public static List<TypeP> DictionaryToTypeList(Dictionary<TypeP, double> d){
+        public static List<TypeP> DictionaryToTypeList(Dictionary<TypeP, double> d)
+        {
             List<TypeP> types = new List<TypeP>();
-            foreach(KeyValuePair<TypeP, double> kvp in d)
+            foreach (KeyValuePair<TypeP, double> kvp in d)
             {
                 TypeP type = kvp.Key;
                 types.Add(type);
-            }   
+            }
             return types;
         }
-
-        public static async Task<Pokemon> GetPokemonByName(string name)
-        {
-
-            using (HttpClient client = new HttpClient())
-            {
-                HttpResponseMessage response = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{name}");
-                if (response.IsSuccessStatusCode)
-                {
-                    string content = await response.Content.ReadAsStringAsync();
-                    currentPokemon = JsonConvert.DeserializeObject<Pokemon>(content);
-                }
-                else
-                {
-                    Console.WriteLine("Une erreur s'est produite lors de la récupération des informations du Pokémon.");
-                }
-            }
-            return currentPokemon;
-        }
-
 
         public static void ResumeUnPokemon(Pokemon p)
         {
@@ -516,22 +520,145 @@ namespace PokemonCalculator
             Console.Write("Types : ");
             foreach (Types types in currentPokemon.Types)
             {
-                if(types == currentPokemon.Types.Last() && currentPokemon.HasTwoTypes())
+                if (types == currentPokemon.Types.Last() && currentPokemon.HasTwoTypes())
                 {
                     Console.Write(" , " + types.Type.Name);
-                }else Console.Write(types.Type.Name); 
+                }
+                else Console.Write(types.Type.Name);
             }
             Console.WriteLine("\n==================================");
             Console.WriteLine("------- FAIBLESSES -------");
-            if(currentPokemon.HasTwoTypes()) AfficheDictionnaire(GetFaiblesses(p.GetType(1), p.GetType(2)));
+            if (currentPokemon.HasTwoTypes()) AfficheDictionnaire(GetFaiblesses(p.GetType(1), p.GetType(2)));
             else AfficheDictionnaire(GetFaiblessesAuType(p.GetType(1)));
 
             Console.WriteLine("\n------- RESISTANCES -------");
             if (currentPokemon.HasTwoTypes()) AfficheDictionnaire(GetResistances(p.GetType(1), p.GetType(2)));
             else AfficheDictionnaire(GetResistancesAuType(p.GetType(1)));
-            
+
             Console.WriteLine();
         }
-    }
 
+        /*
+        public static List<string> ConvertPokemonListToFr(List<Pokemon> pokemons)
+        {
+            List<Pokemon> pokemonsTrad = new List<Pokemon>();
+
+            foreach (Pokemon pok in pokemons)
+            {
+
+                pokemonsTrad.Add();
+            }
+        }*/
+
+        public static async Task<List<Pokemon>> GetRandomPokemonTeam()
+        {
+            List<Pokemon> equipePokemonAleatoire = new List<Pokemon>();
+            Random random = new Random();
+
+            for (int i = 0; i < 6; i++)
+            {
+                equipePokemonAleatoire.Add(await GetRandomPokemon());
+            }
+
+            return equipePokemonAleatoire;
+        }
+
+        public static async Task<Pokemon> GetRandomPokemon()
+        {
+            Random random = new Random();
+            int idPokemonAleatoire = random.Next(1, 1020); // Il y a actuellement 1020 Pokémon répertoriés dans l'API
+
+            Pokemon pokemonAleatoire = await GetPokemonById(idPokemonAleatoire);
+            if (pokemonAleatoire != null)
+            {
+                return pokemonAleatoire;
+            }
+            else return null;
+        }
+
+        public static async Task<Pokemon> GetPokemonById(int id)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon-species/{id}");
+                if (reponse.IsSuccessStatusCode)
+                {
+                    string contenu = await reponse.Content.ReadAsStringAsync();
+                    Pokemon pokemon = JsonConvert.DeserializeObject<Pokemon>(contenu);
+                    return pokemon;
+                }
+                else
+                {
+                    Console.WriteLine("Une erreur s'est produite lors de la récupération des informations du Pokémon.");
+                    return null;
+                }
+            }
+        }
+
+        public static async Task<Pokemon> GetPokemonByName(string nom)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{nom}");
+                if (reponse.IsSuccessStatusCode)
+                {
+                    string contenu = await reponse.Content.ReadAsStringAsync();
+                    Pokemon pokemon = JsonConvert.DeserializeObject<Pokemon>(contenu);
+                    return pokemon;
+                }
+                else
+                {
+                    Console.WriteLine("Une erreur s'est produite lors de la récupération des informations du Pokémon.");
+                    return null;
+                }
+            }
+        }
+
+        public static async Task<string> GetPokemonNameById(int id, string? lang)
+        {
+            int langId;
+            if (lang != "en")
+            {
+                langId = 3;
+            }
+            else langId = 5;
+
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon-species/{id}");
+                if (reponse.IsSuccessStatusCode)
+                {
+                    string contenu = await reponse.Content.ReadAsStringAsync();
+                    dynamic especePokemon = JsonConvert.DeserializeObject(contenu);
+                    return especePokemon.name;
+                }
+                else
+                {
+                    Console.WriteLine($"Erreur lors de la récupération du nom du Pokémon avec l'ID {id}.");
+                    return null;
+                }
+            }
+        }
+
+        public static async Task<int> GetPokemonIdByName(string nom)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{nom}");
+                if (reponse.IsSuccessStatusCode)
+                {
+                    string contenu = await reponse.Content.ReadAsStringAsync();
+                    dynamic especePokemon = JsonConvert.DeserializeObject(contenu);
+                    return especePokemon.id;
+                }
+                else
+                {
+                    Console.WriteLine($"Erreur lors de la récupération de l'ID du Pokémon avec le nom {nom}.");
+                    return 0;
+                }
+            }
+        }
+    }
 }
+
+
