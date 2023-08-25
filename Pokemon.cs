@@ -1,35 +1,36 @@
-﻿
-using POKEMON_CALCULATOR;
+﻿using Newtonsoft.Json;
+using PokemonCalculator;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace PokemonCalculator
+namespace POKEMON_CALCULATOR
 {
-    public enum TypeP
-    {
-        Steel, Fighting, Dragon, Water, Electric, Fairy, Fire, Ice, Bug,
-        Normal, Grass, Poison, Psychic, Rock, Ground, Ghost, Dark, Flying
-    }
-
     public class Pokemon
     {
         private string name;
-        private List<NameLanguage> names;
+        private int id;
+        private Sprite sprites;
+        private PokemonSpecies pSpecies;
         private List<Types> types;
 
-        public Pokemon() { }
-
-        public Pokemon(string nom, List<Types> types, List<NameLanguage> names)
+        public Pokemon()
         {
-            this.Name = nom;
-            this.Types = types;
-            this.Names = names;
         }
 
-        public string Name { get => name; set => name = value.Substring(0, 1).ToUpper() + value.Substring(1).ToLower(); }
+        public string Name { get => name; set => name = value; }
+        public int Id { get => id; set => id = value; }
+        public Sprite Sprites { get => sprites; set => sprites = value; }
+        public PokemonSpecies PSpecies { get => pSpecies; set => pSpecies = value; }
         public List<Types> Types { get => types; set => types = value; }
-        public List<NameLanguage> Names { get => names; set => names = value; }
+
+        public async Task SetSpecies()
+        {
+            pSpecies = await GetPokemonSpeciesById(Id);
+        }
 
         public string GetType(int type)
         {
@@ -51,8 +52,27 @@ namespace PokemonCalculator
 
         public string ToFrString()
         {
-            string frName = names.Find(x => x.Language.Name == "fr").Name;
+            string frName = PSpecies.Names.Find(x => x.Language.Name == "fr").Name;
             return frName;
+        }
+
+        public static async Task<PokemonSpecies> GetPokemonSpeciesById(int id)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon-species/{id}");
+                if (reponse.IsSuccessStatusCode)
+                {
+                    string contenu = await reponse.Content.ReadAsStringAsync();
+                    PokemonSpecies especePokemon = JsonConvert.DeserializeObject<PokemonSpecies>(contenu);
+                    return especePokemon;
+                }
+                else
+                {
+                    Console.WriteLine($"Erreur lors de la récupération du Pokémon avec l'ID {id}.");
+                    return null;
+                }
+            }
         }
     }
 }

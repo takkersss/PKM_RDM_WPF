@@ -2,10 +2,10 @@
 using POKEMON_CALCULATOR;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using static PokemonCalculator.Pokemon;
 
 namespace PokemonCalculator
 {
@@ -566,11 +566,12 @@ namespace PokemonCalculator
         public static async Task<Pokemon> GetRandomPokemon()
         {
             Random random = new Random();
-            int idPokemonAleatoire = random.Next(1, 1020); // Il y a actuellement 1020 Pokémon répertoriés dans l'API
+            int idPokemonAleatoire = random.Next(1, 1011); // Il y a actuellement 1020 Pokémon répertoriés dans l'API
 
             Pokemon pokemonAleatoire = await GetPokemonById(idPokemonAleatoire);
             if (pokemonAleatoire != null)
             {
+                await pokemonAleatoire.SetSpecies();
                 return pokemonAleatoire;
             }
             else return null;
@@ -580,11 +581,12 @@ namespace PokemonCalculator
         {
             using (HttpClient client = new HttpClient())
             {
-                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon-species/{id}");
+                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{id}");
                 if (reponse.IsSuccessStatusCode)
                 {
                     string contenu = await reponse.Content.ReadAsStringAsync();
                     Pokemon pokemon = JsonConvert.DeserializeObject<Pokemon>(contenu);
+                    await pokemon.SetSpecies();
                     return pokemon;
                 }
                 else
@@ -604,6 +606,8 @@ namespace PokemonCalculator
                 {
                     string contenu = await reponse.Content.ReadAsStringAsync();
                     Pokemon pokemon = JsonConvert.DeserializeObject<Pokemon>(contenu);
+                    await pokemon.SetSpecies();
+                    currentPokemon = pokemon;
                     return pokemon;
                 }
                 else
@@ -625,7 +629,7 @@ namespace PokemonCalculator
 
             using (HttpClient client = new HttpClient())
             {
-                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon-species/{id}");
+                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{id}");
                 if (reponse.IsSuccessStatusCode)
                 {
                     string contenu = await reponse.Content.ReadAsStringAsync();
