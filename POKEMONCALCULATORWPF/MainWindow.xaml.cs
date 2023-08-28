@@ -71,16 +71,16 @@ namespace POKEMONCALCULATORWPF
             isBtnRandomTeamBusy = false;
         }
 
-        private async Task LoadProperties()
+        private void LoadProperties()
         {
             foreach (Pokemon p in applicationData.PokemonTeam)
             {
                 p.SetFrName();
-                p.ResumePokemon();
+                p.SetDoubleTypesSpecifiations();
             }
         }
 
-        private async void teamListBox_Loaded(object sender, RoutedEventArgs e)
+        private void teamListBox_Loaded(object sender, RoutedEventArgs e)
         {
             RefreshListView();
         }
@@ -95,7 +95,7 @@ namespace POKEMONCALCULATORWPF
         private async void RefreshListView()
         {
             await RandomTeamRefresh();
-            await LoadProperties();
+            LoadProperties();
             teamListImageView.SelectedIndex = -1;
             teamListImageView.SelectedIndex = 0; // actualisation
         }

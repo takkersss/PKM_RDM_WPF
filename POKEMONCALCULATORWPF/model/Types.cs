@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 
 namespace POKEMONCALCULATORWPF.model
 {
-    [JsonConverter(typeof(StringEnumConverter))]
     public enum TypeP
     {
         Steel, Fighting, Dragon, Water, Electric, Fairy, Fire, Ice, Bug,

@@ -34,6 +34,13 @@ namespace POKEMONCALCULATORWPF.model
         private string frName, typeChartResume;
         public string FrName { get => frName; set => frName = value; }
         public string TypeChartResume { get => typeChartResume; set => typeChartResume = value; }
+        public List<TypeP> ResistancesX2 { get => resistancesX2; set => resistancesX2 = value; }
+        public List<TypeP> ResistancesX4 { get => resistancesX4; set => resistancesX4 = value; }
+        public List<TypeP> FaiblessesX2 { get => faiblessesX2; set => faiblessesX2 = value; }
+        public List<TypeP> FaiblessesX4 { get => faiblessesX4; set => faiblessesX4 = value; }
+        public List<TypeP> Immunites { get => immunites; set => immunites = value; }
+
+        private List<TypeP> resistancesX2, resistancesX4, faiblessesX2, faiblessesX4, immunites;
 
 
         public async Task SetSpecies()
@@ -79,118 +86,53 @@ namespace POKEMONCALCULATORWPF.model
             return Name;
         }
 
-        // FAIBLESSES
-
-        public Dictionary<TypeP, double> GetFaiblesses()
+        public void SetDoubleTypesSpecifiations()
         {
-            if (Types[1] == null)
+            ResistancesX2 = new List<TypeP>();
+            ResistancesX4 = new List<TypeP>();
+            FaiblessesX2 = new List<TypeP>();
+            FaiblessesX4 = new List<TypeP>();
+            Immunites = new List<TypeP>();
+
+            Dictionary<TypeP, double> resistances, faiblesses;
+
+            if (HasTwoTypes())
             {
-                return MainPokemonCalc.GetFaiblessesAuType(Types[0].Type.Name);
+                resistances = MainPokemonCalc.GetResistances(Types[0].Type.Name, Types[1].Type.Name);
+                faiblesses = MainPokemonCalc.GetFaiblesses(Types[0].Type.Name, Types[1].Type.Name);
+            }
+            else
+            {
+                resistances = MainPokemonCalc.GetResistances(Types[0].Type.Name, "");
+                faiblesses = MainPokemonCalc.GetFaiblesses(Types[0].Type.Name, "");
             }
 
-            Dictionary<TypeP, double> faiblesses = new Dictionary<TypeP, double>();
-            Dictionary<TypeP, double> faiblessesType1 = MainPokemonCalc.GetFaiblessesAuType(this.Types[0].Type.Name);
-            Dictionary<TypeP, double> faiblessesType2 = MainPokemonCalc.GetFaiblessesAuType(this.Types[1].Type.Name);
-
-            // faiblesses = faiblessesType1 + faiblessesType2
-            faiblesses = faiblessesType1;
-            faiblesses = MainPokemonCalc.AddDictionaryToDictionary(faiblesses, faiblessesType2, false);
-
-            Dictionary<TypeP, double> resistancesType1 = MainPokemonCalc.GetResistancesAuType(this.Types[0].Type.Name);
-            Dictionary<TypeP, double> resistancesType2 = MainPokemonCalc.GetResistancesAuType(this.Types[1].Type.Name);
-
-            foreach (var faiblesse in faiblessesType1)
+            foreach (KeyValuePair <TypeP,double> kvp in resistances)
             {
-                if (resistancesType2.ContainsKey(faiblesse.Key))
+                if (kvp.Value == 0.5)
                 {
-                    faiblesses.Remove(faiblesse.Key);
+                    ResistancesX2.Add(kvp.Key);
+                }
+                if (kvp.Value == 0.25)
+                {
+                    ResistancesX4.Add(kvp.Key);
+                }
+                if (kvp.Value == 0)
+                {
+                    Immunites.Add(kvp.Key);
                 }
             }
-
-            foreach (var faiblesse in faiblessesType2)
+            foreach (KeyValuePair<TypeP, double> kvp in faiblesses)
             {
-                if (resistancesType1.ContainsKey(faiblesse.Key))
+                if (kvp.Value == 2)
                 {
-                    faiblesses.Remove(faiblesse.Key);
+                    FaiblessesX2.Add(kvp.Key);
+                }
+                if (kvp.Value == 4)
+                {
+                    FaiblessesX4.Add(kvp.Key);
                 }
             }
-
-            return faiblesses;
-        }
-
-        // RESISTANCES
-
-        public Dictionary<TypeP, double> GetResistances()
-        {
-            if (Types[1] == null)
-            {
-                return MainPokemonCalc.GetResistancesAuType(Types[0].Type.Name);
-            }
-
-            Dictionary<TypeP, double> resistances = new Dictionary<TypeP, double>();
-            Dictionary<TypeP, double> resType1 = MainPokemonCalc.GetResistancesAuType(this.Types[0].Type.Name);
-            Dictionary<TypeP, double> resType2 = MainPokemonCalc.GetResistancesAuType(this.Types[1].Type.Name);
-            Dictionary<TypeP, double> faiblesseType1 = MainPokemonCalc.GetFaiblessesAuType(this.Types[0].Type.Name);
-            Dictionary<TypeP, double> faiblesseType2 = MainPokemonCalc.GetFaiblessesAuType(this.Types[1].Type.Name);
-
-            // On ajoute automatiquement les immunités des 2 types
-            foreach (KeyValuePair<TypeP, double> item in resType2)
-            {
-                if (item.Value == 0)
-                {
-                    resistances.Add(item.Key, 0);
-                }
-            }
-            foreach (KeyValuePair<TypeP, double> item in resType1)
-            {
-                if (item.Value == 0)
-                {
-                    resistances.Add(item.Key, 0);
-                }
-            }
-
-            // Ajouter les résistances du type1 qui ne sont pas faibles contre le type2
-            foreach (KeyValuePair<TypeP, double> res in resType1)
-            {
-                if (!faiblesseType2.ContainsKey(res.Key))
-                {
-                    resistances[res.Key] = res.Value;
-                }
-            }
-
-            // Ajouter les résistances du type2 qui ne sont pas faibles contre le type1
-            foreach (KeyValuePair<TypeP, double> res in resType2)
-            {
-                if (!faiblesseType1.ContainsKey(res.Key))
-                {
-                    if (resistances.ContainsKey(res.Key))
-                    {
-                        // Si la résistance est déjà présente, on multiplie les multiplicateurs
-                        resistances[res.Key] *= res.Value;
-                    }
-                    else
-                    {
-                        // Sinon, on ajoute la résistance
-                        resistances[res.Key] = res.Value;
-                    }
-                }
-            }
-
-            return resistances;
-        }
-
-        public void ResumePokemon()
-        {
-            string txt = "";
-            txt += "------- FAIBLESSES -------";
-            if (HasTwoTypes()) txt += MainPokemonCalc.DictionnaireToString(GetFaiblesses());
-            else txt += MainPokemonCalc.DictionnaireToString(MainPokemonCalc.GetFaiblessesAuType(this.Types[0].Type.Name));
-
-            txt += "------- RESISTANCES -------";
-            if (HasTwoTypes()) txt += MainPokemonCalc.DictionnaireToString(GetResistances());
-            else txt += MainPokemonCalc.DictionnaireToString(MainPokemonCalc.GetResistancesAuType(this.Types[0].Type.Name));
-
-            TypeChartResume = txt;
         }
 
 
