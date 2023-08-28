@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace POKEMONCALCULATORWPF.model
 {
-    class MainPokemonCalc
+    public class MainPokemonCalc
     {
         public static Pokemon currentPokemon;
 
@@ -159,10 +159,19 @@ namespace POKEMONCALCULATORWPF.model
             return (TypeP)Enum.Parse(typeof(TypeP), type.ToLower());
         }
         */
+        
 
         public static TypeP TexteToType(string type1)
         {
-            return (TypeP)Enum.Parse(typeof(TypeP), (type1.Substring(0, 1).ToUpper() + type1.Substring(1).ToLower()));
+            try
+            {
+                return (TypeP)Enum.Parse(typeof(TypeP), type1);
+                // Utilisez typeEnum ici
+            }
+            catch (ArgumentException ex)
+            {
+                throw new ArgumentException(type1);
+            }
         }
 
         public static void AskPokemonTypes(out string type1, out string type2)
@@ -335,6 +344,23 @@ namespace POKEMONCALCULATORWPF.model
                 }
                 i++;
             }
+        }
+
+        public static String DictionnaireToString(Dictionary<TypeP, double> d)
+        {
+            int i = 0;
+            string txt ="";
+            foreach (KeyValuePair<TypeP, double> paire in d)
+            {
+                txt += paire.Key + " x" + paire.Value;
+                // Vérifier si c'est le dernier élément
+                if (i < d.Count - 1)
+                {
+                    txt += ", ";
+                }
+                i++;
+            }
+            return txt;
         }
 
 

@@ -112,6 +112,9 @@
                         </Grid>
                     </StackPanel>
                 </Grid>
+                <Grid Grid.Row="2" Margin="0,289,0,0" DataContext="{Binding SelectedItem, ElementName=teamListImageView}">
+                    <Label Content="{Binding TypeChartResume}"></Label>
+                </Grid>
 
             </Grid>
 

@@ -5,12 +5,6 @@ using System.Linq;
 
 namespace POKEMONCALCULATORWPF.model
 {
-    public enum TypeP
-    {
-        Steel, Fighting, Dragon, Water, Electric, Fairy, Fire, Ice, Bug,
-        Normal, Grass, Poison, Psychic, Rock, Ground, Ghost, Dark, Flying
-    }
-
     public class PokemonSpecies
     {
         private string name;

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +8,13 @@ using System.Threading.Tasks;
 
 namespace POKEMONCALCULATORWPF.model
 {
+    [JsonConverter(typeof(StringEnumConverter))]
+    public enum TypeP
+    {
+        Steel, Fighting, Dragon, Water, Electric, Fairy, Fire, Ice, Bug,
+        Normal, Grass, Poison, Psychic, Rock, Ground, Ghost, Dark, Flying
+    }
+
     public class Types
     {
         private int slot;

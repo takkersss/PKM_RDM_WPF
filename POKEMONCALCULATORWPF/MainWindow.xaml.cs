@@ -75,7 +75,8 @@ namespace POKEMONCALCULATORWPF
         {
             foreach (Pokemon p in applicationData.PokemonTeam)
             {
-                p.FrName = p.ToFrString();
+                p.SetFrName();
+                p.ResumePokemon();
             }
         }
 

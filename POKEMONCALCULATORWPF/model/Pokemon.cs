@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using static POKEMONCALCULATORWPF.model.MainPokemonCalc;
 
 namespace POKEMONCALCULATORWPF.model
 {
@@ -30,8 +31,9 @@ namespace POKEMONCALCULATORWPF.model
 
 
         // WPF
-        private string frName;
+        private string frName, typeChartResume;
         public string FrName { get => frName; set => frName = value; }
+        public string TypeChartResume { get => typeChartResume; set => typeChartResume = value; }
 
 
         public async Task SetSpecies()
@@ -39,29 +41,18 @@ namespace POKEMONCALCULATORWPF.model
             pSpecies = await GetPokemonSpeciesById(Id);
         }
 
-        public string GetType(int type)
-        {
-            String leType;
-
-            if (HasTwoTypes())
-            {
-                leType = this.Types[type - 1].Type.Name;
-            }
-            else leType = this.Types[0].Type.Name;
-
-            return leType;
-        }
-
         public bool HasTwoTypes()
         {
             return this.Types.Count == 2 ? true : false;
         }
 
-        public string ToFrString()
+        private string ToFrString()
         {
             string frName = PSpecies.Names.Find(x => x.Language.Name == "Fr").Name;
             return frName;
         }
+
+        public void SetFrName() { FrName = ToFrString();}
 
         // Méthode pour récupérer l'espèce du pokemon à partir de son id
         public static async Task<PokemonSpecies> GetPokemonSpeciesById(int id)
@@ -94,19 +85,19 @@ namespace POKEMONCALCULATORWPF.model
         {
             if (Types[1] == null)
             {
-                return MainPokemonCalc.GetFaiblessesAuType(Types[0].ToString());
+                return MainPokemonCalc.GetFaiblessesAuType(Types[0].Type.Name);
             }
 
             Dictionary<TypeP, double> faiblesses = new Dictionary<TypeP, double>();
-            Dictionary<TypeP, double> faiblessesType1 = MainPokemonCalc.GetFaiblessesAuType(Types[0].ToString());
-            Dictionary<TypeP, double> faiblessesType2 = MainPokemonCalc.GetFaiblessesAuType(Types[1].ToString());
+            Dictionary<TypeP, double> faiblessesType1 = MainPokemonCalc.GetFaiblessesAuType(this.Types[0].Type.Name);
+            Dictionary<TypeP, double> faiblessesType2 = MainPokemonCalc.GetFaiblessesAuType(this.Types[1].Type.Name);
 
             // faiblesses = faiblessesType1 + faiblessesType2
             faiblesses = faiblessesType1;
             faiblesses = MainPokemonCalc.AddDictionaryToDictionary(faiblesses, faiblessesType2, false);
 
-            Dictionary<TypeP, double> resistancesType1 = MainPokemonCalc.GetResistancesAuType(Types[0].ToString());
-            Dictionary<TypeP, double> resistancesType2 = MainPokemonCalc.GetResistancesAuType(Types[1].ToString());
+            Dictionary<TypeP, double> resistancesType1 = MainPokemonCalc.GetResistancesAuType(this.Types[0].Type.Name);
+            Dictionary<TypeP, double> resistancesType2 = MainPokemonCalc.GetResistancesAuType(this.Types[1].Type.Name);
 
             foreach (var faiblesse in faiblessesType1)
             {
@@ -133,14 +124,14 @@ namespace POKEMONCALCULATORWPF.model
         {
             if (Types[1] == null)
             {
-                return MainPokemonCalc.GetResistancesAuType(Types[0].ToString());
+                return MainPokemonCalc.GetResistancesAuType(Types[0].Type.Name);
             }
 
             Dictionary<TypeP, double> resistances = new Dictionary<TypeP, double>();
-            Dictionary<TypeP, double> resType1 = MainPokemonCalc.GetResistancesAuType(Types[0].ToString());
-            Dictionary<TypeP, double> resType2 = MainPokemonCalc.GetResistancesAuType(Types[1].ToString());
-            Dictionary<TypeP, double> faiblesseType1 = MainPokemonCalc.GetFaiblessesAuType(Types[0].ToString());
-            Dictionary<TypeP, double> faiblesseType2 = MainPokemonCalc.GetFaiblessesAuType(Types[1].ToString());
+            Dictionary<TypeP, double> resType1 = MainPokemonCalc.GetResistancesAuType(this.Types[0].Type.Name);
+            Dictionary<TypeP, double> resType2 = MainPokemonCalc.GetResistancesAuType(this.Types[1].Type.Name);
+            Dictionary<TypeP, double> faiblesseType1 = MainPokemonCalc.GetFaiblessesAuType(this.Types[0].Type.Name);
+            Dictionary<TypeP, double> faiblesseType2 = MainPokemonCalc.GetFaiblessesAuType(this.Types[1].Type.Name);
 
             // On ajoute automatiquement les immunités des 2 types
             foreach (KeyValuePair<TypeP, double> item in resType2)
@@ -186,6 +177,20 @@ namespace POKEMONCALCULATORWPF.model
             }
 
             return resistances;
+        }
+
+        public void ResumePokemon()
+        {
+            string txt = "";
+            txt += "------- FAIBLESSES -------";
+            if (HasTwoTypes()) txt += MainPokemonCalc.DictionnaireToString(GetFaiblesses());
+            else txt += MainPokemonCalc.DictionnaireToString(MainPokemonCalc.GetFaiblessesAuType(this.Types[0].Type.Name));
+
+            txt += "------- RESISTANCES -------";
+            if (HasTwoTypes()) txt += MainPokemonCalc.DictionnaireToString(GetResistances());
+            else txt += MainPokemonCalc.DictionnaireToString(MainPokemonCalc.GetResistancesAuType(this.Types[0].Type.Name));
+
+            TypeChartResume = txt;
         }
 
 
