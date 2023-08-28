@@ -24,10 +24,13 @@ namespace POKEMONCALCULATORWPF
     public partial class MainWindow : Window
     {
         private bool isBtnRandomTeamBusy;
+        WindowSwitchPokemon winSwitch;
 
         public MainWindow()
         {
             InitializeComponent();
+            Show();
+            winSwitch = new WindowSwitchPokemon(this, applicationData);
         }
 
         private async void RandomTeamBtn_Click(object sender, RoutedEventArgs e)
@@ -80,8 +83,9 @@ namespace POKEMONCALCULATORWPF
             }
         }
 
-        private void teamListBox_Loaded(object sender, RoutedEventArgs e)
+        private async void teamListBox_Loaded(object sender, RoutedEventArgs e)
         {
+            applicationData.AllPokemonName = new ObservableCollection<String>(await MainPokemonCalc.GetAllPokemonName());
             RefreshListView();
         }
 
@@ -98,6 +102,15 @@ namespace POKEMONCALCULATORWPF
             LoadProperties();
             teamListImageView.SelectedIndex = -1;
             teamListImageView.SelectedIndex = 0; // actualisation
+        }
+
+        private void lvOpenSwitchWindow(object sender, MouseButtonEventArgs e)
+        {
+            var item = sender as ListViewItem;
+            if (item != null && item.IsSelected)
+            {
+                winSwitch.ShowDialog();
+            }
         }
     }
 }

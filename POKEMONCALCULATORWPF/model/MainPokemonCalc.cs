@@ -710,6 +710,37 @@ namespace POKEMONCALCULATORWPF.model
                 }
             }
         }
+
+        public static async Task<AllPokemon> GetAllPokemonNameUrl()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon?limit=1010");
+                if (reponse.IsSuccessStatusCode)
+                {
+                    string contenu = await reponse.Content.ReadAsStringAsync();
+                    AllPokemon allPokemon = JsonConvert.DeserializeObject<AllPokemon>(contenu);
+                    return allPokemon;
+                }
+                else
+                {
+                    Console.WriteLine("Une erreur s'est produite lors de la récupération des informations du Pokémon.");
+                    return null;
+                }
+            }
+        }
+
+        public static async Task<List<string>> GetAllPokemonName()
+        {
+            AllPokemon allPokemonNameUrl = await GetAllPokemonNameUrl();
+            List<string> allPokemonName = new List<string>();
+            foreach (NameUrl pokemon in allPokemonNameUrl.Results)
+            {
+                allPokemonName.Add(pokemon.Name);
+            }
+            //throw new Exception(allPokemonName[1009]);
+            return allPokemonName;
+        }
     }
 }
 

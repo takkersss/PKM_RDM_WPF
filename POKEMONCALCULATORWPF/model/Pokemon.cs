@@ -62,7 +62,7 @@ namespace POKEMONCALCULATORWPF.model
         public void SetFrName() { FrName = ToFrString();}
 
         // Méthode pour récupérer l'espèce du pokemon à partir de son id
-        public static async Task<PokemonSpecies> GetPokemonSpeciesById(int id)
+        public static async Task<PokemonSpecies> GetPokemonSpeciesById(int id) //url de pokemonspecies à mettre à la place
         {
             using (HttpClient client = new HttpClient())
             {

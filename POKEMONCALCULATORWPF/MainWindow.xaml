@@ -46,6 +46,11 @@
                             <Image Source="{Binding Sprites.Front_default}" Width="100" Height="100"/>
                         </DataTemplate>
                     </ListView.ItemTemplate>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <EventSetter Event="PreviewMouseDoubleClick" Handler="lvOpenSwitchWindow" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
                 </ListView>
 
                 <!-- DESC RAPIDE -->
