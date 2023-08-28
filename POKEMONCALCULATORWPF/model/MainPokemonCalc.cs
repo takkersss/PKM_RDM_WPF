@@ -34,6 +34,7 @@ namespace POKEMONCALCULATORWPF.model
             { 1, 0.5, 1, 1, 2, 1, 1, 2, 0.5, 1, 0.5, 1, 1, 2, 0, 1, 1, 1 } // Vol
         };
 
+        /*
         static async Task Main(string[] args)
         {
             string userEntry = "";
@@ -45,7 +46,7 @@ namespace POKEMONCALCULATORWPF.model
                 Console.WriteLine("=============================");
                 /*Console.WriteLine("2. Obtenir faiblesses du type");
                 Console.WriteLine("3. Obtenir resistances du type");
-                Console.WriteLine("-----------------------------");*/
+                Console.WriteLine("-----------------------------");
                 Console.WriteLine("4. Obtenir attaques efficaces sur type");
                 Console.WriteLine("5. Obtenir attaques peu efficace sur type");
                 Console.WriteLine("=============================");
@@ -68,7 +69,7 @@ namespace POKEMONCALCULATORWPF.model
                         Console.WriteLine("Multiplicateur : " + CalculMultiplicator(type1, type2, typeAtk));
                         Console.ReadLine();
                         break;
-                    /*
+                    
                     case "2":
                         Console.Clear();
                         AskType(out type1, true);
@@ -81,7 +82,7 @@ namespace POKEMONCALCULATORWPF.model
                         AfficheDictionnaire(GetResistancesAuType(type1));
                         Console.ReadLine();
                         break;
-                    */
+                    
                     case "4":
                         Console.Clear();
                         AskType(out typeAtk, false);
@@ -128,7 +129,7 @@ namespace POKEMONCALCULATORWPF.model
                 }
 
             } while (userEntry.ToLower() != "q");
-        }
+        }*/
 
         public static double CalculMultiplicator(TypeP type1, TypeP type2, TypeP typeAtk)
         {
@@ -182,112 +183,7 @@ namespace POKEMONCALCULATORWPF.model
             type = Console.ReadLine();
         }
 
-        public static Dictionary<TypeP, double> GetFaiblesses(TypeP type1, TypeP type2)
-        {
-            return GetFaiblesses(type1.ToString(), type2.ToString());
-        }
-
-        public static Dictionary<TypeP, double> GetFaiblesses(string type1, string type2)
-        {
-            if (String.IsNullOrEmpty(type2))
-            {
-                return GetFaiblessesAuType(type1);
-            }
-
-            Dictionary<TypeP, double> faiblesses = new Dictionary<TypeP, double>();
-            Dictionary<TypeP, double> faiblessesType1 = GetFaiblessesAuType(type1);
-            Dictionary<TypeP, double> faiblessesType2 = GetFaiblessesAuType(type2);
-
-            // faiblesses = faiblessesType1 + faiblessesType2
-            faiblesses = faiblessesType1;
-            faiblesses = AddDictionaryToDictionary(faiblesses, faiblessesType2, false);
-
-            Dictionary<TypeP, double> resistancesType1 = GetResistancesAuType(type1);
-            Dictionary<TypeP, double> resistancesType2 = GetResistancesAuType(type2);
-
-            foreach (var faiblesse in faiblessesType1)
-            {
-                if (resistancesType2.ContainsKey(faiblesse.Key))
-                {
-                    faiblesses.Remove(faiblesse.Key);
-                }
-            }
-
-            foreach (var faiblesse in faiblessesType2)
-            {
-                if (resistancesType1.ContainsKey(faiblesse.Key))
-                {
-                    faiblesses.Remove(faiblesse.Key);
-                }
-            }
-
-            return faiblesses;
-        }
-
-        public static Dictionary<TypeP, double> GetResistances(TypeP type1, TypeP type2)
-        {
-            return GetResistances(type1.ToString(), type2.ToString());
-        }
-
-        public static Dictionary<TypeP, double> GetResistances(string type1, string type2)
-        {
-            if (String.IsNullOrEmpty(type2))
-            {
-                return GetResistancesAuType(type1);
-            }
-
-            Dictionary<TypeP, double> resistances = new Dictionary<TypeP, double>();
-            Dictionary<TypeP, double> resType1 = GetResistancesAuType(type1);
-            Dictionary<TypeP, double> resType2 = GetResistancesAuType(type2);
-            Dictionary<TypeP, double> faiblesseType1 = GetFaiblessesAuType(type1);
-            Dictionary<TypeP, double> faiblesseType2 = GetFaiblessesAuType(type2);
-
-            // On ajoute automatiquement les immunités des 2 types
-            foreach (KeyValuePair<TypeP, double> item in resType2)
-            {
-                if (item.Value == 0)
-                {
-                    resistances.Add(item.Key, 0);
-                }
-            }
-            foreach (KeyValuePair<TypeP, double> item in resType1)
-            {
-                if (item.Value == 0)
-                {
-                    resistances.Add(item.Key, 0);
-                }
-            }
-
-            // Ajouter les résistances du type1 qui ne sont pas faibles contre le type2
-            foreach (KeyValuePair<TypeP, double> res in resType1)
-            {
-                if (!faiblesseType2.ContainsKey(res.Key))
-                {
-                    resistances[res.Key] = res.Value;
-                }
-            }
-
-            // Ajouter les résistances du type2 qui ne sont pas faibles contre le type1
-            foreach (KeyValuePair<TypeP, double> res in resType2)
-            {
-                if (!faiblesseType1.ContainsKey(res.Key))
-                {
-                    if (resistances.ContainsKey(res.Key))
-                    {
-                        // Si la résistance est déjà présente, on multiplie les multiplicateurs
-                        resistances[res.Key] *= res.Value;
-                    }
-                    else
-                    {
-                        // Sinon, on ajoute la résistance
-                        resistances[res.Key] = res.Value;
-                    }
-                }
-            }
-
-            return resistances;
-        }
-
+        // FAIBLESSES AU TYPE
 
         public static Dictionary<TypeP, double> GetFaiblessesAuType(TypeP type)
         {
@@ -315,6 +211,8 @@ namespace POKEMONCALCULATORWPF.model
 
             return faiblesses;
         }
+
+        // RESISTANCES AU TYPE
 
         public static Dictionary<TypeP, double> GetResistancesAuType(TypeP type)
         {
@@ -348,6 +246,8 @@ namespace POKEMONCALCULATORWPF.model
             return resistances;
         }
 
+        // EFFICACITE SUR TYPE
+
         public static List<TypeP> GetEfficaceSurType(TypeP type)
         {
             return GetEfficaceSurType(type.ToString());
@@ -375,6 +275,8 @@ namespace POKEMONCALCULATORWPF.model
             return faiblesses;
         }
 
+        // PEU EFFICACE SUR TYPE
+
         public static List<TypeP> GetPeuEfficaceSurType(TypeP type)
         {
             return GetPeuEfficaceSurType(type.ToString());
@@ -401,6 +303,8 @@ namespace POKEMONCALCULATORWPF.model
 
             return faiblesses;
         }
+
+        // AFFICHAGE DE LISTE/DICTIONNARY FORMAT CONSOLE
 
         public static void AfficheListe(List<TypeP> list)
         {
@@ -513,6 +417,7 @@ namespace POKEMONCALCULATORWPF.model
             return types;
         }
 
+        /*
         public static void ResumeUnPokemon(Pokemon p)
         {
             Console.WriteLine("Nom : " + p.Name);
@@ -536,6 +441,7 @@ namespace POKEMONCALCULATORWPF.model
 
             Console.WriteLine();
         }
+        */
 
         /*
         public static List<string> ConvertPokemonListToFr(List<Pokemon> pokemons)
@@ -548,6 +454,8 @@ namespace POKEMONCALCULATORWPF.model
                 pokemonsTrad.Add();
             }
         }*/
+
+        // REQUETES POKEAPI
 
         public static async Task<List<Pokemon>> GetRandomPokemonTeam()
         {

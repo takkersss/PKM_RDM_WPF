@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -53,7 +54,7 @@ namespace POKEMONCALCULATORWPF
 
             foreach (Pokemon p in applicationData.PokemonTeam)
             {
-                team += p.ToFrString() + " ";
+                team += p.Name + " ";
             }
             return team;
         }
@@ -70,15 +71,32 @@ namespace POKEMONCALCULATORWPF
             isBtnRandomTeamBusy = false;
         }
 
+        private async Task LoadProperties()
+        {
+            foreach (Pokemon p in applicationData.PokemonTeam)
+            {
+                p.FrName = p.ToFrString();
+            }
+        }
+
         private async void teamListBox_Loaded(object sender, RoutedEventArgs e)
         {
-            await RandomTeamRefresh();
+            RefreshListView();
         }
 
         private void RefreshWindow()
         {
-            teamListBox.ItemsSource = applicationData.PokemonTeam;
+            //teamListBox.ItemsSource = applicationData.PokemonTeam;
             teamListImageView.ItemsSource = applicationData.PokemonTeam; // actualisation
+            RefreshListView();
+        }
+
+        private async void RefreshListView()
+        {
+            await RandomTeamRefresh();
+            await LoadProperties();
+            teamListImageView.SelectedIndex = -1;
+            teamListImageView.SelectedIndex = 0; // actualisation
         }
     }
 }

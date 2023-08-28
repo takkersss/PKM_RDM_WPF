@@ -19,7 +19,14 @@ namespace POKEMONCALCULATORWPF.model
             this.Url = url;
         }
 
-        public string Name { get => name; set => name = value; }
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                this.name = value.Substring(0, 1).ToUpper() + value.Substring(1).ToLower();
+            }
+        }
         public string Url { get => url; set => url = value; }
     }
 }
