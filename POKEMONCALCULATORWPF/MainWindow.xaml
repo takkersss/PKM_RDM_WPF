@@ -59,9 +59,15 @@
                         <ColumnDefinition Width="1*"/>
                         <ColumnDefinition Width="3*"/>
                     </Grid.ColumnDefinitions>
-                    <Label x:Name="lbName" Content="{Binding Name}" Margin="0,10,527,0" VerticalAlignment="Top" Height="38" FontSize="20" Grid.ColumnSpan="2"/>
+                    <Label x:Name="lbName" Content="{Binding Name}" VerticalAlignment="Top" Height="38" FontSize="20"/>
                     <Label x:Name="lbType1" Content="{Binding Types[0].Type.Name}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="38" Width="80" FontSize="15" Margin="0,48,0,0"/>
-                    <Label x:Name="lbType2" Content="{Binding Types[1].Type.Name}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="38" Width="80" FontSize="15" Margin="104,48,0,0" Grid.ColumnSpan="2"/>
+                    <Label x:Name="lbType2" Content="{Binding Types[1].Type.Name}" HorizontalAlignment="Left" VerticalAlignment="Top" Height="38" Width="80" FontSize="15" Margin="104,48,0,0" />
+                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                        <Label x:Name="lbAbilities" Content="Abilities : " VerticalAlignment="Top" Height="38" FontSize="20"/>
+                        <Label x:Name="lbAbility1" Content="{Binding Abilities[0].Ability.Name}" VerticalAlignment="Top" Height="38" FontSize="20"/>
+                        <Label x:Name="lbAbility2" Content="{Binding Abilities[1].Ability.Name}" VerticalAlignment="Top" Height="38" FontSize="20"/>
+                        <Label x:Name="lbAbility3" Content="{Binding Abilities[2].Ability.Name}" VerticalAlignment="Top" Height="38" FontSize="20"/>
+                    </StackPanel>
                 </Grid>
 
                 <!-- STATS & TYPE CHART -->

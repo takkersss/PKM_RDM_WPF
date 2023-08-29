@@ -93,6 +93,10 @@ namespace POKEMONCALCULATORWPF
             {
                 p.SetFrName();
                 p.SetDoubleTypesSpecifiations();
+                if (p.Abilities[0].Ability.Name == p.Abilities[1].Ability.Name)
+                {
+                    p.Abilities.Remove(p.Abilities[1]);
+                }
             }
         }
 
@@ -116,6 +120,7 @@ namespace POKEMONCALCULATORWPF
                         pokemons.Add(p);
                     }
                     applicationData.PokemonTeam = new ObservableCollection<Pokemon>(pokemons);
+                    RefreshWindow(0);
                     teamListImageView.ItemsSource = applicationData.PokemonTeam; // actualisation
                 }
                 else
