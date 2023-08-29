@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
@@ -11,6 +12,8 @@ namespace POKEMONCALCULATORWPF.model
 {
     public class Pokemon
     {
+        public static string CHEMIN_DOSSIER = "jsonstock";
+
         private string name;
         private int id;
         private Sprite sprites;
@@ -79,6 +82,19 @@ namespace POKEMONCALCULATORWPF.model
                     return null;
                 }
             }
+        }
+
+        public void Serialize()
+        {
+            string json = JsonConvert.SerializeObject(this);
+            string cheminFichier = $"jsonstock/{this.Name}.json";
+
+
+            if (!Directory.Exists(CHEMIN_DOSSIER))
+            {
+                Directory.CreateDirectory(CHEMIN_DOSSIER);
+            }
+            File.WriteAllText(cheminFichier, json);
         }
 
         public override string ToString()

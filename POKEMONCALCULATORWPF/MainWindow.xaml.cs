@@ -1,7 +1,9 @@
-﻿using POKEMONCALCULATORWPF.model;
+﻿using Newtonsoft.Json;
+using POKEMONCALCULATORWPF.model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Text;
@@ -35,7 +37,7 @@ namespace POKEMONCALCULATORWPF
 
         private async void RandomTeamBtn_Click(object sender, RoutedEventArgs e)
         {
-            await RandomTeamRefresh();
+            await NewRandomTeam();
         }
 
         private void CopyTeamBtn_Click(object sender, RoutedEventArgs e)
@@ -62,14 +64,14 @@ namespace POKEMONCALCULATORWPF
             return team;
         }
 
-        private async Task RandomTeamRefresh() {
+        private async Task NewRandomTeam() {
 
             if (isBtnRandomTeamBusy) return;
 
             isBtnRandomTeamBusy = true;
             RandomTeamBtn.Background = Brushes.Red;
             applicationData.PokemonTeam = new ObservableCollection<Pokemon>(await MainPokemonCalc.GetRandomPokemonTeam());
-            RefreshWindow();
+            RefreshWindow(0);
             RandomTeamBtn.Background = Brushes.Gray;
             isBtnRandomTeamBusy = false;
         }
@@ -83,25 +85,46 @@ namespace POKEMONCALCULATORWPF
             }
         }
 
+        // Se lance au chargement de la fenetre (listview)
         private async void teamListBox_Loaded(object sender, RoutedEventArgs e)
         {
             applicationData.AllPokemonName = new ObservableCollection<String>(await MainPokemonCalc.GetAllPokemonName());
-            RefreshListView();
+            if (Directory.Exists(Pokemon.CHEMIN_DOSSIER))
+            {
+                string[] fichiersDansDossier = Directory.GetFiles(Pokemon.CHEMIN_DOSSIER);
+
+                if (fichiersDansDossier.Length == 6)
+                {
+                    List<Pokemon> pokemons = new List<Pokemon>();
+                    foreach (string fichier in fichiersDansDossier)
+                    {
+                        string jsonContenu = File.ReadAllText(fichier);
+
+                        // Désérialiser le contenu JSON en un objet
+                        Pokemon p = JsonConvert.DeserializeObject<Pokemon>(jsonContenu);
+                        pokemons.Add(p);
+                    }
+                    applicationData.PokemonTeam = new ObservableCollection<Pokemon>(pokemons);
+                    teamListImageView.ItemsSource = applicationData.PokemonTeam; // actualisation
+                }
+                else
+                {
+                    NewRandomTeam();
+                }
+            }
+            else
+            {
+                throw new Exception("directory doesn't exist");
+            }
         }
 
-        private void RefreshWindow()
+        public void RefreshWindow(int index)
         {
             //teamListBox.ItemsSource = applicationData.PokemonTeam;
-            teamListImageView.ItemsSource = applicationData.PokemonTeam; // actualisation
-            RefreshListView();
-        }
-
-        private async void RefreshListView()
-        {
-            await RandomTeamRefresh();
             LoadProperties();
+            teamListImageView.ItemsSource = applicationData.PokemonTeam; // actualisation
             teamListImageView.SelectedIndex = -1;
-            teamListImageView.SelectedIndex = 0; // actualisation
+            teamListImageView.SelectedIndex = index; // actualisation
         }
 
         private void lvOpenSwitchWindow(object sender, MouseButtonEventArgs e)
@@ -109,7 +132,23 @@ namespace POKEMONCALCULATORWPF
             var item = sender as ListViewItem;
             if (item != null && item.IsSelected)
             {
+                object dC = ((ListViewItem)sender).DataContext;
+                winSwitch.selectedPokemon = ((Pokemon)dC);
                 winSwitch.ShowDialog();
+            }
+        }
+
+        private void SaveTeamBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (isBtnRandomTeamBusy) return;
+            string[] fichiersDansDossier = Directory.GetFiles(Pokemon.CHEMIN_DOSSIER);
+            foreach (string item in fichiersDansDossier) // On supprime les anciens fichiers
+            {
+                File.Delete(item);
+            }
+            foreach (Pokemon p in applicationData.PokemonTeam) // On sauvegarde les nouveaux
+            {
+                p.Serialize();
             }
         }
     }

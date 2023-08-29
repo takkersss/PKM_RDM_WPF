@@ -649,7 +649,7 @@ namespace POKEMONCALCULATORWPF.model
         {
             using (HttpClient client = new HttpClient())
             {
-                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{nom}");
+                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{nom.ToLower()}");
                 if (reponse.IsSuccessStatusCode)
                 {
                     string contenu = await reponse.Content.ReadAsStringAsync();

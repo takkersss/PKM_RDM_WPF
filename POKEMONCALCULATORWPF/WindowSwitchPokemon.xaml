@@ -6,8 +6,15 @@
         xmlns:local="clr-namespace:POKEMONCALCULATORWPF"
         xmlns:model="clr-namespace:POKEMONCALCULATORWPF.model"
         mc:Ignorable="d"
-        Title="WindowSwitchPokemon" Height="450" Width="450" ResizeMode="NoResize" Closing="Window_Closing">
+        Title="WindowSwitchPokemon" Height="450" Width="450" ResizeMode="NoResize" Closing="Window_Closing" Activated="Window_Activated">
+    <Window.DataContext>
+        <model:ApplicationData x:Name="applicationData" />
+    </Window.DataContext>
     <Grid>
-        <ListView x:Name="lvPokemonNameList" ItemsSource="{Binding AllPokemonName}" HorizontalAlignment="Left" Width="225" Margin="5,5,0,5" Loaded="lvPokemonNameList_Loaded" />
+        <ListView x:Name="lvPokemonNameList" ItemsSource="{Binding AllPokemonName}" HorizontalAlignment="Left" Width="225" Margin="5,5,0,5" SelectionChanged="lvPokemonNameList_SelectionChanged" />
+        <StackPanel Margin="230,0,0,0">
+            <Image x:Name="imgSelectedPokemon" Height="200" Width="200"/>
+            <Button x:Name="btnSwicthPokemon" Content="Switch Pokemon" Margin="10,0,10,0" Click="btnSwicthPokemon_Click"/>
+        </StackPanel>
     </Grid>
 </Window>
