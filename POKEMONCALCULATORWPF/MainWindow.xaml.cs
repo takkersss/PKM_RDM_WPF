@@ -57,9 +57,20 @@ namespace POKEMONCALCULATORWPF
         {
             string team ="";
 
+            Random random = new Random();
+            Array valeursEnum = Enum.GetValues(typeof(TypeP));
+
+
             foreach (Pokemon p in applicationData.PokemonTeam)
             {
-                team += p.Name + " ";
+                // Type Aleatoire
+                TypeP teraType = (TypeP)valeursEnum.GetValue(random.Next(valeursEnum.Length));
+
+                // Ability Aleatoire
+                String ability = p.Abilities[random.Next(0, p.Abilities.Count)].Ability.Name;
+
+                team +=p.Name + "\nAbility: " + ability;
+                team += "\nTera Type: " + teraType.ToString() +"\n" + "\n";
             }
             return team;
         }

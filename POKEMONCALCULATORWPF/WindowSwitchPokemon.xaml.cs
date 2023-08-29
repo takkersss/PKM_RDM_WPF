@@ -1,6 +1,7 @@
 ﻿using POKEMONCALCULATORWPF.model;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
@@ -34,8 +35,9 @@ namespace POKEMONCALCULATORWPF
 
         public void RefreshShowedPokemon()
         {
-            lvPokemonNameList.ItemsSource = appData.AllPokemonName; // actualisation
+            appData.AllPokemonNameFiltres = appData.AllPokemonName;
             SetPokemon();
+            RefreshList();
         }
 
         private async void SetPokemon()
@@ -57,12 +59,14 @@ namespace POKEMONCALCULATORWPF
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            txtBoxRecherche.Text = "";
             e.Cancel = true;
             this.Hide();
         }
 
         private async void lvPokemonNameList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (((string)lvPokemonNameList.SelectedItem == null)) return;
             newSelectedPokemon = await MainPokemonCalc.GetPokemonByName(((string)lvPokemonNameList.SelectedItem));
             imgSelectedPokemon.Source = new BitmapImage(new Uri(newSelectedPokemon.Sprites.Front_default));
         }
@@ -72,15 +76,34 @@ namespace POKEMONCALCULATORWPF
             RefreshShowedPokemon();
         }
 
+        private void txtBoxRecherche_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            if (!String.IsNullOrEmpty(txtBoxRecherche.Text)){
+                appData.AllPokemonNameFiltres = new ObservableCollection<string>(appData.AllPokemonName.ToList().FindAll(x => x.StartsWith(txtBoxRecherche.Text.Substring(0,1).ToUpper()+ txtBoxRecherche.Text.Substring(1, txtBoxRecherche.Text.Length-1).ToLower())));
+                RefreshList();
+            }
+            else
+            {
+                appData.AllPokemonNameFiltres = appData.AllPokemonName;
+                RefreshList(); // actualisation
+            }
+        }
+
         private async void btnSwicthPokemon_Click(object sender, RoutedEventArgs e)
         {
             int index = appData.PokemonTeam.IndexOf(selectedPokemon);
             appData.PokemonTeam.Remove(selectedPokemon);
             appData.PokemonTeam.Insert(index, newSelectedPokemon);
             this.Owner.DataContext = appData;
+            txtBoxRecherche.Text = "";
 
             ((MainWindow)this.Owner).RefreshWindow(index);
             this.Hide();
+        }
+
+        private void RefreshList()
+        {
+            lvPokemonNameList.ItemsSource = appData.AllPokemonNameFiltres; // actualisation
         }
     }
 }

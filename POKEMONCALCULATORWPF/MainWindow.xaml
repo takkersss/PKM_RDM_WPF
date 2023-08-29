@@ -213,7 +213,7 @@
                 <Button x:Name="RandomTeamBtn" Content="Random Team" Margin="10,10,10,0" Height="80" Click="RandomTeamBtn_Click" Width="95" />
                 <Button x:Name="CopyTeamBtn" Content="Copy Team" Margin="10,10,10,0" Height="80" Click="CopyTeamBtn_Click" Width="95" />
                 <StackPanel Orientation="Horizontal">
-                <Button x:Name="SaveTeamBtn" Content="Save" Height="51" Width="47.5" HorizontalAlignment="Left" Margin="5,10,0,0" Click="SaveTeamBtn_Click" />
+                <Button x:Name="SaveTeamBtn" Content="Save" Height="51" Width="47.5" HorizontalAlignment="Left" Margin="5,10,3,0" Click="SaveTeamBtn_Click" />
                 <Button x:Name="LoadTeamBtn" Content="Load" Height="51" Width="47.5" HorizontalAlignment="Left" Margin="5,10,0,0" />
                 </StackPanel>
             </StackPanel>

@@ -14,6 +14,8 @@ namespace POKEMONCALCULATORWPF.model
         public ObservableCollection<Pokemon> PokemonTeam { get; set; }
         public ObservableCollection<String> AllPokemonName { get; set; }
 
+        public ObservableCollection<String> AllPokemonNameFiltres { get; set; }
+
         //public static List<Pokemon> pokemonTeam = new List<Pokemon>();
 
         public ApplicationData()

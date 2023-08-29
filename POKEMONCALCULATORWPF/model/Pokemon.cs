@@ -20,10 +20,7 @@ namespace POKEMONCALCULATORWPF.model
         private PokemonSpecies pSpecies;
         private List<Types> types;
         private Stat[] stats;
-
-        public Pokemon()
-        {
-        }
+        private List<Abilities> abilities;
 
         public string Name { get => name; set => name = value.Substring(0, 1).ToUpper() + value.Substring(1).ToLower(); }
         public int Id { get => id; set => id = value; }
@@ -42,9 +39,12 @@ namespace POKEMONCALCULATORWPF.model
         public List<TypeP> FaiblessesX2 { get => faiblessesX2; set => faiblessesX2 = value; }
         public List<TypeP> FaiblessesX4 { get => faiblessesX4; set => faiblessesX4 = value; }
         public List<TypeP> Immunites { get => immunites; set => immunites = value; }
+        public List<Abilities> Abilities { get => abilities; set => abilities = value; }
 
         private List<TypeP> resistancesX2, resistancesX4, faiblessesX2, faiblessesX4, immunites;
 
+        public Pokemon()
+        {}
 
         public async Task SetSpecies()
         {
