@@ -32,6 +32,7 @@ namespace POKEMONCALCULATORWPF.model
 
         // WPF
         private string frName, typeChartResume;
+        private int bst;
         public string FrName { get => frName; set => frName = value; }
         public string TypeChartResume { get => typeChartResume; set => typeChartResume = value; }
         public List<TypeP> ResistancesX2 { get => resistancesX2; set => resistancesX2 = value; }
@@ -40,8 +41,10 @@ namespace POKEMONCALCULATORWPF.model
         public List<TypeP> FaiblessesX4 { get => faiblessesX4; set => faiblessesX4 = value; }
         public List<TypeP> Immunites { get => immunites; set => immunites = value; }
         public List<Abilities> Abilities { get => abilities; set => abilities = value; }
+        public int Bst { get => bst; set => bst = value; }
 
         private List<TypeP> resistancesX2, resistancesX4, faiblessesX2, faiblessesX4, immunites;
+
 
         public Pokemon()
         {}
@@ -87,7 +90,7 @@ namespace POKEMONCALCULATORWPF.model
         public void Serialize()
         {
             string json = JsonConvert.SerializeObject(this);
-            string cheminFichier = $"jsonstock/{this.Name}.json";
+            string cheminFichier = $"{CHEMIN_DOSSIER}/{this.Name}.json";
 
 
             if (!Directory.Exists(CHEMIN_DOSSIER))

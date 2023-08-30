@@ -8,11 +8,89 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="img\BugIC_SV.png" />
+    <None Remove="img\DarkIC_SV.png" />
+    <None Remove="img\DragonIC_SV.png" />
+    <None Remove="img\ElectricIC_SV.png" />
+    <None Remove="img\FairyIC_SV.png" />
+    <None Remove="img\FightingIC_SV.png" />
+    <None Remove="img\FireIC_SV.png" />
+    <None Remove="img\FlyingIC_SV.png" />
+    <None Remove="img\GhostIC_SV.png" />
+    <None Remove="img\GrassIC_SV.png" />
+    <None Remove="img\GroundIC_SV.png" />
+    <None Remove="img\IceIC_SV.png" />
+    <None Remove="img\NormalIC_SV.png" />
+    <None Remove="img\PoisonIC_SV.png" />
+    <None Remove="img\PsychicIC_SV.png" />
+    <None Remove="img\RockIC_SV.png" />
+    <None Remove="img\SteelIC_SV.png" />
+    <None Remove="img\WaterIC_SV.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="jsonstock\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="img\BugIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\DarkIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\DragonIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\ElectricIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\FairyIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\FightingIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\FireIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\FlyingIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\GhostIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\GrassIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\GroundIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\IceIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\NormalIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\PoisonIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\PsychicIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\RockIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\SteelIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\WaterIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>

@@ -28,6 +28,6 @@ namespace POKEMONCALCULATORWPF.model
         }
 
         public int Slot { get => slot; set => slot = value; }
-        public NameUrl Type { get => type; set => type = value; }
+        public NameUrl Type { get => type; set => type = value; }   
     }
 }

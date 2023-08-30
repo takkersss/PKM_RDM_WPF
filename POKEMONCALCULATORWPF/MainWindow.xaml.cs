@@ -93,9 +93,17 @@ namespace POKEMONCALCULATORWPF
             {
                 p.SetFrName();
                 p.SetDoubleTypesSpecifiations();
-                if (p.Abilities[0].Ability.Name == p.Abilities[1].Ability.Name)
+                if(p.Abilities.Count > 1)
                 {
-                    p.Abilities.Remove(p.Abilities[1]);
+                    if (p.Abilities.First().Ability.Name == p.Abilities.Last().Ability.Name)
+                    {
+                        p.Abilities.Remove(p.Abilities.Last());
+                    }
+                }
+                p.Bst = 0;
+                foreach (Stat stat in p.Stats)
+                {
+                    p.Bst += stat.Base_stat;
                 }
             }
         }
