@@ -31,8 +31,9 @@ namespace POKEMONCALCULATORWPF.model
 
 
         // WPF
-        private string frName, typeChartResume;
+        private string frName, typeChartResume, wantedAbility;
         private int bst;
+        private TypeP teraType;
         public string FrName { get => frName; set => frName = value; }
         public string TypeChartResume { get => typeChartResume; set => typeChartResume = value; }
         public List<TypeP> ResistancesX2 { get => resistancesX2; set => resistancesX2 = value; }
@@ -42,9 +43,16 @@ namespace POKEMONCALCULATORWPF.model
         public List<TypeP> Immunites { get => immunites; set => immunites = value; }
         public List<Abilities> Abilities { get => abilities; set => abilities = value; }
         public int Bst { get => bst; set => bst = value; }
+        public string WantedAbility { get => wantedAbility; set => wantedAbility = value; }
+        public TypeP TeraType { get => teraType; set => teraType = value; }
 
         private List<TypeP> resistancesX2, resistancesX4, faiblessesX2, faiblessesX4, immunites;
 
+        public int GetIndexOfWantedAbility()
+        {
+            int index = this.Abilities.IndexOf(this.Abilities.Find(x => x.Ability.Name == WantedAbility));
+            return index;
+        }
 
         public Pokemon()
         {}

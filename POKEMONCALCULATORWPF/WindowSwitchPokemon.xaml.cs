@@ -97,7 +97,7 @@ namespace POKEMONCALCULATORWPF
             this.Owner.DataContext = appData;
             txtBoxRecherche.Text = "";
 
-            ((MainWindow)this.Owner).RefreshWindow(index);
+            ((MainWindow)this.Owner).ReSetWindowAndTeam(index);
             this.Hide();
         }
 

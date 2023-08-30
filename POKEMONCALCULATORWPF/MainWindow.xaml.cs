@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,7 @@ namespace POKEMONCALCULATORWPF
     {
         private bool isBtnRandomTeamBusy;
         WindowSwitchPokemon winSwitch;
+        private Pokemon currentPokemon;
 
         public MainWindow()
         {
@@ -63,14 +65,8 @@ namespace POKEMONCALCULATORWPF
 
             foreach (Pokemon p in applicationData.PokemonTeam)
             {
-                // Type Aleatoire
-                TypeP teraType = (TypeP)valeursEnum.GetValue(random.Next(valeursEnum.Length));
-
-                // Ability Aleatoire
-                String ability = p.Abilities[random.Next(0, p.Abilities.Count)].Ability.Name;
-
-                team +=p.Name + "\nAbility: " + ability;
-                team += "\nTera Type: " + teraType.ToString() +"\n" + "\n";
+                team +=p.Name + "\nAbility: " + p.WantedAbility;
+                team += "\nTera Type: " + p.TeraType.ToString() +"\n" + "\n";
             }
             return team;
         }
@@ -82,7 +78,7 @@ namespace POKEMONCALCULATORWPF
             isBtnRandomTeamBusy = true;
             RandomTeamBtn.Background = Brushes.Red;
             applicationData.PokemonTeam = new ObservableCollection<Pokemon>(await MainPokemonCalc.GetRandomPokemonTeam());
-            RefreshWindow(0);
+            ReSetWindowAndTeam(0);
             RandomTeamBtn.Background = Brushes.Gray;
             isBtnRandomTeamBusy = false;
         }
@@ -93,7 +89,7 @@ namespace POKEMONCALCULATORWPF
             {
                 p.SetFrName();
                 p.SetDoubleTypesSpecifiations();
-                if(p.Abilities.Count > 1)
+                if (p.Abilities.Count > 1)
                 {
                     if (p.Abilities.First().Ability.Name == p.Abilities.Last().Ability.Name)
                     {
@@ -105,6 +101,9 @@ namespace POKEMONCALCULATORWPF
                 {
                     p.Bst += stat.Base_stat;
                 }
+                Random r = new Random();
+                p.WantedAbility = p.Abilities[r.Next(0, p.Abilities.Count)].Ability.Name;
+                p.TeraType = (TypeP)Enum.Parse(typeof(TypeP), applicationData.AllType[r.Next(0,19)]);
             }
         }
 
@@ -112,6 +111,7 @@ namespace POKEMONCALCULATORWPF
         private async void teamListBox_Loaded(object sender, RoutedEventArgs e)
         {
             applicationData.AllPokemonName = new ObservableCollection<String>(await MainPokemonCalc.GetAllPokemonName());
+            applicationData.AllType = new ObservableCollection<string>(Enum.GetNames(typeof(TypeP)));
             if (Directory.Exists(Pokemon.CHEMIN_DOSSIER))
             {
                 string[] fichiersDansDossier = Directory.GetFiles(Pokemon.CHEMIN_DOSSIER);
@@ -128,13 +128,14 @@ namespace POKEMONCALCULATORWPF
                         pokemons.Add(p);
                     }
                     applicationData.PokemonTeam = new ObservableCollection<Pokemon>(pokemons);
-                    RefreshWindow(0);
-                    teamListImageView.ItemsSource = applicationData.PokemonTeam; // actualisation
+                    RefreshWindow();
                 }
                 else
                 {
                     NewRandomTeam();
                 }
+                currentPokemon = (Pokemon)teamListImageView.SelectedItem;
+                //MessageBox.Show(currentPokemon.Name);
             }
             else
             {
@@ -142,13 +143,21 @@ namespace POKEMONCALCULATORWPF
             }
         }
 
-        public void RefreshWindow(int index)
+        public void ReSetWindowAndTeam(int index)
         {
-            //teamListBox.ItemsSource = applicationData.PokemonTeam;
             LoadProperties();
             teamListImageView.ItemsSource = applicationData.PokemonTeam; // actualisation
+            cbTera.ItemsSource = applicationData.AllType; // actualisation
             teamListImageView.SelectedIndex = -1;
-            teamListImageView.SelectedIndex = index; // actualisation
+            teamListImageView.SelectedIndex = index; // actualisation;
+        }
+
+        public void RefreshWindow()
+        {
+            teamListImageView.ItemsSource = applicationData.PokemonTeam; // actualisation
+            cbTera.ItemsSource = applicationData.AllType; // actualisation
+            teamListImageView.SelectedIndex = -1;
+            teamListImageView.SelectedIndex = 0; // actualisation;
         }
 
         private void lvOpenSwitchWindow(object sender, MouseButtonEventArgs e)
@@ -174,6 +183,37 @@ namespace POKEMONCALCULATORWPF
             {
                 p.Serialize();
             }
+        }
+
+        private void teamListImageView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ListView lv = ((ListView)sender);
+            if (lv.SelectedItem == null) return;
+            currentPokemon = (Pokemon)lv.SelectedItem;
+            cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
+            cbTera.SelectedIndex = GetIndexOfWantedTera(currentPokemon);
+            //MessageBox.Show(obj.ToString());
+        }
+
+        private void cbAbility_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (currentPokemon == null) return;
+            if(cbAbility.SelectedIndex == -1) return;
+            currentPokemon.WantedAbility = currentPokemon.Abilities[cbAbility.SelectedIndex].Ability.Name;
+            //cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
+        }
+
+        private void cbTera_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (currentPokemon == null) return;
+            if (cbTera.SelectedIndex == -1) return;
+            currentPokemon.TeraType = (TypeP)Enum.Parse(typeof(TypeP), applicationData.AllType[cbTera.SelectedIndex]);
+        }
+
+        private int GetIndexOfWantedTera(Pokemon p)
+        {
+            int index = applicationData.AllType.IndexOf(applicationData.AllType.ToList().Find(x => x == p.TeraType.ToString()));
+            return index;
         }
     }
 }

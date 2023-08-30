@@ -22,7 +22,7 @@ namespace POKEMONCALCULATORWPF.model
 
         public override string? ToString()
         {
-            return ability.ToString();
+            return ability.Name;
         }
     }
 }
