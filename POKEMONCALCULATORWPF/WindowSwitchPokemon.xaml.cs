@@ -24,6 +24,7 @@ namespace POKEMONCALCULATORWPF
     {
         private ApplicationData appData;
         public Pokemon selectedPokemon, newSelectedPokemon;
+        private bool isWindowBusy;
 
         public WindowSwitchPokemon(MainWindow owner, ApplicationData applicationData)
         {
@@ -36,16 +37,16 @@ namespace POKEMONCALCULATORWPF
         public void RefreshShowedPokemon()
         {
             appData.AllPokemonNameFiltres = appData.AllPokemonName;
-            SetPokemon();
+            SetPokemon(newSelectedPokemon);
             RefreshList();
         }
 
-        private async void SetPokemon()
+        private async void SetPokemon(Pokemon poke)
         {
-            imgSelectedPokemon.Source = new BitmapImage(new Uri(selectedPokemon.Sprites.Front_default));
+            imgSelectedPokemon.Source = new BitmapImage(new Uri(poke.Sprites.Front_default));
             foreach (string p in lvPokemonNameList.Items)
             {
-                if (p.Equals(selectedPokemon.Name))
+                if (p.Equals(poke.Name))
                 {
                     // Élément trouvé, faites quelque chose avec lui
                     // Par exemple, sélectionnez-le et faites défiler la ListView
@@ -66,13 +67,16 @@ namespace POKEMONCALCULATORWPF
 
         private async void lvPokemonNameList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (((string)lvPokemonNameList.SelectedItem == null)) return;
+            if (((string)lvPokemonNameList.SelectedItem == null) || isWindowBusy) return;
+            isWindowBusy = true;
             newSelectedPokemon = await MainPokemonCalc.GetPokemonByName(((string)lvPokemonNameList.SelectedItem));
             imgSelectedPokemon.Source = new BitmapImage(new Uri(newSelectedPokemon.Sprites.Front_default));
+            isWindowBusy = false;
         }
 
         private void Window_Activated(object sender, EventArgs e)
         {
+            newSelectedPokemon = selectedPokemon;
             RefreshShowedPokemon();
         }
 
@@ -91,6 +95,7 @@ namespace POKEMONCALCULATORWPF
 
         private async void btnSwicthPokemon_Click(object sender, RoutedEventArgs e)
         {
+            if (isWindowBusy) return;
             int index = appData.PokemonTeam.IndexOf(selectedPokemon);
             appData.PokemonTeam.Remove(selectedPokemon);
             appData.PokemonTeam.Insert(index, newSelectedPokemon);
@@ -99,6 +104,15 @@ namespace POKEMONCALCULATORWPF
 
             ((MainWindow)this.Owner).ReSetWindowAndTeam(index);
             this.Hide();
+        }
+
+        private async void btnRandomPokemon_Click(object sender, RoutedEventArgs e)
+        {
+            if (isWindowBusy) return;
+            newSelectedPokemon = await MainPokemonCalc.GetRandomPokemon();
+            SetPokemon(newSelectedPokemon);
+            imgSelectedPokemon.Source = new BitmapImage(new Uri(newSelectedPokemon.Sprites.Front_default));
+
         }
 
         private void RefreshList()
