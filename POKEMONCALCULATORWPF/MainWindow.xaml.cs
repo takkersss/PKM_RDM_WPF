@@ -103,7 +103,7 @@ namespace POKEMONCALCULATORWPF
                 }
                 Random r = new Random();
                 p.WantedAbility = p.Abilities[r.Next(0, p.Abilities.Count)].Ability.Name;
-                p.TeraType = (TypeP)Enum.Parse(typeof(TypeP), applicationData.AllType[r.Next(0,19)]);
+                p.TeraType = (TypeP)Enum.Parse(typeof(TypeP), applicationData.AllType[r.Next(0,18)]);
             }
         }
 
