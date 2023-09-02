@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Navigation;
 using static POKEMONCALCULATORWPF.model.MainPokemonCalc;
 
@@ -169,20 +170,24 @@ namespace POKEMONCALCULATORWPF.model
         public void SetEvs()
         {
             Evs = new int[6];
+            List<int> indexStrongStat = new List<int>();
+            for (int i = 0; i < Stats.Length; i++)
+            {
+                if (Stats[i].Effort > 0)
+                {
+                    indexStrongStat.Add(i);
+                }
+            }
+
             for (int i = 0; i < 6; i++)
             {
                 Evs[i] = 0;
             }
-        }
-
-        public bool HasMaxedEvs()
-        {
-            int totalEvs = 0;
-            foreach (int ev in Evs)
+            foreach (int i in indexStrongStat)
             {
-                totalEvs += ev;
+                Evs[i] = 252;
+                //MessageBox.Show(Evs[i].ToString());
             }
-            return totalEvs >= 508 ? true : false;
         }
 
         public int GetTotalEvs()
@@ -193,11 +198,6 @@ namespace POKEMONCALCULATORWPF.model
                 totalEvs += ev;
             }
             return totalEvs;
-        }
-
-        public int RemainingEVs()
-        {
-            return 508 - GetTotalEvs();
         }
     }
 }
