@@ -68,10 +68,6 @@
                             <Image x:Name="imgTyp1" Source="{Binding Types[0].Type.Name, Converter={StaticResource TypeToImageConverter}}" Width="100" Height="20" HorizontalAlignment="Left"/>
                             <Image x:Name="imgTyp2" Source="{Binding Types[1].Type.Name, Converter={StaticResource TypeToImageConverter}}" Width="100" Height="20" HorizontalAlignment="Left" />
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
-                            <Label x:Name="lbBSTHeader" Content="BST : " Height="34" FontSize="20" VerticalContentAlignment="Top" VerticalAlignment="Top"/>
-                            <Label x:Name="lbBST" Content="{Binding Bst}" Height="34" FontSize="20" VerticalContentAlignment="Top" VerticalAlignment="Top"/>
-                        </StackPanel>
                     </StackPanel>
 
                     <StackPanel Grid.Column="2">
@@ -97,19 +93,29 @@
 
             <Grid Grid.Column="1" Grid.Row="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="295*"/>
+                    <RowDefinition Height="385*"/>
                     <RowDefinition Height="227*"/>
                 </Grid.RowDefinitions>
 
 
                 <!-- STATS & TYPE CHART -->
-                <Grid x:Name="statsGrid" DataContext="{Binding SelectedItem, ElementName=teamListImageView}" Height="284" VerticalAlignment="Top">
+                <Grid x:Name="statsGrid" DataContext="{Binding SelectedItem, ElementName=teamListImageView}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="37*"/>
+                        <RowDefinition Height="300*"/>
+                    </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="365"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
+
+                    <!-- BST LABEL -->
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,0">
+                        <Label x:Name="lbBSTHeader" Content="BST : " Height="34" FontSize="20" VerticalContentAlignment="Top" VerticalAlignment="Top" FontWeight="Bold"/>
+                        <Label x:Name="lbBST" Content="{Binding Bst}" Height="34" FontSize="20" VerticalContentAlignment="Top" VerticalAlignment="Top"/>
+                    </StackPanel>
                     <!-- STATS -->
-                    <StackPanel Grid.Column="0">
+                    <StackPanel Grid.Column="0" Grid.Row="1">
                         <!-- HP -->
                         <Grid>
                             <StackPanel Orientation="Horizontal" VerticalAlignment="Top" Margin="0,10,10,10">
@@ -159,10 +165,44 @@
                             <Label Content="{Binding Stats[5].Base_stat}" HorizontalAlignment="Left" Width="61" VerticalAlignment="Top" Margin="60,10,0,0" Height="27"/>
                         </Grid>
                     </StackPanel>
+                    <!-- EVS -->
+                    <StackPanel Grid.Column="1" Grid.Row="1">
+                        <!-- HP -->
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                            <TextBox x:Name="tbHpEv"  Width="50" Height="27.29" Text="{Binding Evs[0], Mode=OneWay}" SelectionChanged="tbEv_SelectionChanged"/>
+                            <Slider x:Name="slHpEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[0], Mode=OneWay}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
+                        </StackPanel>
+                        <!-- Attack -->
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                            <TextBox x:Name="tbAttEv"  Width="50" Height="27.29" Text="{Binding Evs[1], Mode=OneWay}" SelectionChanged="tbEv_SelectionChanged"/>
+                            <Slider x:Name="slAttEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[1], Mode=OneWay}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
+                        </StackPanel>
+                        <!-- Defense -->
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                            <TextBox x:Name="tbDefEv"  Width="50" Height="27.29" Text="{Binding Evs[2], Mode=OneWay}" SelectionChanged="tbEv_SelectionChanged"/>
+                            <Slider x:Name="slDefEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[2], Mode=OneWay}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
+                        </StackPanel>
+                        <!-- Spe Att -->
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                            <TextBox x:Name="tbSAttEv"  Width="50" Height="27.29" Text="{Binding Evs[3], Mode=OneWay}" SelectionChanged="tbEv_SelectionChanged"/>
+                            <Slider x:Name="slSAttEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[3], Mode=OneWay}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
+                        </StackPanel>
+                        <!-- Spe Defense -->
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                            <TextBox x:Name="tbSDefEv"  Width="50" Height="27.29" Text="{Binding Evs[4], Mode=OneWay}" SelectionChanged="tbEv_SelectionChanged"/>
+                            <Slider x:Name="slSDefEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[4], Mode=OneWay}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
+                        </StackPanel>
+                        <!-- Defense -->
+                        <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
+                            <TextBox x:Name="tbSpeEv"  Width="50" Height="27.29" Text="{Binding Evs[5], Mode=OneWay}" SelectionChanged="tbEv_SelectionChanged"/>
+                            <Slider x:Name="slSpeEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[5], Mode=OneWay}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
+                        </StackPanel>
+
+                    </StackPanel>
                 </Grid>
 
                 <!-- TYPE CHART -->
-                <StackPanel Grid.Row="1" Margin="0,0,0,0" DataContext="{Binding SelectedItem, ElementName=teamListImageView}" Width="700" HorizontalAlignment="Left">
+                <StackPanel Grid.Row="1" DataContext="{Binding SelectedItem, ElementName=teamListImageView}" Width="700" HorizontalAlignment="Left" VerticalAlignment="Bottom">
                     <Label Content="Weak to"/>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="x4 : " />

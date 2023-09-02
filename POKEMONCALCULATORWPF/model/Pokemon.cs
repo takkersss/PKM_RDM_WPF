@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Navigation;
 using static POKEMONCALCULATORWPF.model.MainPokemonCalc;
 
 namespace POKEMONCALCULATORWPF.model
@@ -34,6 +35,7 @@ namespace POKEMONCALCULATORWPF.model
         private string frName, typeChartResume, wantedAbility;
         private int bst;
         private TypeP teraType;
+        private int[] evs, ivs;
         public string FrName { get => frName; set => frName = value; }
         public string TypeChartResume { get => typeChartResume; set => typeChartResume = value; }
         public List<TypeP> ResistancesX2 { get => resistancesX2; set => resistancesX2 = value; }
@@ -45,6 +47,8 @@ namespace POKEMONCALCULATORWPF.model
         public int Bst { get => bst; set => bst = value; }
         public string WantedAbility { get => wantedAbility; set => wantedAbility = value; }
         public TypeP TeraType { get => teraType; set => teraType = value; }
+        public int[] Evs { get => evs; set => evs = value; }
+        public int[] Ivs { get => ivs; set => ivs = value; }
 
         private List<TypeP> resistancesX2, resistancesX4, faiblessesX2, faiblessesX4, immunites;
 
@@ -162,6 +166,38 @@ namespace POKEMONCALCULATORWPF.model
             }
         }
 
+        public void SetEvs()
+        {
+            Evs = new int[6];
+            for (int i = 0; i < 6; i++)
+            {
+                Evs[i] = 0;
+            }
+        }
 
+        public bool HasMaxedEvs()
+        {
+            int totalEvs = 0;
+            foreach (int ev in Evs)
+            {
+                totalEvs += ev;
+            }
+            return totalEvs >= 508 ? true : false;
+        }
+
+        public int GetTotalEvs()
+        {
+            int totalEvs = 0;
+            foreach (int ev in Evs)
+            {
+                totalEvs += ev;
+            }
+            return totalEvs;
+        }
+
+        public int RemainingEVs()
+        {
+            return 508 - GetTotalEvs();
+        }
     }
 }

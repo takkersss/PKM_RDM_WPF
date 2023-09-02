@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Printing;
 using System.Reflection;
 using System.Security.AccessControl;
 using System.Text;
@@ -101,6 +102,7 @@ namespace POKEMONCALCULATORWPF
                 {
                     p.Bst += stat.Base_stat;
                 }
+                p.SetEvs();
                 Random r = new Random();
                 p.WantedAbility = p.Abilities[r.Next(0, p.Abilities.Count)].Ability.Name;
                 p.TeraType = (TypeP)Enum.Parse(typeof(TypeP), applicationData.AllType[r.Next(0,18)]);
@@ -146,10 +148,7 @@ namespace POKEMONCALCULATORWPF
         public void ReSetWindowAndTeam(int index)
         {
             LoadProperties();
-            teamListImageView.ItemsSource = applicationData.PokemonTeam; // actualisation
-            cbTera.ItemsSource = applicationData.AllType; // actualisation
-            teamListImageView.SelectedIndex = -1;
-            teamListImageView.SelectedIndex = index; // actualisation;
+            RefreshWindow();
         }
 
         public void RefreshWindow()
@@ -189,9 +188,11 @@ namespace POKEMONCALCULATORWPF
         {
             ListView lv = ((ListView)sender);
             if (lv.SelectedItem == null) return;
+
             currentPokemon = (Pokemon)lv.SelectedItem;
             cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
             cbTera.SelectedIndex = GetIndexOfWantedTera(currentPokemon);
+            UpdateShowedEVs();
             //MessageBox.Show(obj.ToString());
         }
 
@@ -215,5 +216,128 @@ namespace POKEMONCALCULATORWPF
             int index = applicationData.AllType.IndexOf(applicationData.AllType.ToList().Find(x => x == p.TeraType.ToString()));
             return index;
         }
+
+        private void UpdateEvAndSlider(int index, int value, Slider slider)
+        {
+            currentPokemon.Evs[index] = value;
+            slider.Value = currentPokemon.Evs[index];
+        }
+        private void tbEv_SelectionChanged(object sender, RoutedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            if (String.IsNullOrEmpty(tb.Text)) return;
+
+            if (currentPokemon != null && currentPokemon.Evs != null)
+            {
+                int ev;
+                if (int.TryParse(tb.Text, out ev))
+                {
+
+                    switch (tb.Name)
+                    {
+                        case "tbHpEv":
+                            UpdateEvAndSlider(0, ev, slHpEv);
+                            break;
+                        case "tbAttEv":
+                            UpdateEvAndSlider(1, ev, slAttEv);
+                            break;
+                        case "tbDefEv":
+                            UpdateEvAndSlider(2, ev, slDefEv);
+                            break;
+                        case "tbSAttEv":
+                            UpdateEvAndSlider(3, ev, slSAttEv);
+                            break;
+                        case "tbSDefEv":
+                            UpdateEvAndSlider(4, ev, slSDefEv);
+                            break;
+                        case "tbSpeEv":
+                            UpdateEvAndSlider(5, ev, slSpeEv);
+                            break;
+                    }
+                }
+                else
+                {
+                    // Gérez le cas où tb.Text n'est pas un entier valide.
+                }
+            }
+        }
+
+        private void slEv_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Slider slider = (Slider)sender;
+            if (currentPokemon == null) return;
+
+            int totalEVs = GetSliderTotal();
+            int maxTotalEVs = 508;
+
+            if (totalEVs > maxTotalEVs)
+            {
+                // Calculez la différence entre la somme actuelle et 508
+                int difference = totalEVs - maxTotalEVs;
+
+                // Vérifiez si la valeur du slider dépasse la différence
+                if (slider.Value > difference)
+                {
+                    // Reduisez la valeur du slider
+                    slider.Value -= difference;
+                }
+                else
+                {
+                    // Réglez la valeur du slider à zéro pour éviter les valeurs négatives
+                    slider.Value = 0;
+                }
+            }
+
+            switch (slider.Name)
+            {
+                case "slHpEv":
+                    currentPokemon.Evs[0] = (int)slider.Value;
+                    tbHpEv.Text = currentPokemon.Evs[0].ToString();
+                    break;
+                case "slAttEv":
+                    currentPokemon.Evs[1] = (int)slider.Value;
+                    tbAttEv.Text = currentPokemon.Evs[1].ToString();
+                    break;
+                case "slDefEv":
+                    currentPokemon.Evs[2] = (int)slider.Value;
+                    tbDefEv.Text = currentPokemon.Evs[2].ToString();
+                    break;
+                case "slSAttEv":
+                    currentPokemon.Evs[3] = (int)slider.Value;
+                    tbSAttEv.Text = currentPokemon.Evs[3].ToString();
+                    break;
+                case "slSDefEv":
+                    currentPokemon.Evs[4] = (int)slider.Value;
+                    tbSDefEv.Text = currentPokemon.Evs[4].ToString();
+                    break;
+                case "slSpeEv":
+                    currentPokemon.Evs[5] = (int)slider.Value;
+                    tbSpeEv.Text = currentPokemon.Evs[5].ToString();
+                    break;
+            }
+        }
+
+        private void UpdateShowedEVs()
+        {
+            slHpEv.Value = currentPokemon.Evs[0];
+            slAttEv.Value = currentPokemon.Evs[1];
+            slDefEv.Value = currentPokemon.Evs[2];
+            slSAttEv.Value = currentPokemon.Evs[3];
+            slSDefEv.Value = currentPokemon.Evs[4];
+            slSpeEv.Value = currentPokemon.Evs[5];
+
+            tbHpEv.Text = currentPokemon.Evs[0].ToString();
+            tbAttEv.Text = currentPokemon.Evs[1].ToString();
+            tbDefEv.Text = currentPokemon.Evs[2].ToString();
+            tbSAttEv.Text = currentPokemon.Evs[3].ToString();
+            tbSDefEv.Text = currentPokemon.Evs[4].ToString();
+            tbSpeEv.Text = currentPokemon.Evs[5].ToString();
+        }
+
+        private int GetSliderTotal()
+        {
+            return (int)(slHpEv.Value + slAttEv.Value + slDefEv.Value + slSAttEv.Value + slSDefEv.Value + slSpeEv.Value);
+        }
+
     }
 }
