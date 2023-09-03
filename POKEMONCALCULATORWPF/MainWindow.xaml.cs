@@ -67,7 +67,9 @@ namespace POKEMONCALCULATORWPF
             foreach (Pokemon p in applicationData.PokemonTeam)
             {
                 team +=p.Name + "\nAbility: " + p.WantedAbility;
-                team += "\nTera Type: " + p.TeraType.ToString() +"\n" + "\n";
+                team += "\nTera Type: " + p.TeraType.ToString();
+                team += "\nEVs: " + p.GetEvsTextForShowdown();
+                team += "\n\n";
             }
             return team;
         }
@@ -189,7 +191,7 @@ namespace POKEMONCALCULATORWPF
             ListView lv = ((ListView)sender);
             if (lv.SelectedItem == null) return;
 
-            currentPokemon = (Pokemon)lv.SelectedItem;
+            currentPokemon = applicationData.PokemonTeam[applicationData.PokemonTeam.ToList().FindIndex(x => x.Name == ((Pokemon)lv.SelectedItem).Name)];
             cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
             cbTera.SelectedIndex = GetIndexOfWantedTera(currentPokemon);
             UpdateShowedEVs();
@@ -219,7 +221,6 @@ namespace POKEMONCALCULATORWPF
 
         private void UpdateEvAndSlider(int index, int value, Slider slider)
         {
-            currentPokemon.Evs[index] = value;
             slider.Value = currentPokemon.Evs[index];
         }
         private void tbEv_SelectionChanged(object sender, RoutedEventArgs e)
@@ -291,32 +292,27 @@ namespace POKEMONCALCULATORWPF
             switch (slider.Name)
             {
                 case "slHpEv":
-                    currentPokemon.Evs[0] = (int)slider.Value;
-                    tbHpEv.Text = currentPokemon.Evs[0].ToString();
+                    tbHpEv.Text = slider.Value.ToString();
                     break;
                 case "slAttEv":
-                    currentPokemon.Evs[1] = (int)slider.Value;
-                    tbAttEv.Text = currentPokemon.Evs[1].ToString();
+                    tbAttEv.Text = slider.Value.ToString();
                     break;
                 case "slDefEv":
-                    currentPokemon.Evs[2] = (int)slider.Value;
-                    tbDefEv.Text = currentPokemon.Evs[2].ToString();
+                    tbDefEv.Text = slider.Value.ToString();
                     break;
                 case "slSAttEv":
-                    currentPokemon.Evs[3] = (int)slider.Value;
-                    tbSAttEv.Text = currentPokemon.Evs[3].ToString();
+                    tbSAttEv.Text = slider.Value.ToString();
                     break;
                 case "slSDefEv":
-                    currentPokemon.Evs[4] = (int)slider.Value;
-                    tbSDefEv.Text = currentPokemon.Evs[4].ToString();
+                    tbSDefEv.Text = slider.Value.ToString();
                     break;
                 case "slSpeEv":
-                    currentPokemon.Evs[5] = (int)slider.Value;
-                    tbSpeEv.Text = currentPokemon.Evs[5].ToString();
+                    tbSpeEv.Text = slider.Value.ToString();
                     break;
             }
         }
 
+        
         private void UpdateShowedEVs()
         {
             slHpEv.Value = currentPokemon.Evs[0];
@@ -339,5 +335,15 @@ namespace POKEMONCALCULATORWPF
             return (int)(slHpEv.Value + slAttEv.Value + slDefEv.Value + slSAttEv.Value + slSDefEv.Value + slSpeEv.Value);
         }
 
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            string txt = "";
+            foreach (int z in currentPokemon.Evs)
+            {
+                txt += z.ToString() + ", ";
+            }
+            MessageBox.Show(currentPokemon.Name + " " + txt);
+
+        }
     }
 }

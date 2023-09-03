@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Runtime.Intrinsics.X86;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Navigation;
 using static POKEMONCALCULATORWPF.model.MainPokemonCalc;
 
@@ -15,6 +17,7 @@ namespace POKEMONCALCULATORWPF.model
     public class Pokemon
     {
         public static string CHEMIN_DOSSIER = "jsonstock";
+        public static string[] EVS_NAME = new string[6] { "HP", "Atk", "Def", "SpA", "SpD", "Spe" };
 
         private string name;
         private int id;
@@ -169,25 +172,13 @@ namespace POKEMONCALCULATORWPF.model
 
         public void SetEvs()
         {
-            Evs = new int[6];
-            List<int> indexStrongStat = new List<int>();
-            for (int i = 0; i < Stats.Length; i++)
-            {
-                if (Stats[i].Effort > 0)
-                {
-                    indexStrongStat.Add(i);
-                }
-            }
+            Evs = new int[6] { 0, 0, 0, 0, 0, 0 };
 
-            for (int i = 0; i < 6; i++)
-            {
-                Evs[i] = 0;
-            }
-            foreach (int i in indexStrongStat)
-            {
-                Evs[i] = 252;
-                //MessageBox.Show(Evs[i].ToString());
-            }
+            int[] baseStats = GetDescendingStatsIndex();
+            Evs[baseStats[0]] = 252; // On met les 2 stats les plus fortes à 252
+            Evs[baseStats[1]] = 252;
+            DistributeRemainingEVs();
+
         }
 
         public int GetTotalEvs()
@@ -198,6 +189,115 @@ namespace POKEMONCALCULATORWPF.model
                 totalEvs += ev;
             }
             return totalEvs;
+        }
+
+        private int GetBestStatIndex()
+        {
+            int max = 0;
+            int index = -1; // Initialisez l'index à une valeur invalide
+
+            for (int i = 0; i < Stats.Length; i++)
+            {
+                if (Stats[i].Base_stat > max)
+                {
+                    max = Stats[i].Base_stat;
+                    index = i; // Mettez à jour l'index de la valeur maximale
+                }
+            }
+
+            return index;
+
+        }
+
+        private int GetWorstStatIndex()
+        {
+            int min = 1000;
+            int index = -1; // Initialisez l'index à une valeur invalide
+
+            for (int i = 0; i < Stats.Length; i++)
+            {
+                if (Stats[i].Base_stat < min)
+                {
+                    min = Stats[i].Base_stat;
+                    index = i; // Mettez à jour l'index de la valeur maximale
+                }
+            }
+
+            return index;
+        }
+
+        private int[] GetDescendingStatsIndex()
+        {
+            int[] tableauBaseStats = new int[6];
+
+            for (int i = 0; i < Stats.Length; i++)
+            {
+                tableauBaseStats[i] = Stats[i].Base_stat;
+            }
+
+            int[] indices = Enumerable.Range(0, tableauBaseStats.Length).ToArray();
+
+            // Créez des paires (valeur, index)
+            var paires = tableauBaseStats.Select((valeur, index) => new { Valeur = valeur, Index = index }).ToArray();
+
+            // Triez les paires par valeur (du plus grand au plus petit)
+            Array.Sort(paires, (a, b) => b.Valeur.CompareTo(a.Valeur));
+
+            // Créez un tableau des indices triés
+            int[] indicesTries = paires.Select(pair => pair.Index).ToArray();
+
+            return indicesTries;
+        }
+
+        public void DistributeRemainingEVs()
+        {
+            int[] baseStats = GetDescendingStatsIndex();
+            List<int> eligibleStats = new List<int>();
+
+            // Remplissez eligibleStats avec les indices des statistiques non à 252 et non les deux statistiques les plus élevées
+            for (int i = 0; i < Evs.Length; i++)
+            {
+                if (Evs[i] != 252 && i != baseStats[0] && i != baseStats[1])
+                {
+                    eligibleStats.Add(i);
+                }
+            }
+
+            if (eligibleStats.Contains(5)) // Vérifiez la statistique de vitesse
+            {
+                if (Evs[GetWorstStatIndex()] != eligibleStats.IndexOf(5))
+                {
+                    Evs[eligibleStats[eligibleStats.IndexOf(5)]] += 4; // Ajoutez 4 EVs à la statistique de vitesse
+                }
+            }
+            else if (eligibleStats.Contains(4)) // Vérifiez la statistique spedef
+            {
+                if (Evs[GetWorstStatIndex()] != eligibleStats.IndexOf(4))
+                {
+                    Evs[eligibleStats[eligibleStats.IndexOf(4)]] += 4; // Ajoutez 4 EVs à la statistique de vitesse
+                }
+            }
+            else if (eligibleStats.Count > 0) // Si aucune des deux options précédentes n'est possible, choisissez une statistique aléatoire
+            {
+                Random random = new Random();
+                int randomStatIndex = random.Next(0, eligibleStats.Count);
+                Evs[eligibleStats[randomStatIndex]] += 4; // Ajoutez 4 EVs à une statistique aléatoire
+            }
+        }
+
+        public string GetEvsTextForShowdown()
+        {
+            string txt = "";
+            for (int i = 0; i < Evs.Length; i++)
+            {
+                if (Evs[i] == 0) continue;
+                txt += Evs[i] + " " + EVS_NAME[i];
+                if(i != Evs.Length-1)
+                {
+                    txt += " / ";
+                }
+            }
+            return txt;
         }
     }
 }
