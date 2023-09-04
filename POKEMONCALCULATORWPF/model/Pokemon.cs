@@ -170,14 +170,20 @@ namespace POKEMONCALCULATORWPF.model
             }
         }
 
-        public void SetEvs()
+        public void SetEvsAndIvs()
         {
             Evs = new int[6] { 0, 0, 0, 0, 0, 0 };
+            Ivs = new int[6] { 31, 31, 31, 31, 31, 31 };
 
             int[] baseStats = GetDescendingStatsIndex();
             Evs[baseStats[0]] = 252; // On met les 2 stats les plus fortes à 252
             Evs[baseStats[1]] = 252;
             DistributeRemainingEVs();
+
+            if (Stats[3].Base_stat - 25 > Stats[1].Base_stat)
+            {
+                Ivs[1] = 0;
+            }
 
         }
 
@@ -299,5 +305,42 @@ namespace POKEMONCALCULATORWPF.model
             }
             return txt;
         }
+
+        public string GetIvsTextForShowdown()
+        {
+            string txt = "";
+            int nbIv31 = 0;
+
+            foreach (int iv in Ivs)
+            {
+                if (iv == 31)
+                {
+                    nbIv31 += 1;
+                }
+            }
+
+            for (int i = 0; i < Ivs.Length; i++)
+            {
+                if (Ivs[i] == 31)
+                {
+                    continue; // Ignore les IVs égaux à 31
+                }
+
+                txt += Ivs[i] + " " + EVS_NAME[i];
+
+                if (i != Ivs.Length - 1 && Ivs[i + 1] != 31)
+                {
+                    txt += " / ";
+                }
+            }
+
+            if (nbIv31 != 6)
+            {
+                txt = "IVs: " + txt;
+            }
+
+            return txt;
+        }
+
     }
 }

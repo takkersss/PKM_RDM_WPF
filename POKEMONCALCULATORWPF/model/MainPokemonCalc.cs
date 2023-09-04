@@ -324,7 +324,7 @@ namespace POKEMONCALCULATORWPF.model
                 double typeM = extractedRow[i];
                 if (typeM > 1)
                 {
-                    faiblesses.Add(values[i], 2); ;
+                    faiblesses.Add(values[i], 2);
                 }
             }
 

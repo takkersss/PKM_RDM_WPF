@@ -171,35 +171,42 @@
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                             <TextBox x:Name="tbHpEv"  Width="50" Height="27.29" Text="{Binding Evs[0]}" SelectionChanged="tbEv_SelectionChanged"/>
                             <Slider x:Name="slHpEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[0]}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
+                            <TextBox x:Name="tbHpIv"  Width="50" Height="27.29" Text="{Binding Ivs[0]}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
                         </StackPanel>
                         <!-- Attack -->
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                             <TextBox x:Name="tbAttEv"  Width="50" Height="27.29" Text="{Binding Evs[1]}" SelectionChanged="tbEv_SelectionChanged"/>
                             <Slider x:Name="slAttEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[1]}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
+                            <TextBox x:Name="tbAttIv"  Width="50" Height="27.29" Text="{Binding Ivs[1]}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
                         </StackPanel>
                         <!-- Defense -->
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                             <TextBox x:Name="tbDefEv"  Width="50" Height="27.29" Text="{Binding Evs[2]}" SelectionChanged="tbEv_SelectionChanged"/>
                             <Slider x:Name="slDefEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[2]}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
+                            <TextBox x:Name="tbDefIv"  Width="50" Height="27.29" Text="{Binding Ivs[2]}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
                         </StackPanel>
                         <!-- Spe Att -->
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                             <TextBox x:Name="tbSAttEv"  Width="50" Height="27.29" Text="{Binding Evs[3]}" SelectionChanged="tbEv_SelectionChanged"/>
                             <Slider x:Name="slSAttEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[3]}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
+                            <TextBox x:Name="tbSAttIv"  Width="50" Height="27.29" Text="{Binding Ivs[3]}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
                         </StackPanel>
                         <!-- Spe Defense -->
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                             <TextBox x:Name="tbSDefEv"  Width="50" Height="27.29" Text="{Binding Evs[4]}" SelectionChanged="tbEv_SelectionChanged"/>
                             <Slider x:Name="slSDefEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[4]}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
+                            <TextBox x:Name="tbSDefIv"  Width="50" Height="27.29" Text="{Binding Ivs[4]}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
                         </StackPanel>
                         <!-- Defense -->
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                             <TextBox x:Name="tbSpeEv"  Width="50" Height="27.29" Text="{Binding Evs[5]}" SelectionChanged="tbEv_SelectionChanged"/>
                             <Slider x:Name="slSpeEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[5]}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
+                            <TextBox x:Name="tbSpeIv"  Width="50" Height="27.29" Text="{Binding Ivs[5]}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
                         </StackPanel>
 
                     </StackPanel>
                     <Label Grid.Column="1" x:Name="lbEVs" Content="EVs" Height="34" FontSize="20" VerticalContentAlignment="Top" VerticalAlignment="Top" FontWeight="Bold" HorizontalAlignment="Left"/>
+                    <Label Grid.Column="1" x:Name="lbIVs" Content="IVs" Height="34" FontSize="20" VerticalContentAlignment="Top" VerticalAlignment="Top" FontWeight="Bold" HorizontalAlignment="Right" Margin="0,0,145,0"/>
                 </Grid>
 
                 <!-- TYPE CHART -->

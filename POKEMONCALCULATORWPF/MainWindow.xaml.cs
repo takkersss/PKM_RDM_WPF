@@ -69,6 +69,11 @@ namespace POKEMONCALCULATORWPF
                 team +=p.Name + "\nAbility: " + p.WantedAbility;
                 team += "\nTera Type: " + p.TeraType.ToString();
                 team += "\nEVs: " + p.GetEvsTextForShowdown();
+
+                if (!String.IsNullOrEmpty(p.GetIvsTextForShowdown()))
+                {
+                    team += "\n" + p.GetIvsTextForShowdown();
+                }
                 team += "\n\n";
             }
             return team;
@@ -104,7 +109,7 @@ namespace POKEMONCALCULATORWPF
                 {
                     p.Bst += stat.Base_stat;
                 }
-                p.SetEvs();
+                p.SetEvsAndIvs();
                 Random r = new Random();
                 p.WantedAbility = p.Abilities[r.Next(0, p.Abilities.Count)].Ability.Name;
                 p.TeraType = (TypeP)Enum.Parse(typeof(TypeP), applicationData.AllType[r.Next(0,18)]);
@@ -344,6 +349,21 @@ namespace POKEMONCALCULATORWPF
             }
             MessageBox.Show(currentPokemon.Name + " " + txt);
 
+        }
+
+        private void tbIv_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            TextBox tb = (TextBox)sender;
+            if (String.IsNullOrEmpty(tb.Text)) { tb.Text = "0"; return; }
+
+            int iv;
+            if (int.TryParse(tb.Text, out iv))
+            {
+                if (iv > 31)
+                {
+                    tb.Text = "31";
+                }
+            }
         }
     }
 }
