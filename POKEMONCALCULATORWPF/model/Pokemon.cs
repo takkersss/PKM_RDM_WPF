@@ -18,6 +18,7 @@ namespace POKEMONCALCULATORWPF.model
     {
         public static string CHEMIN_DOSSIER = "jsonstock";
         public static string[] EVS_NAME = new string[6] { "HP", "Atk", "Def", "SpA", "SpD", "Spe" };
+        public static int MAX_EV_DISTRIBUTION = 508;
 
         private string name;
         private int id;
@@ -340,6 +341,16 @@ namespace POKEMONCALCULATORWPF.model
             }
 
             return txt;
+        }
+
+        public int GetRemainingEvs()
+        {
+            int distribuedEvs = 0;
+            foreach (int i in Evs)
+            {
+                distribuedEvs += i;
+            }
+            return MAX_EV_DISTRIBUTION - distribuedEvs;
         }
 
     }

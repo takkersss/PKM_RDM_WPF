@@ -160,10 +160,9 @@ namespace POKEMONCALCULATORWPF
 
         public void RefreshWindow()
         {
-            teamListImageView.ItemsSource = applicationData.PokemonTeam; // actualisation
-            cbTera.ItemsSource = applicationData.AllType; // actualisation
-            teamListImageView.SelectedIndex = -1;
-            teamListImageView.SelectedIndex = 0; // actualisation;
+            teamListImageView.ItemsSource = applicationData.PokemonTeam; 
+            cbTera.ItemsSource = applicationData.AllType; 
+            teamListImageView.SelectedIndex = 0; 
         }
 
         private void lvOpenSwitchWindow(object sender, MouseButtonEventArgs e)
@@ -191,16 +190,21 @@ namespace POKEMONCALCULATORWPF
             }
         }
 
+        private bool canUpdate;
+
         private void teamListImageView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            canUpdate = false;
             ListView lv = ((ListView)sender);
             if (lv.SelectedItem == null) return;
-
-            currentPokemon = applicationData.PokemonTeam[applicationData.PokemonTeam.ToList().FindIndex(x => x.Name == ((Pokemon)lv.SelectedItem).Name)];
+            
+            currentPokemon = applicationData.PokemonTeam[applicationData.PokemonTeam.ToList().FindIndex(x => x.GetHashCode() == ((Pokemon)lv.SelectedItem).GetHashCode())];
             cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
             cbTera.SelectedIndex = GetIndexOfWantedTera(currentPokemon);
             UpdateShowedEVs();
-            //MessageBox.Show(obj.ToString());
+            UpdateRemainingEvsText();
+            //MessageBox.Show(currentPokemon.Name);
+            canUpdate = true;
         }
 
         private void cbAbility_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -226,10 +230,12 @@ namespace POKEMONCALCULATORWPF
 
         private void UpdateEvAndSlider(int index, int value, Slider slider)
         {
+            currentPokemon.Evs[index] = value;
             slider.Value = currentPokemon.Evs[index];
         }
-        private void tbEv_SelectionChanged(object sender, RoutedEventArgs e)
+        private void tbEv_TextChanged(object sender, TextChangedEventArgs e)
         {
+            if (canUpdate != true) return;   
             TextBox tb = (TextBox)sender;
             if (String.IsNullOrEmpty(tb.Text)) return;
 
@@ -260,6 +266,7 @@ namespace POKEMONCALCULATORWPF
                             UpdateEvAndSlider(5, ev, slSpeEv);
                             break;
                     }
+                    UpdateRemainingEvsText();
                 }
                 else
                 {
@@ -270,16 +277,16 @@ namespace POKEMONCALCULATORWPF
 
         private void slEv_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            if (canUpdate != true) return;   
             Slider slider = (Slider)sender;
             if (currentPokemon == null) return;
 
             int totalEVs = GetSliderTotal();
-            int maxTotalEVs = 508;
 
-            if (totalEVs > maxTotalEVs)
+            if (totalEVs > Pokemon.MAX_EV_DISTRIBUTION)
             {
                 // Calculez la différence entre la somme actuelle et 508
-                int difference = totalEVs - maxTotalEVs;
+                int difference = totalEVs - Pokemon.MAX_EV_DISTRIBUTION;
 
                 // Vérifiez si la valeur du slider dépasse la différence
                 if (slider.Value > difference)
@@ -315,6 +322,7 @@ namespace POKEMONCALCULATORWPF
                     tbSpeEv.Text = slider.Value.ToString();
                     break;
             }
+            UpdateRemainingEvsText();
         }
 
         
@@ -365,5 +373,11 @@ namespace POKEMONCALCULATORWPF
                 }
             }
         }
+
+        private void UpdateRemainingEvsText()
+        {
+            lbRemainingEVsValue.Content = currentPokemon.GetRemainingEvs().ToString();
+        }
+
     }
 }
