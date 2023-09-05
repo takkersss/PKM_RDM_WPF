@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Net.Http.Json;
 using System.Printing;
 using System.Reflection;
 using System.Security.AccessControl;
@@ -30,6 +31,7 @@ namespace POKEMONCALCULATORWPF
         private bool isBtnRandomTeamBusy;
         WindowSwitchPokemon winSwitch;
         private Pokemon currentPokemon;
+        private AllPokemon allPokemonData;
 
         public MainWindow()
         {
@@ -116,10 +118,37 @@ namespace POKEMONCALCULATORWPF
             }
         }
 
+        private async void LoadAllPokemonName()
+        {
+            if (File.Exists(AllPokemon.CHEMIN_ALL_POKEMON_NAME)) // Si le fichier existe, on regarde si on peut le mettre à jour
+            {
+                string jsonContenu = File.ReadAllText(AllPokemon.CHEMIN_ALL_POKEMON_NAME);
+                // Désérialiser le contenu JSON en un objet
+                allPokemonData = JsonConvert.DeserializeObject<AllPokemon>(jsonContenu);
+
+                if (await MainPokemonCalc.GetNumberOfPokemon() != allPokemonData.Results.Count)
+                {
+                    allPokemonData = await MainPokemonCalc.GetAllPokemonNameUrl();
+                }
+            }
+            else // Si le fichier n'existe pas, on le crée et on lui assigne les données
+            {
+                if (!Directory.Exists("data"))
+                {
+                    Directory.CreateDirectory("data");
+                }
+
+                string json = JsonConvert.SerializeObject(await MainPokemonCalc.GetAllPokemonNameUrl());
+                File.WriteAllText(AllPokemon.CHEMIN_ALL_POKEMON_NAME, json);
+                allPokemonData = JsonConvert.DeserializeObject<AllPokemon>(File.ReadAllText(AllPokemon.CHEMIN_ALL_POKEMON_NAME));
+            }
+            applicationData.AllPokemonName = new ObservableCollection<string>(allPokemonData.GetAllPokemonName());
+        }
+
         // Se lance au chargement de la fenetre (listview)
         private async void teamListBox_Loaded(object sender, RoutedEventArgs e)
         {
-            applicationData.AllPokemonName = new ObservableCollection<String>(await MainPokemonCalc.GetAllPokemonName());
+            LoadAllPokemonName();
             applicationData.AllType = new ObservableCollection<string>(Enum.GetNames(typeof(TypeP)));
             if (Directory.Exists(Pokemon.CHEMIN_DOSSIER))
             {

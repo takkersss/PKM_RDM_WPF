@@ -16,9 +16,9 @@ namespace POKEMONCALCULATORWPF.model
 {
     public class Pokemon
     {
-        public static string CHEMIN_DOSSIER = "jsonstock";
-        public static string[] EVS_NAME = new string[6] { "HP", "Atk", "Def", "SpA", "SpD", "Spe" };
-        public static int MAX_EV_DISTRIBUTION = 508;
+        public const string CHEMIN_DOSSIER = "jsonstock";
+        public static readonly string[] EVS_NAME = new string[] { "HP", "Atk", "Def", "SpA", "SpD", "Spe" };
+        public const int MAX_EV_DISTRIBUTION = 508;
 
         private string name;
         private int id;

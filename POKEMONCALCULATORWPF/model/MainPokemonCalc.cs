@@ -720,6 +720,7 @@ namespace POKEMONCALCULATORWPF.model
                 {
                     string contenu = await reponse.Content.ReadAsStringAsync();
                     AllPokemon allPokemon = JsonConvert.DeserializeObject<AllPokemon>(contenu);
+                    AllPokemon.NB = allPokemon.Results.Count;
                     return allPokemon;
                 }
                 else
@@ -729,17 +730,46 @@ namespace POKEMONCALCULATORWPF.model
                 }
             }
         }
-
-        public static async Task<List<string>> GetAllPokemonName()
+        public static async Task<bool> HasAllPokemon()
         {
-            AllPokemon allPokemonNameUrl = await GetAllPokemonNameUrl();
-            List<string> allPokemonName = new List<string>();
-            foreach (NameUrl pokemon in allPokemonNameUrl.Results)
+            using (HttpClient client = new HttpClient())
             {
-                allPokemonName.Add(pokemon.Name);
+                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon?limit={AllPokemon.NB}");
+                if (reponse.IsSuccessStatusCode)
+                {
+                    string contenu = await reponse.Content.ReadAsStringAsync();
+                    AllPokemon allPokemon = JsonConvert.DeserializeObject<AllPokemon>(contenu);
+                    if (allPokemon.Results.Count == AllPokemon.NB)
+                    {
+                        return true;
+                    }
+                    else return false;
+                }
+                else
+                {
+                    Console.WriteLine("Une erreur s'est produite lors de la récupération des informations du Pokémon.");
+                    return false;
+                }
             }
-            //throw new Exception(allPokemonName[1009]);
-            return allPokemonName;
+        }
+
+        public static async Task<int> GetNumberOfPokemon()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon?limit={AllPokemon.NB}");
+                if (reponse.IsSuccessStatusCode)
+                {
+                    string contenu = await reponse.Content.ReadAsStringAsync();
+                    AllPokemon allPokemon = JsonConvert.DeserializeObject<AllPokemon>(contenu);
+                    return allPokemon.Results.Count;
+                }
+                else
+                {
+                    Console.WriteLine("Une erreur s'est produite lors de la récupération des informations du Pokémon.");
+                    return -1;
+                }
+            }
         }
     }
 }
