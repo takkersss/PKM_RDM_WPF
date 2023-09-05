@@ -720,33 +720,12 @@ namespace POKEMONCALCULATORWPF.model
                 {
                     string contenu = await reponse.Content.ReadAsStringAsync();
                     AllPokemon allPokemon = JsonConvert.DeserializeObject<AllPokemon>(contenu);
-                    AllPokemon.NB = allPokemon.Results.Count;
                     return allPokemon;
                 }
                 else
                 {
                     Console.WriteLine("Une erreur s'est produite lors de la récupération des informations du Pokémon.");
                     return null;
-                }
-            }
-        }
-
-        public static async Task<int> GetAndSetNumberOfPokemon()
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon?limit={AllPokemon.NB}");
-                if (reponse.IsSuccessStatusCode)
-                {
-                    string contenu = await reponse.Content.ReadAsStringAsync();
-                    AllPokemon allPokemon = JsonConvert.DeserializeObject<AllPokemon>(contenu);
-                    AllPokemon.NB = allPokemon.Results.Count;
-                    return allPokemon.Results.Count;
-                }
-                else
-                {
-                    Console.WriteLine("Une erreur s'est produite lors de la récupération des informations du Pokémon.");
-                    return -1;
                 }
             }
         }

@@ -126,8 +126,9 @@ namespace POKEMONCALCULATORWPF
                 // Désérialiser le contenu JSON en un objet
                 allPokemonData = JsonConvert.DeserializeObject<AllPokemon>(jsonContenu);
 
-                if (await MainPokemonCalc.GetAndSetNumberOfPokemon() != AllPokemon.NB)
+                if (AllPokemon.NB_POKEMON != allPokemonData.Results.Count)
                 {
+                    //MessageBox.Show(AllPokemon.NB_POKEMON + " " + allPokemonData.Results.Count);
                     allPokemonData = await MainPokemonCalc.GetAllPokemonNameUrl();
                 }
             }
