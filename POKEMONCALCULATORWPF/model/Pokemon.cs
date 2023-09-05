@@ -19,6 +19,34 @@ namespace POKEMONCALCULATORWPF.model
         public const string CHEMIN_DOSSIER = "jsonstock";
         public static readonly string[] EVS_NAME = new string[] { "HP", "Atk", "Def", "SpA", "SpD", "Spe" };
         public const int MAX_EV_DISTRIBUTION = 508;
+        public static readonly string[] NATURES = new string[]
+        {
+    "Adamant (+Atk, -SpA)",
+    "Bashful (+SpA, -SpA)",
+    "Bold (+Def, -Atk)",
+    "Brave (+Atk, -Spe)",
+    "Calm (+SpD, -Atk)",
+    "Careful (+SpD, -SpA)",
+    "Docile (+Def, -Def)",
+    "Gentle (+SpD, -Def)",
+    "Hardy (+Atk, -Atk)",
+    "Hasty (+Spe, -Def)",
+    "Impish (+Def, -SpA)",
+    "Jolly (+Spe, -SpA)",
+    "Lax (+Def, -SpD)",
+    "Lonely (+Atk, -Def)",
+    "Mild (+SpA, -Def)",
+    "Modest (+SpA, -Atk)",
+    "Naive (+Spe, -SpD)",
+    "Naughty (+Atk, -SpD)",
+    "Quiet (+SpA, -Spe)",
+    "Quirky (+SpD, -SpD)",
+    "Rash (+SpA, -SpD)",
+    "Relaxed (+Def, -Spe)",
+    "Sassy (+SpD, -Spe)",
+    "Serious (+Spe, -Spe)",
+    "Timid (+Spe, -Atk)"
+        };
 
         private string name;
         private int id;
@@ -37,7 +65,7 @@ namespace POKEMONCALCULATORWPF.model
 
 
         // WPF
-        private string frName, typeChartResume, wantedAbility;
+        private string frName, typeChartResume, wantedAbility, wantedNature;
         private int bst;
         private TypeP teraType;
         private int[] evs, ivs;
@@ -54,6 +82,7 @@ namespace POKEMONCALCULATORWPF.model
         public TypeP TeraType { get => teraType; set => teraType = value; }
         public int[] Evs { get => evs; set => evs = value; }
         public int[] Ivs { get => ivs; set => ivs = value; }
+        public string WantedNature { get => wantedNature; set => wantedNature = value; }
 
         private List<TypeP> resistancesX2, resistancesX4, faiblessesX2, faiblessesX4, immunites;
 
@@ -181,11 +210,20 @@ namespace POKEMONCALCULATORWPF.model
             Evs[baseStats[1]] = 252;
             DistributeRemainingEVs();
 
-            if (Stats[3].Base_stat - 25 > Stats[1].Base_stat)
+            if (IsSpecialAttacker())
             {
                 Ivs[1] = 0;
             }
 
+        }
+
+        private bool IsSpecialAttacker()
+        {
+            if (Stats[3].Base_stat - 25 > Stats[1].Base_stat)
+            {
+                return true;
+            }
+            else return false;
         }
 
         public int GetTotalEvs()
@@ -353,5 +391,22 @@ namespace POKEMONCALCULATORWPF.model
             return MAX_EV_DISTRIBUTION - distribuedEvs;
         }
 
+        public string GetOnlyNatureName()
+        {
+            // Divisez la chaîne en utilisant '(' comme séparateur
+            string[] parties = this.WantedNature.Split('(');
+
+            // La première partie (index 0) contient le nom de la nature
+            string nomNature = parties[0].Trim();
+
+            return nomNature;
+        }
+
+        /*
+        public string ChooseBestNature()
+        {
+            if(Stats[GetBestStatIndex])
+        }
+        */
     }
 }

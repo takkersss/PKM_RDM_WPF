@@ -70,21 +70,30 @@
                         </StackPanel>
                     </StackPanel>
 
-                    <StackPanel Grid.Column="2">
-                        <StackPanel Orientation="Horizontal" Margin="20,0,0,0" DataContext="{Binding SelectedItem, ElementName=teamListImageView}">
-                            <Label x:Name="lbAbility" Content="Ability : " FontSize="20" Width="110"/>
-                            <ComboBox x:Name="cbAbility" Width="200" SelectedItem="{Binding WantedAbility, Mode=OneWay}" ItemsSource="{Binding Abilities}" FontSize="18" SelectionChanged="cbAbility_SelectionChanged" VerticalContentAlignment="Center"/>
+                    <StackPanel Orientation="Horizontal" Grid.Column="2">
+                        <!-- ABILITY ET TERA -->
+                        <StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="20,0,0,0" DataContext="{Binding SelectedItem, ElementName=teamListImageView}">
+                                <Label x:Name="lbAbility" Content="Ability : " FontSize="20" Width="110"/>
+                                <ComboBox x:Name="cbAbility" Width="200" SelectedItem="{Binding WantedAbility, Mode=OneWay}" ItemsSource="{Binding Abilities}" FontSize="18" SelectionChanged="cbAbility_SelectionChanged" VerticalContentAlignment="Center"/>
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
+                                <Label x:Name="lbTera" Content="Tera Type : " FontSize="20" Width="110"/>
+                                <ComboBox x:Name="cbTera" Width="200" ItemsSource="{Binding AllType}" FontSize="18" VerticalContentAlignment="Center" SelectionChanged="cbTera_SelectionChanged">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <Image Source="{Binding Converter={StaticResource TypeToImageConverter}}" Width="100" Height="20"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
-                            <Label x:Name="lbTera" Content="Tera Type : " FontSize="20" Width="110"/>
-                            <ComboBox x:Name="cbTera" Width="200" ItemsSource="{Binding AllType}" FontSize="18" VerticalContentAlignment="Center" SelectionChanged="cbTera_SelectionChanged">
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Image Source="{Binding Converter={StaticResource TypeToImageConverter}}" Width="100" Height="20"/>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ComboBox>
+                        <!-- NATURE -->
+                        <StackPanel Orientation="Horizontal" Margin="20,0,0,0" Width="357">
+                            <Label x:Name="lbNature" Content="Nature : " FontSize="20" Width="110" VerticalAlignment="Top"/>
+                            <ComboBox x:Name="cbNature" Width="244" ItemsSource="{Binding AllNature}" FontSize="18" VerticalContentAlignment="Center" VerticalAlignment="Top" SelectionChanged="cbNature_SelectionChanged" Height="36.6"/>
                         </StackPanel>
+
                     </StackPanel>
 
                 </Grid>
@@ -171,37 +180,37 @@
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                             <TextBox x:Name="tbHpEv"  Width="50" Height="27.29" Text="{Binding Evs[0], Mode=OneWay}" TextChanged="tbEv_TextChanged"/>
                             <Slider x:Name="slHpEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[0], Mode=OneWay}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
-                            <TextBox x:Name="tbHpIv"  Width="50" Height="27.29" Text="{Binding Ivs[0], Mode=OneWay}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
+                            <TextBox x:Name="tbHpIv"  Width="50" Height="27.29" Text="{Binding Ivs[0]}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
                         </StackPanel>
                         <!-- Attack -->
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                             <TextBox x:Name="tbAttEv"  Width="50" Height="27.29" Text="{Binding Evs[1], Mode=OneWay}" TextChanged="tbEv_TextChanged"/>
                             <Slider x:Name="slAttEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[1], Mode=OneWay}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
-                            <TextBox x:Name="tbAttIv"  Width="50" Height="27.29" Text="{Binding Ivs[1], Mode=OneWay}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
+                            <TextBox x:Name="tbAttIv"  Width="50" Height="27.29" Text="{Binding Ivs[1]}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
                         </StackPanel>
                         <!-- Defense -->
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                             <TextBox x:Name="tbDefEv"  Width="50" Height="27.29" Text="{Binding Evs[2], Mode=OneWay}" TextChanged="tbEv_TextChanged"/>
                             <Slider x:Name="slDefEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[2], Mode=OneWay}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
-                            <TextBox x:Name="tbDefIv"  Width="50" Height="27.29" Text="{Binding Ivs[2], Mode=OneWay}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
+                            <TextBox x:Name="tbDefIv"  Width="50" Height="27.29" Text="{Binding Ivs[2]}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
                         </StackPanel>
                         <!-- Spe Att -->
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                             <TextBox x:Name="tbSAttEv"  Width="50" Height="27.29" Text="{Binding Evs[3], Mode=OneWay}" TextChanged="tbEv_TextChanged"/>
                             <Slider x:Name="slSAttEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[3], Mode=OneWay}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
-                            <TextBox x:Name="tbSAttIv"  Width="50" Height="27.29" Text="{Binding Ivs[3], Mode=OneWay}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
+                            <TextBox x:Name="tbSAttIv"  Width="50" Height="27.29" Text="{Binding Ivs[3]}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
                         </StackPanel>
                         <!-- Spe Defense -->
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                             <TextBox x:Name="tbSDefEv"  Width="50" Height="27.29" Text="{Binding Evs[4], Mode=OneWay}" TextChanged="tbEv_TextChanged"/>
                             <Slider x:Name="slSDefEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[4], Mode=OneWay}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
-                            <TextBox x:Name="tbSDefIv"  Width="50" Height="27.29" Text="{Binding Ivs[4], Mode=OneWay}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
+                            <TextBox x:Name="tbSDefIv"  Width="50" Height="27.29" Text="{Binding Ivs[4]}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
                         </StackPanel>
                         <!-- Defense -->
                         <StackPanel Orientation="Horizontal" Margin="0,10,0,10">
                             <TextBox x:Name="tbSpeEv"  Width="50" Height="27.29" Text="{Binding Evs[5], Mode=OneWay}" TextChanged="tbEv_TextChanged"/>
                             <Slider x:Name="slSpeEv" SmallChange="1" Maximum="252" Width="300" Margin="15,0,0,0" Value="{Binding Evs[5], Mode=OneWay}" ValueChanged="slEv_ValueChanged" IsSnapToTickEnabled="True" TickFrequency="1" />
-                            <TextBox x:Name="tbSpeIv"  Width="50" Height="27.29" Text="{Binding Ivs[5], Mode=OneWay}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
+                            <TextBox x:Name="tbSpeIv"  Width="50" Height="27.29" Text="{Binding Ivs[5]}" Margin="15,0,0,0" TextChanged="tbIv_TextChanged"/>
                         </StackPanel>
 
                     </StackPanel>

@@ -15,6 +15,7 @@ namespace POKEMONCALCULATORWPF.model
         public ObservableCollection<String> AllPokemonName { get; set; }
 
         public ObservableCollection<String> AllType { get; set; }
+        public ObservableCollection<String> AllNature { get; set; }
 
         public ObservableCollection<String> AllPokemonNameFiltres { get; set; }
 
