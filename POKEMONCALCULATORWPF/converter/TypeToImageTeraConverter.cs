@@ -11,16 +11,17 @@ using System.Windows.Media.Imaging;
 
 namespace POKEMONCALCULATORWPF.converter
 {
-    public class TypeToImageConverter : IValueConverter
+    public class TypeToImageTeraConverter : IValueConverter
     {
         string[] typeImages =
-        {
-            "img/SteelIC_SV.png", "img/FightingIC_SV.png", "img/DragonIC_SV.png", "img/WaterIC_SV.png",
-            "img/ElectricIC_SV.png", "img/FairyIC_SV.png", "img/FireIC_SV.png", "img/IceIC_SV.png",
-            "img/BugIC_SV.png", "img/NormalIC_SV.png", "img/GrassIC_SV.png", "img/PoisonIC_SV.png",
-            "img/PsychicIC_SV.png", "img/RockIC_SV.png", "img/GroundIC_SV.png", "img/GhostIC_SV.png",
-            "img/DarkIC_SV.png", "img/FlyingIC_SV.png"
-        };
+{
+    "img/tera/SteelIC_Tera.png", "img/tera/FightingIC_Tera.png", "img/tera/DragonIC_Tera.png", "img/tera/WaterIC_Tera.png",
+    "img/tera/ElectricIC_Tera.png", "img/tera/FairyIC_Tera.png", "img/tera/FireIC_Tera.png", "img/tera/IceIC_Tera.png",
+    "img/tera/BugIC_Tera.png", "img/tera/NormalIC_Tera.png", "img/tera/GrassIC_Tera.png", "img/tera/PoisonIC_Tera.png",
+    "img/tera/PsychicIC_Tera.png", "img/tera/RockIC_Tera.png", "img/tera/GroundIC_Tera.png", "img/tera/GhostIC_Tera.png",
+    "img/tera/DarkIC_Tera.png", "img/tera/FlyingIC_Tera.png"
+};
+
 
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {

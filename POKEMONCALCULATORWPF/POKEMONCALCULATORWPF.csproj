@@ -25,6 +25,24 @@
     <None Remove="img\PsychicIC_SV.png" />
     <None Remove="img\RockIC_SV.png" />
     <None Remove="img\SteelIC_SV.png" />
+    <None Remove="img\tera\BugIC_Tera.png" />
+    <None Remove="img\tera\DarkIC_Tera.png" />
+    <None Remove="img\tera\DragonIC_Tera.png" />
+    <None Remove="img\tera\ElectricIC_Tera.png" />
+    <None Remove="img\tera\FairyIC_Tera.png" />
+    <None Remove="img\tera\FightingIC_Tera.png" />
+    <None Remove="img\tera\FireIC_Tera.png" />
+    <None Remove="img\tera\FlyingIC_Tera.png" />
+    <None Remove="img\tera\GhostIC_Tera.png" />
+    <None Remove="img\tera\GrassIC_Tera.png" />
+    <None Remove="img\tera\GroundIC_Tera.png" />
+    <None Remove="img\tera\IceIC_Tera.png" />
+    <None Remove="img\tera\NormalIC_Tera.png" />
+    <None Remove="img\tera\PoisonIC_Tera.png" />
+    <None Remove="img\tera\PsychicIC_Tera.png" />
+    <None Remove="img\tera\RockIC_Tera.png" />
+    <None Remove="img\tera\SteelIC_Tera.png" />
+    <None Remove="img\tera\WaterIC_Tera.png" />
     <None Remove="img\WaterIC_SV.png" />
   </ItemGroup>
 
@@ -38,58 +56,112 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="img\BugIC_SV.png">
+    <Resource Include="img\tera\BugIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\DarkIC_SV.png">
+    <Resource Include="img\tera\DarkIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\DragonIC_SV.png">
+    <Resource Include="img\tera\DragonIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\ElectricIC_SV.png">
+    <Resource Include="img\tera\ElectricIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\FairyIC_SV.png">
+    <Resource Include="img\tera\FairyIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\FightingIC_SV.png">
+    <Resource Include="img\tera\FightingIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\FireIC_SV.png">
+    <Resource Include="img\tera\FireIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\FlyingIC_SV.png">
+    <Resource Include="img\tera\FlyingIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\GhostIC_SV.png">
+    <Resource Include="img\tera\GhostIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\GrassIC_SV.png">
+    <Resource Include="img\tera\GrassIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\GroundIC_SV.png">
+    <Resource Include="img\tera\GroundIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\IceIC_SV.png">
+    <Resource Include="img\tera\IceIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\NormalIC_SV.png">
+    <Resource Include="img\tera\NormalIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\PoisonIC_SV.png">
+    <Resource Include="img\tera\PoisonIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\PsychicIC_SV.png">
+    <Resource Include="img\tera\PsychicIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\RockIC_SV.png">
+    <Resource Include="img\tera\RockIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\SteelIC_SV.png">
+    <Resource Include="img\tera\SteelIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="img\WaterIC_SV.png">
+    <Resource Include="img\tera\WaterIC_Tera.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\BugIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\DarkIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\DragonIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\ElectricIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\FairyIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\FightingIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\FireIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\FlyingIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\GhostIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\GrassIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\GroundIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\IceIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\NormalIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\PoisonIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\PsychicIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\RockIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\SteelIC_SV.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\type\WaterIC_SV.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

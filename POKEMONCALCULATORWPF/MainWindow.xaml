@@ -13,7 +13,8 @@
     </Window.DataContext>
     <Window.Resources>
         <converter:ProgressForegroundConverter x:Key="ProgressForegroundConverter"/>
-        <converter:TypeToImageConverter x:Key="TypeToImageConverter"/>
+        <converter:TypeToImageTypeConverter x:Key="TypeToImageTypeConverter"/>
+        <converter:TypeToImageTeraConverter x:Key="TypeToImageTeraConverter"/>
         <Style TargetType="ProgressBar">
             <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Value, Converter={StaticResource ProgressForegroundConverter}}" />
         </Style>
@@ -65,8 +66,8 @@
                     <StackPanel DataContext="{Binding SelectedItem, ElementName=teamListImageView}">
                         <Label x:Name="lbName" Content="{Binding Name}" VerticalAlignment="Top" Height="38" FontSize="20"/>
                         <StackPanel Orientation="Horizontal" Height="20">
-                            <Image x:Name="imgTyp1" Source="{Binding Types[0].Type.Name, Converter={StaticResource TypeToImageConverter}}" Width="100" Height="20" HorizontalAlignment="Left"/>
-                            <Image x:Name="imgTyp2" Source="{Binding Types[1].Type.Name, Converter={StaticResource TypeToImageConverter}}" Width="100" Height="20" HorizontalAlignment="Left" />
+                            <Image x:Name="imgTyp1" Source="{Binding Types[0].Type.Name, Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20" HorizontalAlignment="Left"/>
+                            <Image x:Name="imgTyp2" Source="{Binding Types[1].Type.Name, Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20" HorizontalAlignment="Left" />
                         </StackPanel>
                     </StackPanel>
 
@@ -82,7 +83,7 @@
                                 <ComboBox x:Name="cbTera" Width="200" ItemsSource="{Binding AllType}" FontSize="18" VerticalContentAlignment="Center" SelectionChanged="cbTera_SelectionChanged">
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <Image Source="{Binding Converter={StaticResource TypeToImageConverter}}" Width="100" Height="20"/>
+                                            <Image Source="{Binding Converter={StaticResource TypeToImageTeraConverter}}" Width="130" Height="26"/>
                                         </DataTemplate>
                                     </ItemsControl.ItemTemplate>
                                 </ComboBox>
@@ -233,7 +234,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding Converter={StaticResource TypeToImageConverter}}" Width="100" Height="20"/>
+                                    <Image Source="{Binding Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -248,7 +249,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding Converter={StaticResource TypeToImageConverter}}" Width="100" Height="20"/>
+                                    <Image Source="{Binding Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -264,7 +265,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding Converter={StaticResource TypeToImageConverter}}" Width="100" Height="20"/>
+                                    <Image Source="{Binding Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -279,7 +280,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding Converter={StaticResource TypeToImageConverter}}" Width="100" Height="20"/>
+                                    <Image Source="{Binding Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -294,7 +295,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding Converter={StaticResource TypeToImageConverter}}" Width="100" Height="20"/>
+                                    <Image Source="{Binding Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
