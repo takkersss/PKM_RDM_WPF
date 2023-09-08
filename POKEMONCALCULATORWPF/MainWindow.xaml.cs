@@ -175,9 +175,11 @@ namespace POKEMONCALCULATORWPF
                 currentPokemon = (Pokemon)teamListImageView.SelectedItem;
                 //MessageBox.Show(currentPokemon.Name);
             }
-            else
+            else // Si le dossier n'existe pas, on le crée
             {
-                throw new Exception("directory doesn't exist");
+                Directory.CreateDirectory(Pokemon.CHEMIN_DOSSIER);
+                NewRandomTeam();
+                currentPokemon = (Pokemon)teamListImageView.SelectedItem;
             }
         }
 
