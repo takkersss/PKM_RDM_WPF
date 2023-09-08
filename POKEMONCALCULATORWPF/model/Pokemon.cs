@@ -19,34 +19,6 @@ namespace POKEMONCALCULATORWPF.model
         public const string CHEMIN_DOSSIER = "jsonstock";
         public static readonly string[] EVS_NAME = new string[] { "HP", "Atk", "Def", "SpA", "SpD", "Spe" };
         public const int MAX_EV_DISTRIBUTION = 508;
-        public static readonly string[] NATURES = new string[]
-        {
-    "Adamant (+Atk, -SpA)",
-    "Bashful (+SpA, -SpA)",
-    "Bold (+Def, -Atk)",
-    "Brave (+Atk, -Spe)",
-    "Calm (+SpD, -Atk)",
-    "Careful (+SpD, -SpA)",
-    "Docile (+Def, -Def)",
-    "Gentle (+SpD, -Def)",
-    "Hardy (+Atk, -Atk)",
-    "Hasty (+Spe, -Def)",
-    "Impish (+Def, -SpA)",
-    "Jolly (+Spe, -SpA)",
-    "Lax (+Def, -SpD)",
-    "Lonely (+Atk, -Def)",
-    "Mild (+SpA, -Def)",
-    "Modest (+SpA, -Atk)",
-    "Naive (+Spe, -SpD)",
-    "Naughty (+Atk, -SpD)",
-    "Quiet (+SpA, -Spe)",
-    "Quirky (+SpD, -SpD)",
-    "Rash (+SpA, -SpD)",
-    "Relaxed (+Def, -Spe)",
-    "Sassy (+SpD, -Spe)",
-    "Serious (+Spe, -Spe)",
-    "Timid (+Spe, -Atk)"
-        };
 
         private string name;
         private int id;
@@ -65,8 +37,9 @@ namespace POKEMONCALCULATORWPF.model
 
 
         // WPF
-        private string frName, typeChartResume, wantedAbility, wantedNature;
+        private string frName, typeChartResume, wantedAbility;
         private int bst;
+        private Nature wantedNature;
         private TypeP teraType;
         private int[] evs, ivs;
         public string FrName { get => frName; set => frName = value; }
@@ -82,7 +55,7 @@ namespace POKEMONCALCULATORWPF.model
         public TypeP TeraType { get => teraType; set => teraType = value; }
         public int[] Evs { get => evs; set => evs = value; }
         public int[] Ivs { get => ivs; set => ivs = value; }
-        public string WantedNature { get => wantedNature; set => wantedNature = value; }
+        public Nature WantedNature { get => wantedNature; set => wantedNature = value; }
 
         private List<TypeP> resistancesX2, resistancesX4, faiblessesX2, faiblessesX4, immunites;
 
@@ -391,22 +364,41 @@ namespace POKEMONCALCULATORWPF.model
             return MAX_EV_DISTRIBUTION - distribuedEvs;
         }
 
-        public string GetOnlyNatureName()
+        public void ChooseBestNature()
         {
-            // Divisez la chaîne en utilisant '(' comme séparateur
-            string[] parties = this.WantedNature.Split('(');
+            string bestStat, worstStat;
+            Random r = new Random();
 
-            // La première partie (index 0) contient le nom de la nature
-            string nomNature = parties[0].Trim();
+            if(GetBestStatIndex() != 0 && GetWorstStatIndex() != 5) // Si le pokemon est offensif
+            {
+                bestStat = EVS_NAME[5]; // On augmente la vitesse
+                if (IsSpecialAttacker())
+                {
+                    worstStat = EVS_NAME[1];
+                }
+                else worstStat = EVS_NAME[3];
+            }
+            else if(GetBestStatIndex() == 0 || GetBestStatIndex() == 2 || GetBestStatIndex() == 4) // Si pokemon defensif on augmente defense ou spedef
+            {
+                if (Stats[2].Base_stat > Stats[4].Base_stat)
+                {
+                    bestStat = EVS_NAME[2];
+                }else bestStat = EVS_NAME[4];
+                worstStat = EVS_NAME[5];
+            }
+            else if(GetBestStatIndex() != 0 && GetWorstStatIndex() != 0)
+            {
+                bestStat = EVS_NAME[GetBestStatIndex()];
+                worstStat = EVS_NAME[GetWorstStatIndex()];
+            }
+            else
+            {
+                WantedNature.Name = Nature.NATURES[1];
+                return;
+            }
 
-            return nomNature;
+            string resume = $"(+{bestStat}, -{worstStat})";
+            WantedNature.Name = Nature.NATURES.ToList().Find(x => x.Contains(resume));
         }
-
-        /*
-        public string ChooseBestNature()
-        {
-            if(Stats[GetBestStatIndex])
-        }
-        */
     }
 }

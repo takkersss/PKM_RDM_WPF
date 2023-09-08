@@ -67,7 +67,7 @@ namespace POKEMONCALCULATORWPF
                 team +=p.Name + "\nAbility: " + p.WantedAbility;
                 team += "\nTera Type: " + p.TeraType.ToString();
                 team += "\nEVs: " + p.GetEvsTextForShowdown();
-                team += "\n" + p.GetOnlyNatureName() + " Nature";
+                team += "\n" + p.WantedNature.GetOnlyNatureName() + " Nature";
                 if (!String.IsNullOrEmpty(p.GetIvsTextForShowdown()))
                 {
                     team += "\n" + p.GetIvsTextForShowdown();
@@ -111,7 +111,8 @@ namespace POKEMONCALCULATORWPF
                 Random r = new Random();
                 p.WantedAbility = p.Abilities[r.Next(0, p.Abilities.Count)].Ability.Name;
                 p.TeraType = (TypeP)Enum.Parse(typeof(TypeP), applicationData.AllType[r.Next(0,18)]);
-                p.WantedNature = applicationData.AllNature[r.Next(0, 25)]; // ne pas faire aléatoire
+                p.WantedNature = new Nature();
+                p.ChooseBestNature();
             }
         }
 
@@ -148,7 +149,7 @@ namespace POKEMONCALCULATORWPF
         {
             LoadAllPokemonName();
             applicationData.AllType = new ObservableCollection<string>(Enum.GetNames(typeof(TypeP)));
-            applicationData.AllNature = new ObservableCollection<string>(Pokemon.NATURES);
+            applicationData.AllNature = new ObservableCollection<string>(Nature.NATURES);
             if (Directory.Exists(Pokemon.CHEMIN_DOSSIER))
             {
                 string[] fichiersDansDossier = Directory.GetFiles(Pokemon.CHEMIN_DOSSIER);
@@ -259,7 +260,7 @@ namespace POKEMONCALCULATORWPF
         }
         private int GetIndexOfWantedNature(Pokemon p)
         {
-            int index = applicationData.AllNature.IndexOf(applicationData.AllNature.ToList().Find(x => x == p.WantedNature));
+            int index = applicationData.AllNature.IndexOf(applicationData.AllNature.ToList().Find(x => x == p.WantedNature.Name));
             return index;
         }
 
@@ -267,7 +268,7 @@ namespace POKEMONCALCULATORWPF
         {
             if (currentPokemon == null) return;
             if (cbNature.SelectedIndex == -1) return;
-            currentPokemon.WantedNature = applicationData.AllNature[cbNature.SelectedIndex];
+            currentPokemon.WantedNature.Name = applicationData.AllNature[cbNature.SelectedIndex];
         }
 
         private void UpdateEvAndSlider(int index, int value, Slider slider)
