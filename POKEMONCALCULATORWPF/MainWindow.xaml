@@ -7,7 +7,7 @@
         xmlns:model="clr-namespace:POKEMONCALCULATORWPF.model"
         xmlns:converter="clr-namespace:POKEMONCALCULATORWPF.converter"
         mc:Ignorable="d"
-        Title="Random Teambuilder" Height="800" Width="1050" MinHeight="800" MinWidth="1050">
+        Title="Random Teambuilder" Height="800" Width="1050" MinHeight="800" MinWidth="1050" Icon="/img/icon.png">
     <Window.DataContext>
         <model:ApplicationData x:Name="applicationData" />
     </Window.DataContext>
@@ -20,8 +20,17 @@
         </Style>
     </Window.Resources>
     <Grid>
+        <DockPanel>
+            <Menu DockPanel.Dock="Top">
+                <MenuItem Header="_File">
+                    <Separator />
+                    <MenuItem Header="_Exit" />
+                </MenuItem>
+                <MenuItem x:Name="miAbout" Header="_About"></MenuItem>
+            </Menu>
+        </DockPanel>
         <!-- FENETRE -->
-        <Grid>
+        <Grid Margin="0,20,0,0">
             <!-- GRID /4 -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="6*"/>

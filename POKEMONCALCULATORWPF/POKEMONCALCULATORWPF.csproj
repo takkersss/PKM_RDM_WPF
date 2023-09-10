@@ -20,6 +20,7 @@
     <None Remove="img\GrassIC_SV.png" />
     <None Remove="img\GroundIC_SV.png" />
     <None Remove="img\IceIC_SV.png" />
+    <None Remove="img\icon.png" />
     <None Remove="img\NormalIC_SV.png" />
     <None Remove="img\PoisonIC_SV.png" />
     <None Remove="img\PsychicIC_SV.png" />
@@ -56,6 +57,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="img\icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="img\tera\BugIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
