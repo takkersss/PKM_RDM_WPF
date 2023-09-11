@@ -615,7 +615,7 @@ namespace POKEMONCALCULATORWPF.model
         public static async Task<Pokemon> GetRandomPokemon()
         {
             Random random = new Random();
-            int idPokemonAleatoire = random.Next(1, 1011); // Il y a actuellement 1020 Pokémon répertoriés dans l'API
+            int idPokemonAleatoire = random.Next(1, AllPokemon.NB_Pokemon + 1); // Il y a actuellement 1020 Pokémon répertoriés dans l'API
 
             Pokemon pokemonAleatoire = await GetPokemonById(idPokemonAleatoire);
             if (pokemonAleatoire != null)
