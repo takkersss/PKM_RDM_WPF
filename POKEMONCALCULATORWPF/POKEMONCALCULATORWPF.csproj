@@ -24,6 +24,7 @@
     <None Remove="img\NormalIC_SV.png" />
     <None Remove="img\PoisonIC_SV.png" />
     <None Remove="img\PsychicIC_SV.png" />
+    <None Remove="img\question_mark.png" />
     <None Remove="img\RockIC_SV.png" />
     <None Remove="img\SteelIC_SV.png" />
     <None Remove="img\tera\BugIC_Tera.png" />
@@ -58,6 +59,9 @@
 
   <ItemGroup>
     <Resource Include="img\icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\question_mark.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="img\tera\BugIC_Tera.png">

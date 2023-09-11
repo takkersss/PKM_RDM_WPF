@@ -1,0 +1,25 @@
+﻿<Window x:Class="POKEMONCALCULATORWPF.WindowAbout"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:POKEMONCALCULATORWPF"
+        mc:Ignorable="d"
+        Title="About" Height="270" Width="420" Icon="/img/question_mark.png" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+    <Grid>
+        <StackPanel>
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <Image Source="/img/icon.png" Width="100" Height="100"/>
+                <Label Content="Random Teambuilder" FontSize="29" VerticalContentAlignment="Center" FontWeight="Bold"></Label>
+            </StackPanel>
+            <TextBlock Margin="10,20,0,0">
+                <Hyperlink NavigateUri="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+                Creative Commons
+                </Hyperlink>
+                <LineBreak/>
+                Attribution-NonCommercial-ShareAlike 4.0 International License
+            </TextBlock>
+            <Label Content="Made by takkers" FontWeight="Bold" FontSize="17" Margin="0,23,0,0"></Label>
+        </StackPanel>
+    </Grid>
+</Window>

@@ -423,5 +423,18 @@ namespace POKEMONCALCULATORWPF
         {
             lbRemainingEVsValue.Content = currentPokemon.GetRemainingEvs().ToString();
         }
+
+        // Exit app
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        // Open about window
+        private void miAbout_Click(object sender, RoutedEventArgs e)
+        {
+            WindowAbout winAbout = new WindowAbout(this);
+            winAbout.ShowDialog();
+        }
     }
 }

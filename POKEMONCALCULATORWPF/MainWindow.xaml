@@ -24,9 +24,16 @@
             <Menu DockPanel.Dock="Top">
                 <MenuItem Header="_File">
                     <Separator />
-                    <MenuItem Header="_Exit" />
+                    <MenuItem Header="_Exit" Click="MenuItem_Click" />
                 </MenuItem>
-                <MenuItem x:Name="miAbout" Header="_About"></MenuItem>
+                <MenuItem x:Name="miAbout" Click="miAbout_Click">
+                    <MenuItem.Header>
+                        <StackPanel Orientation="Horizontal">
+                            <Label Content="About"></Label>
+                            <Image Width="16" Height="16" Source="img/question_mark.png"/>
+                        </StackPanel>
+                    </MenuItem.Header>
+                </MenuItem>
             </Menu>
         </DockPanel>
         <!-- FENETRE -->
