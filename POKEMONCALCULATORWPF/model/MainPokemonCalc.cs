@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -696,7 +697,7 @@ namespace POKEMONCALCULATORWPF.model
         {
             using (HttpClient client = new HttpClient())
             {
-                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{nom}");
+                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{nom.ToLower()}");
                 if (reponse.IsSuccessStatusCode)
                 {
                     string contenu = await reponse.Content.ReadAsStringAsync();
@@ -705,7 +706,7 @@ namespace POKEMONCALCULATORWPF.model
                 }
                 else
                 {
-                    Console.WriteLine($"Erreur lors de la récupération de l'ID du Pokémon avec le nom {nom}.");
+                    Console.WriteLine($"Erreur lors de la récupération de l'ID du Pokémon avec le nom {nom.ToLower()}.");
                     return 0;
                 }
             }
@@ -715,7 +716,7 @@ namespace POKEMONCALCULATORWPF.model
         {
             using (HttpClient client = new HttpClient())
             {
-                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon?limit=1010");
+                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon?limit={AllPokemon.NB_Pokemon}");
                 if (reponse.IsSuccessStatusCode)
                 {
                     string contenu = await reponse.Content.ReadAsStringAsync();
@@ -726,6 +727,25 @@ namespace POKEMONCALCULATORWPF.model
                 {
                     Console.WriteLine("Une erreur s'est produite lors de la récupération des informations du Pokémon.");
                     return null;
+                }
+            }
+        }
+
+        public static async Task GetPokemonCount()
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage reponse = await client.GetAsync("https://pokeapi.co/api/v2/pokemon-species");
+                if (reponse.IsSuccessStatusCode)
+                {
+                    string contenu = await reponse.Content.ReadAsStringAsync();
+                    JObject json = JObject.Parse(contenu);
+                    int count = (int)json["count"];
+                    AllPokemon.NB_Pokemon = count;
+                }
+                else
+                {
+                    Console.WriteLine("Une erreur s'est produite lors de la récupération des informations du Pokémon.");
                 }
             }
         }

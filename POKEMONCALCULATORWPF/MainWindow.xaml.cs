@@ -124,7 +124,7 @@ namespace POKEMONCALCULATORWPF
                 // Désérialiser le contenu JSON en un objet
                 allPokemonData = JsonConvert.DeserializeObject<AllPokemon>(jsonContenu);
 
-                if (AllPokemon.NB_POKEMON != allPokemonData.Results.Count)
+                if (AllPokemon.NB_Pokemon != allPokemonData.Results.Count)
                 {
                     //MessageBox.Show(AllPokemon.NB_POKEMON + " " + allPokemonData.Results.Count);
                     allPokemonData = await MainPokemonCalc.GetAllPokemonNameUrl();
@@ -147,6 +147,7 @@ namespace POKEMONCALCULATORWPF
         // Se lance au chargement de la fenetre (listview)
         private async void teamListBox_Loaded(object sender, RoutedEventArgs e)
         {
+            await MainPokemonCalc.GetPokemonCount(); // On fait une requete pour avoir le nb de pokemon
             LoadAllPokemonName();
             applicationData.AllType = new ObservableCollection<string>(Enum.GetNames(typeof(TypeP)));
             applicationData.AllNature = new ObservableCollection<string>(Nature.NATURES);

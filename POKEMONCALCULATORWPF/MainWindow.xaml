@@ -238,7 +238,7 @@
                 </Grid>
 
                 <!-- TYPE CHART -->
-                <StackPanel Grid.Row="1" DataContext="{Binding SelectedItem, ElementName=teamListImageView}" Width="700" HorizontalAlignment="Left" VerticalAlignment="Bottom">
+                <StackPanel Grid.Row="2" DataContext="{Binding SelectedItem, ElementName=teamListImageView}" VerticalAlignment="Bottom">
                     <Label Content="Weak to" FontWeight="Bold"/>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="x4 : " />

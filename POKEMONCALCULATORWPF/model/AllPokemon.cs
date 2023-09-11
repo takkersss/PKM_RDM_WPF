@@ -8,9 +8,8 @@ namespace POKEMONCALCULATORWPF.model
 {
     public class AllPokemon
     {
-        public const int NB_POKEMON = 1010;
         public const string CHEMIN_ALL_POKEMON_NAME = "data/allPokemonName.json";
-
+        private static int nB_Pokemon;
         private List<NameUrl> results;
         
 
@@ -18,6 +17,7 @@ namespace POKEMONCALCULATORWPF.model
         {
         }
 
+        public static int NB_Pokemon { get => nB_Pokemon; set => nB_Pokemon = value; }
         public List<NameUrl> Results { get => results; set => results = value; }
 
         public List<string> GetAllPokemonName()
