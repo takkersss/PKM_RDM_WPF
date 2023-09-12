@@ -393,12 +393,12 @@ namespace POKEMONCALCULATORWPF.model
             }
             else
             {
-                WantedNature.Name = Nature.NATURES[1];
+                WantedNature = new Nature(Nature.NATURES[1]);
                 return;
             }
 
             string resume = $"(+{bestStat}, -{worstStat})";
-            WantedNature.Name = Nature.NATURES.ToList().Find(x => x.Contains(resume));
+            WantedNature = new Nature(Nature.NATURES.ToList().Find(x => x.Contains(resume)));
         }
     }
 }

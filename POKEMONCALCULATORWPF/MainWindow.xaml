@@ -95,7 +95,11 @@
                         <StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="20,0,0,0" DataContext="{Binding SelectedItem, ElementName=teamListImageView}">
                                 <Label x:Name="lbAbility" Content="Ability : " FontSize="20" Width="110"/>
-                                <ComboBox x:Name="cbAbility" Width="200" SelectedItem="{Binding WantedAbility, Mode=OneWay}" ItemsSource="{Binding Abilities}" FontSize="18" SelectionChanged="cbAbility_SelectionChanged" VerticalContentAlignment="Center"/>
+                                <ComboBox x:Name="cbAbility" Width="200" SelectedItem="{Binding WantedAbility, Mode=OneWay}" ItemsSource="{Binding Abilities}" FontSize="18" SelectionChanged="cbAbility_SelectionChanged" VerticalContentAlignment="Center">
+                                    <ComboBox.ToolTip>
+                                        <TextBlock x:Name="tbAbilityTooltip"/>
+                                    </ComboBox.ToolTip>
+                                </ComboBox>
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="20,0,0,0">
                                 <Label x:Name="lbTera" Content="Tera Type : " FontSize="20" Width="110"/>

@@ -89,7 +89,7 @@ namespace POKEMONCALCULATORWPF
             isBtnRandomTeamBusy = false;
         }
 
-        private void LoadProperties()
+        private async void LoadProperties()
         {
             foreach (Pokemon p in applicationData.PokemonTeam)
             {
@@ -111,8 +111,22 @@ namespace POKEMONCALCULATORWPF
                 Random r = new Random();
                 p.WantedAbility = p.Abilities[r.Next(0, p.Abilities.Count)].Ability.Name;
                 p.TeraType = (TypeP)Enum.Parse(typeof(TypeP), applicationData.AllType[r.Next(0,18)]);
-                p.WantedNature = new Nature();
                 p.ChooseBestNature();
+            }
+            await LoadTooltip();
+        }
+
+        private async Task LoadTooltip() {
+            foreach (Pokemon p in applicationData.PokemonTeam)
+            {
+                // await en dernier
+                foreach (Abilities ability in p.Abilities)
+                {
+                    if(ability.Effect == null)
+                    {
+                        await ability.GetEffectChange();
+                    }
+                }
             }
         }
 
@@ -234,7 +248,10 @@ namespace POKEMONCALCULATORWPF
             currentPokemon = applicationData.PokemonTeam[applicationData.PokemonTeam.ToList().FindIndex(x => x.GetHashCode() == ((Pokemon)lv.SelectedItem).GetHashCode())];
             cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
             cbTera.SelectedIndex = GetIndexOfWantedTera(currentPokemon);
-            cbNature.SelectedIndex = GetIndexOfWantedNature(currentPokemon);
+            if(currentPokemon.WantedNature != null)
+            {
+                cbNature.SelectedIndex = GetIndexOfWantedNature(currentPokemon);
+            }
             UpdateShowedEVs();
             UpdateRemainingEvsText();
             //MessageBox.Show(currentPokemon.Name);
@@ -247,6 +264,16 @@ namespace POKEMONCALCULATORWPF
             if(cbAbility.SelectedIndex == -1) return;
             currentPokemon.WantedAbility = currentPokemon.Abilities[cbAbility.SelectedIndex].Ability.Name;
             //cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
+
+            if (currentPokemon.Abilities[cbAbility.SelectedIndex].Effect == null) return;
+                if (cbAbility.SelectedIndex >= 0 && cbAbility.SelectedIndex < currentPokemon.Abilities.Count)
+            {
+                tbAbilityTooltip.Text = currentPokemon.Abilities[cbAbility.SelectedIndex].Effect.GetEnglishTextEffect();
+            }
+            else
+            {
+                tbAbilityTooltip.Text = string.Empty; // Aucun élément sélectionné ou sélection invalide
+            }
         }
 
         private void cbTera_SelectionChanged(object sender, SelectionChangedEventArgs e)
