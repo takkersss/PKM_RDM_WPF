@@ -426,7 +426,7 @@ namespace POKEMONCALCULATORWPF
         }
 
         // Exit app
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void miExit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
         }
