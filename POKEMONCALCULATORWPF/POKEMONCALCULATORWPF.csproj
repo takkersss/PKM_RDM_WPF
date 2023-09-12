@@ -12,6 +12,7 @@
     <None Remove="img\DarkIC_SV.png" />
     <None Remove="img\DragonIC_SV.png" />
     <None Remove="img\ElectricIC_SV.png" />
+    <None Remove="img\exclamation_mark.png" />
     <None Remove="img\FairyIC_SV.png" />
     <None Remove="img\FightingIC_SV.png" />
     <None Remove="img\FireIC_SV.png" />
@@ -58,6 +59,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="img\exclamation_mark.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="img\icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
