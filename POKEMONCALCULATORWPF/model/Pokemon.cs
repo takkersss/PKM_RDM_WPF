@@ -16,7 +16,7 @@ namespace POKEMONCALCULATORWPF.model
 {
     public class Pokemon
     {
-        public const string CHEMIN_DOSSIER = "jsonstock";
+        public const string CHEMIN_DOSSIER = "teams";
         public static readonly string[] EVS_NAME = new string[] { "HP", "Atk", "Def", "SpA", "SpD", "Spe" };
         public const int MAX_EV_DISTRIBUTION = 508;
 
@@ -37,7 +37,7 @@ namespace POKEMONCALCULATORWPF.model
 
 
         // WPF
-        private string frName, typeChartResume, wantedAbility;
+        private string frName, typeChartResume, wantedAbility, teamName;
         private int bst;
         private Nature wantedNature;
         private TypeP teraType;
@@ -56,6 +56,7 @@ namespace POKEMONCALCULATORWPF.model
         public int[] Evs { get => evs; set => evs = value; }
         public int[] Ivs { get => ivs; set => ivs = value; }
         public Nature WantedNature { get => wantedNature; set => wantedNature = value; }
+        public string TeamName { get => teamName; set => teamName = value; }
 
         private List<TypeP> resistancesX2, resistancesX4, faiblessesX2, faiblessesX4, immunites;
 
@@ -106,11 +107,11 @@ namespace POKEMONCALCULATORWPF.model
             }
         }
 
-        public void Serialize()
+        public void Serialize(string teamName)
         {
+            this.TeamName = teamName;
             string json = JsonConvert.SerializeObject(this);
-            string cheminFichier = $"{CHEMIN_DOSSIER}/{this.Name}.json";
-
+            string cheminFichier = $"{CHEMIN_DOSSIER}/{teamName}/{this.Name}.json";
 
             if (!Directory.Exists(CHEMIN_DOSSIER))
             {

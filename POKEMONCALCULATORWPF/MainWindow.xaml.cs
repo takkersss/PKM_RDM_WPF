@@ -5,21 +5,16 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
-using System.Net.Http.Json;
-using System.Printing;
-using System.Reflection;
-using System.Security.AccessControl;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using static System.Net.Mime.MediaTypeNames;
+using System.Windows.Data;
 using System.Windows.Shapes;
+using Path = System.IO.Path;
 
 namespace POKEMONCALCULATORWPF
 {
@@ -31,6 +26,7 @@ namespace POKEMONCALCULATORWPF
         private bool isBtnRandomTeamBusy;
         WindowSwitchPokemon winSwitch;
         private Pokemon currentPokemon;
+        private string currentTeamName;
         private AllPokemon allPokemonData;
 
         public MainWindow()
@@ -44,6 +40,7 @@ namespace POKEMONCALCULATORWPF
         {
             if (!MainPokemonCalc.IsInternetConnected()) { ShowConnexionError("You must be connected to internet"); return; }
             await NewRandomTeam();
+            tbTeamName.Text = "";
         }
 
         private void CopyTeamBtn_Click(object sender, RoutedEventArgs e)
@@ -164,32 +161,34 @@ namespace POKEMONCALCULATORWPF
         {
             await MainPokemonCalc.GetPokemonCount(); // On fait une requete pour avoir le nb de pokemon
             LoadAllPokemonName();
+            ReadCurrentTeamName();
             applicationData.AllType = new ObservableCollection<string>(Enum.GetNames(typeof(TypeP)));
             applicationData.AllNature = new ObservableCollection<string>(Nature.NATURES);
             if (Directory.Exists(Pokemon.CHEMIN_DOSSIER))
             {
-                string[] fichiersDansDossier = Directory.GetFiles(Pokemon.CHEMIN_DOSSIER);
-
-                if (fichiersDansDossier.Length == 6)
+                string[] teams = Directory.GetDirectories(Pokemon.CHEMIN_DOSSIER);
+                teams = PathToName(teams);
+                if (teams.Length == 0) // Si pas de team, on en crée une nouvelle
                 {
-                    List<Pokemon> pokemons = new List<Pokemon>();
-                    foreach (string fichier in fichiersDansDossier)
-                    {
-                        string jsonContenu = File.ReadAllText(fichier);
-
-                        // Désérialiser le contenu JSON en un objet
-                        Pokemon p = JsonConvert.DeserializeObject<Pokemon>(jsonContenu);
-                        pokemons.Add(p);
-                    }
-                    applicationData.PokemonTeam = new ObservableCollection<Pokemon>(pokemons);
-                    RefreshWindow(0);
+                    NewRandomTeam();
+                    currentPokemon = (Pokemon)teamListImageView.SelectedItem;
                 }
                 else
                 {
-                    NewRandomTeam();
+                    string actualTeamName = File.ReadAllText("data/appData.json");
+                    string[] fichiersDansDossier = Directory.GetFiles($"{Pokemon.CHEMIN_DOSSIER}/{teams.ToList().Find(x => x == actualTeamName)}");
+
+                    if (fichiersDansDossier.Length == 6)
+                    {
+                        SwitchPokemonTeam(fichiersDansDossier);
+                    }
+                    else
+                    {
+                        NewRandomTeam();
+                    }
+                    currentPokemon = (Pokemon)teamListImageView.SelectedItem;
+                    //MessageBox.Show(currentPokemon.Name);
                 }
-                currentPokemon = (Pokemon)teamListImageView.SelectedItem;
-                //MessageBox.Show(currentPokemon.Name);
             }
             else // Si le dossier n'existe pas, on le crée
             {
@@ -197,6 +196,51 @@ namespace POKEMONCALCULATORWPF
                 NewRandomTeam();
                 currentPokemon = (Pokemon)teamListImageView.SelectedItem;
             }
+            tbTeamName.Text = currentTeamName;
+        }
+
+        private static string[] PathToName(string[] paths)
+        {
+            string[] names = new string[paths.Length];
+
+            for (int i = 0; i < paths.Length; i++)
+            {
+                names[i] = Path.GetFileName(paths[i]);
+            }
+            return names;
+        }
+
+        private void SwitchPokemonTeam(string[] filesInFolder)
+        {
+            List<Pokemon> pokemons = new List<Pokemon>();
+            foreach (string fichier in filesInFolder)
+            {
+                string jsonContenu = File.ReadAllText(fichier);
+
+                // Désérialiser le contenu JSON en un objet
+                Pokemon p = JsonConvert.DeserializeObject<Pokemon>(jsonContenu);
+                pokemons.Add(p);
+            }
+            applicationData.PokemonTeam = new ObservableCollection<Pokemon>(pokemons);
+            RefreshWindow(0);
+            WriteTeamNameInData();
+        }
+
+        private void WriteTeamNameInData()
+        { 
+            string appDataPath = "data/appData.json";
+            if (!File.Exists(appDataPath))
+            {
+                File.Create(appDataPath);
+            }
+            else
+            {
+                File.WriteAllText(appDataPath, currentTeamName);
+            }
+        }
+        private void ReadCurrentTeamName()
+        {
+            currentTeamName = File.ReadAllText("data/appData.json");
         }
 
         public void ReSetWindowAndTeam(int index)
@@ -228,14 +272,55 @@ namespace POKEMONCALCULATORWPF
         private void SaveTeamBtn_Click(object sender, RoutedEventArgs e)
         {
             if (isBtnRandomTeamBusy) return;
-            string[] fichiersDansDossier = Directory.GetFiles(Pokemon.CHEMIN_DOSSIER);
+            if(String.IsNullOrEmpty(tbTeamName.Text)) { MessageBox.Show("You must enter a team name", "NULL EXCEPTION", MessageBoxButton.OK, MessageBoxImage.Warning); return; }
+
+            string[] teams = Directory.GetDirectories(Pokemon.CHEMIN_DOSSIER);
+            teams = PathToName(teams);
+            if (teams.Contains(tbTeamName.Text.ToLower()))
+            {
+                MessageBoxResult r = MessageBox.Show("Do you want to override an existing team ?", "Team Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+                if (r == MessageBoxResult.No)
+                {
+                    tbTeamName.Text = currentTeamName;
+                    return;
+                }
+            }
+
+            string teamPath = Pokemon.CHEMIN_DOSSIER + "/" + tbTeamName.Text.ToLower();
+            if (!Directory.Exists(teamPath))
+            {
+                Directory.CreateDirectory(teamPath);
+            }
+
+            string[] fichiersDansDossier = Directory.GetFiles(teamPath);
             foreach (string item in fichiersDansDossier) // On supprime les anciens fichiers
             {
                 File.Delete(item);
             }
             foreach (Pokemon p in applicationData.PokemonTeam) // On sauvegarde les nouveaux
             {
-                p.Serialize();
+                p.Serialize(tbTeamName.Text.ToLower());
+            }
+
+        }
+
+        private void LoadTeamBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (isBtnRandomTeamBusy) return;
+            string teamsDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, Pokemon.CHEMIN_DOSSIER);
+
+            var dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            dialog.InitialDirectory = teamsDirectory;
+            dialog.Multiselect = false;
+            CommonFileDialogResult result = dialog.ShowDialog();
+            if (result == CommonFileDialogResult.Ok)
+            {
+                string teamName = Path.GetFileName(dialog.FileName);
+                tbTeamName.Text = teamName;
+                currentTeamName = teamName;
+                string[] fichiersDansDossier = Directory.GetFiles(dialog.FileName);
+                SwitchPokemonTeam(fichiersDansDossier);
             }
         }
 
@@ -421,17 +506,6 @@ namespace POKEMONCALCULATORWPF
         private int GetSliderTotal()
         {
             return (int)(slHpEv.Value + slAttEv.Value + slDefEv.Value + slSAttEv.Value + slSDefEv.Value + slSpeEv.Value);
-        }
-
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            string txt = "";
-            foreach (int z in currentPokemon.Evs)
-            {
-                txt += z.ToString() + ", ";
-            }
-            MessageBox.Show(currentPokemon.Name + " " + txt);
-
         }
 
         private void tbIv_TextChanged(object sender, TextChangedEventArgs e)
