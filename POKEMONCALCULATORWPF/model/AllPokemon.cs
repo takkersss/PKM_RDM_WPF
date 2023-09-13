@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace POKEMONCALCULATORWPF.model
@@ -9,6 +11,7 @@ namespace POKEMONCALCULATORWPF.model
     public class AllPokemon
     {
         public const string CHEMIN_ALL_POKEMON_NAME = "data/allPokemonName.json";
+        [JsonProperty]
         private static int nB_Pokemon;
         private List<NameUrl> results;
         

@@ -42,6 +42,7 @@ namespace POKEMONCALCULATORWPF
 
         private async void RandomTeamBtn_Click(object sender, RoutedEventArgs e)
         {
+            if (!MainPokemonCalc.IsInternetConnected()) { ShowConnexionError("You must be connected to internet"); return; }
             await NewRandomTeam();
         }
 
@@ -214,6 +215,7 @@ namespace POKEMONCALCULATORWPF
 
         private void lvOpenSwitchWindow(object sender, MouseButtonEventArgs e)
         {
+            if (!MainPokemonCalc.IsInternetConnected()) { ShowConnexionError("You must be connected to internet"); return; }
             var item = sender as ListViewItem;
             if (item != null && item.IsSelected)
             {
@@ -445,6 +447,11 @@ namespace POKEMONCALCULATORWPF
                     tb.Text = "31";
                 }
             }
+        }
+
+        public static void ShowConnexionError(string txt)
+        {
+            MessageBox.Show(txt,"Connexion Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
 
         private void UpdateRemainingEvsText()

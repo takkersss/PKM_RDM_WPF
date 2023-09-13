@@ -93,7 +93,7 @@ namespace POKEMONCALCULATORWPF
             }
         }
 
-        private async void btnSwicthPokemon_Click(object sender, RoutedEventArgs e)
+        private async void btnSwitchPokemon_Click(object sender, RoutedEventArgs e)
         {
             if (isWindowBusy) return;
             int index = appData.PokemonTeam.IndexOf(selectedPokemon);

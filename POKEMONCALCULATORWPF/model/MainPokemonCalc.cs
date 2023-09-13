@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Net.NetworkInformation;
 using System.Threading.Tasks;
 
 namespace POKEMONCALCULATORWPF.model
@@ -628,6 +629,7 @@ namespace POKEMONCALCULATORWPF.model
 
         public static async Task<Pokemon> GetPokemonById(int id)
         {
+            if (!IsInternetConnected()) { MainWindow.ShowConnexionError($"error getting pokemon/{id}"); return null; }
             using (HttpClient client = new HttpClient())
             {
                 HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{id}");
@@ -640,7 +642,7 @@ namespace POKEMONCALCULATORWPF.model
                 }
                 else
                 {
-                    Console.WriteLine("Une erreur s'est produite lors de la récupération des informations du Pokémon.");
+                    MainWindow.ShowConnexionError($"error getting pokemon/{id}");
                     return null;
                 }
             }
@@ -648,6 +650,7 @@ namespace POKEMONCALCULATORWPF.model
 
         public static async Task<Pokemon> GetPokemonByName(string nom)
         {
+            if (!IsInternetConnected()) { MainWindow.ShowConnexionError($"error getting pokemon by name ({nom.ToLower()})"); return null; }
             using (HttpClient client = new HttpClient())
             {
                 HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{nom.ToLower()}");
@@ -661,7 +664,7 @@ namespace POKEMONCALCULATORWPF.model
                 }
                 else
                 {
-                    Console.WriteLine("Une erreur s'est produite lors de la récupération des informations du Pokémon.");
+                    MainWindow.ShowConnexionError($"error getting pokemon/{nom.ToLower()}");
                     return null;
                 }
             }
@@ -669,13 +672,7 @@ namespace POKEMONCALCULATORWPF.model
 
         public static async Task<string> GetPokemonNameById(int id, string? lang)
         {
-            int langId;
-            if (lang != "en")
-            {
-                langId = 3;
-            }
-            else langId = 5;
-
+            if (!IsInternetConnected()) { MainWindow.ShowConnexionError($"error getting name of pokemon/{id}"); return null; }
             using (HttpClient client = new HttpClient())
             {
                 HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{id}");
@@ -687,7 +684,7 @@ namespace POKEMONCALCULATORWPF.model
                 }
                 else
                 {
-                    Console.WriteLine($"Erreur lors de la récupération du nom du Pokémon avec l'ID {id}.");
+                    MainWindow.ShowConnexionError($"error getting name of pokemon/{id}");
                     return null;
                 }
             }
@@ -695,6 +692,7 @@ namespace POKEMONCALCULATORWPF.model
 
         public static async Task<int> GetPokemonIdByName(string nom)
         {
+            if (!IsInternetConnected()) { MainWindow.ShowConnexionError($"error getting id of {nom.ToLower()}"); return -1;}
             using (HttpClient client = new HttpClient())
             {
                 HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{nom.ToLower()}");
@@ -706,14 +704,15 @@ namespace POKEMONCALCULATORWPF.model
                 }
                 else
                 {
-                    Console.WriteLine($"Erreur lors de la récupération de l'ID du Pokémon avec le nom {nom.ToLower()}.");
-                    return 0;
+                    MainWindow.ShowConnexionError($"error getting id of {nom.ToLower()}");
+                    return -1;
                 }
             }
         }
 
         public static async Task<AllPokemon> GetAllPokemonNameUrl()
         {
+            if (!IsInternetConnected()) { MainWindow.ShowConnexionError("error getting name of all pokemon"); return null; }
             using (HttpClient client = new HttpClient())
             {
                 HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon?limit={AllPokemon.NB_Pokemon}");
@@ -725,14 +724,16 @@ namespace POKEMONCALCULATORWPF.model
                 }
                 else
                 {
-                    Console.WriteLine("Une erreur s'est produite lors de la récupération des informations du Pokémon.");
+                    MainWindow.ShowConnexionError("error getting name of all pokemon");
                     return null;
                 }
             }
+
         }
 
         public static async Task GetPokemonCount()
         {
+            if (!IsInternetConnected()) { MainWindow.ShowConnexionError("error getting pokemon count"); return; }
             using (HttpClient client = new HttpClient())
             {
                 HttpResponseMessage reponse = await client.GetAsync("https://pokeapi.co/api/v2/pokemon-species");
@@ -745,9 +746,14 @@ namespace POKEMONCALCULATORWPF.model
                 }
                 else
                 {
-                    Console.WriteLine("Une erreur s'est produite lors de la récupération des informations du Pokémon.");
+                    MainWindow.ShowConnexionError("error getting pokemon count");
                 }
             }
+        }
+
+        public static bool IsInternetConnected()
+        {
+            return NetworkInterface.GetIsNetworkAvailable();
         }
     }
 }
