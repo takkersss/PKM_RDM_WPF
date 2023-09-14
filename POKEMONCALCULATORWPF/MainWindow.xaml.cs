@@ -242,6 +242,7 @@ namespace POKEMONCALCULATORWPF
         }
         private void ReadCurrentTeamName()
         {
+            if (!File.Exists("data/appData.json")) return;
             currentTeamName = File.ReadAllText("data/appData.json");
         }
 
@@ -362,6 +363,7 @@ namespace POKEMONCALCULATORWPF
         private void SwitchTooltip()
         {
             //tooltips
+            if(currentPokemon == null) return;
             if(currentPokemon.Abilities[cbAbility.SelectedIndex].Effect != null || currentPokemon.Abilities[cbAbility.SelectedIndex].EffectEntries != null)
             {
                 tbAbilityTooltip.Text = currentPokemon.Abilities[cbAbility.SelectedIndex].GetDescription();
