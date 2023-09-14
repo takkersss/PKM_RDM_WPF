@@ -14,6 +14,7 @@ namespace POKEMONCALCULATORWPF.model
         private bool is_hidden;
         private int slot;
         private EffectChange effect;
+        private EffectEntryList effectEntries;
 
         public Abilities()
         {
@@ -23,13 +24,14 @@ namespace POKEMONCALCULATORWPF.model
         public bool Is_hidden { get => is_hidden; set => is_hidden = value; }
         public int Slot { get => slot; set => slot = value; }
         public EffectChange Effect { get => effect; set => effect = value; }
+        public EffectEntryList EffectEntries { get => effectEntries; set => effectEntries = value; }
 
         public override string? ToString()
         {
             return ability.Name;
         }
 
-        public async Task GetEffectChange() //url de pokemonspecies à mettre à la place
+        public async Task GetEffectChange() 
         {
             using (HttpClient client = new HttpClient())
             {
@@ -38,13 +40,23 @@ namespace POKEMONCALCULATORWPF.model
                 {
                     string contenu = await reponse.Content.ReadAsStringAsync();
                     EffectChange effectC = JsonConvert.DeserializeObject<EffectChange>(contenu);
+                    EffectEntryList effectEntries = JsonConvert.DeserializeObject<EffectEntryList>(contenu);
                     this.Effect = effectC;
+                    this.EffectEntries = effectEntries;
                 }
                 else
                 {
                     Console.WriteLine("problemo ability text requete");
                 }
             }
+        }
+
+        public string GetDescription()
+        {
+            if (!String.IsNullOrWhiteSpace(Effect.GetEnglishTextEffect()))
+            {
+                return Effect.GetEnglishTextEffect();
+            }else return EffectEntries.GetEnglishTextEffect();
         }
     }
 }

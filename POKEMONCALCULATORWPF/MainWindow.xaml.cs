@@ -15,6 +15,7 @@ using static System.Net.Mime.MediaTypeNames;
 using System.Windows.Data;
 using System.Windows.Shapes;
 using Path = System.IO.Path;
+using System.Text.RegularExpressions;
 
 namespace POKEMONCALCULATORWPF
 {
@@ -111,7 +112,7 @@ namespace POKEMONCALCULATORWPF
                 p.TeraType = (TypeP)Enum.Parse(typeof(TypeP), applicationData.AllType[r.Next(0,18)]);
                 p.ChooseBestNature();
             }
-            await LoadTooltip();
+            await LoadTooltip(); // en dernier
         }
 
         private async Task LoadTooltip() {
@@ -223,6 +224,7 @@ namespace POKEMONCALCULATORWPF
             }
             applicationData.PokemonTeam = new ObservableCollection<Pokemon>(pokemons);
             RefreshWindow(0);
+            SwitchTooltip();
             WriteTeamNameInData();
         }
 
@@ -272,7 +274,9 @@ namespace POKEMONCALCULATORWPF
         private void SaveTeamBtn_Click(object sender, RoutedEventArgs e)
         {
             if (isBtnRandomTeamBusy) return;
-            if(String.IsNullOrEmpty(tbTeamName.Text)) { MessageBox.Show("You must enter a team name", "NULL EXCEPTION", MessageBoxButton.OK, MessageBoxImage.Warning); return; }
+            if(String.IsNullOrWhiteSpace(tbTeamName.Text)) { MessageBox.Show("You must enter a team name", "NULL EXCEPTION", MessageBoxButton.OK, MessageBoxImage.Warning); return; }
+            if(tbTeamName.Text.Length > 30) { MessageBox.Show("Team name must not exceed 30 characters", "LENGTH EXCEPTION", MessageBoxButton.OK, MessageBoxImage.Warning); return; }
+            if(!Regex.IsMatch(tbTeamName.Text, "^[a-zA-Z0-9]+$")){ MessageBox.Show("Team name must consist of letters or numbers", "FORMAT EXCEPTION", MessageBoxButton.OK, MessageBoxImage.Warning); return; }
 
             string[] teams = Directory.GetDirectories(Pokemon.CHEMIN_DOSSIER);
             teams = PathToName(teams);
@@ -341,6 +345,7 @@ namespace POKEMONCALCULATORWPF
             }
             UpdateShowedEVs();
             UpdateRemainingEvsText();
+            //SwitchTooltip();
             //MessageBox.Show(currentPokemon.Name);
             canUpdate = true;
         }
@@ -350,16 +355,16 @@ namespace POKEMONCALCULATORWPF
             if (currentPokemon == null) return;
             if(cbAbility.SelectedIndex == -1) return;
             currentPokemon.WantedAbility = currentPokemon.Abilities[cbAbility.SelectedIndex].Ability.Name;
-            //cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
+            cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
 
-            if (currentPokemon.Abilities[cbAbility.SelectedIndex].Effect == null) return;
-                if (cbAbility.SelectedIndex >= 0 && cbAbility.SelectedIndex < currentPokemon.Abilities.Count)
+            //SwitchTooltip();
+        }
+        private void SwitchTooltip()
+        {
+            //tooltips
+            if(currentPokemon.Abilities[cbAbility.SelectedIndex].Effect != null || currentPokemon.Abilities[cbAbility.SelectedIndex].EffectEntries != null)
             {
-                tbAbilityTooltip.Text = currentPokemon.Abilities[cbAbility.SelectedIndex].Effect.GetEnglishTextEffect();
-            }
-            else
-            {
-                tbAbilityTooltip.Text = string.Empty; // Aucun élément sélectionné ou sélection invalide
+                tbAbilityTooltip.Text = currentPokemon.Abilities[cbAbility.SelectedIndex].GetDescription();
             }
         }
 
@@ -544,6 +549,17 @@ namespace POKEMONCALCULATORWPF
         {
             WindowAbout winAbout = new WindowAbout(this);
             winAbout.ShowDialog();
+        }
+
+        private void miHelp_Click(object sender, RoutedEventArgs e)
+        {
+            WindowTips winAbout = new WindowTips(this);
+            winAbout.ShowDialog();
+        }
+
+        private void cbAbility_MouseEnter(object sender, MouseEventArgs e)
+        {
+            SwitchTooltip();
         }
     }
 }
