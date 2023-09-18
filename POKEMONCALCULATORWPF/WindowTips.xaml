@@ -10,6 +10,7 @@
         <TextBlock Margin="10,10,10,10">
             - You can double-click on a Pokémon to change it using <LineBreak/> a dropdown list and a search bar.
             <LineBreak/>- You can hover your mouse over the ability to see its effect.
+            <LineBreak/>- The "Copy Team" button copies the team in Showdown! format <LineBreak/> into the clipboard
         </TextBlock>
     </Grid>
 </Window>
