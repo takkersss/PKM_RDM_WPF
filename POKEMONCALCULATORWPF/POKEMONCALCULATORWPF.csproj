@@ -21,6 +21,7 @@
     <None Remove="img\GrassIC_SV.png" />
     <None Remove="img\GroundIC_SV.png" />
     <None Remove="img\IceIC_SV.png" />
+    <None Remove="img\icon.ico" />
     <None Remove="img\icon.png" />
     <None Remove="img\NormalIC_SV.png" />
     <None Remove="img\PoisonIC_SV.png" />
@@ -61,6 +62,9 @@
 
   <ItemGroup>
     <Resource Include="img\exclamation_mark.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="img\icon.png">

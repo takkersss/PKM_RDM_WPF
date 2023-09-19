@@ -5,6 +5,8 @@ VisualStudioVersion = 17.3.32825.248
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "POKEMONCALCULATORWPF", "POKEMONCALCULATORWPF\POKEMONCALCULATORWPF.csproj", "{6C3F3FDD-0547-47BD-B912-BB7DFB9F54E6}"
 EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PokemonCalculatorSetup", "PokemonCalculatorSetup\PokemonCalculatorSetup.vdproj", "{4A9A5A9F-A809-4C88-ADD8-A43BBA7E5E43}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,8 @@ Global
 		{6C3F3FDD-0547-47BD-B912-BB7DFB9F54E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6C3F3FDD-0547-47BD-B912-BB7DFB9F54E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6C3F3FDD-0547-47BD-B912-BB7DFB9F54E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4A9A5A9F-A809-4C88-ADD8-A43BBA7E5E43}.Debug|Any CPU.ActiveCfg = Debug
+		{4A9A5A9F-A809-4C88-ADD8-A43BBA7E5E43}.Release|Any CPU.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
