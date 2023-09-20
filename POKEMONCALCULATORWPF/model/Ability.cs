@@ -56,7 +56,12 @@ namespace POKEMONCALCULATORWPF.model
             if (!String.IsNullOrWhiteSpace(Effect.GetEnglishTextEffect()))
             {
                 return Effect.GetEnglishTextEffect();
-            }else return EffectEntries.GetEnglishTextEffect();
+            }
+            else if (!String.IsNullOrWhiteSpace(EffectEntries.GetEnglishTextEffect()))
+            {
+                return EffectEntries.GetEnglishTextEffect();
+            }
+            else return "no desc available";
         }
     }
 }

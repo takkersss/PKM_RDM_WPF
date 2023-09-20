@@ -24,6 +24,7 @@ namespace POKEMONCALCULATORWPF.model
 
         public string GetEnglishTextEffect()
         {
+            if (EffectEntries == null) return null;
             EffectEntry effect_entry = EffectEntries.Find(x => x.Language.Name == "En");
             if (effect_entry == null)
             {

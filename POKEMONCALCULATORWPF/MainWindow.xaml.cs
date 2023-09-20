@@ -228,20 +228,25 @@ namespace POKEMONCALCULATORWPF
         }
 
         private void WriteTeamNameInData()
-        { 
+        {
             string appDataPath = "data/appData.json";
-            if (!File.Exists(appDataPath))
+
+            // Créez le répertoire "data" s'il n'existe pas
+            Directory.CreateDirectory(Path.GetDirectoryName(appDataPath));
+
+            // Utilisez StreamWriter pour écrire le contenu dans le fichier
+            using (StreamWriter writer = new StreamWriter(appDataPath))
             {
-                File.Create(appDataPath);
+                writer.Write(currentTeamName);
             }
-            File.WriteAllText(appDataPath, currentTeamName);
         }
         private void ReadCurrentTeamName()
         {
             if (!File.Exists("data/appData.json")) return;
-            if (!String.IsNullOrWhiteSpace(File.ReadAllText("data/appData.json")))
+            string tn = File.ReadAllText("data/appData.json");
+            if (!String.IsNullOrWhiteSpace(tn))
             {
-                currentTeamName = File.ReadAllText("data/appData.json");
+                currentTeamName = tn;
             }
         }
 
