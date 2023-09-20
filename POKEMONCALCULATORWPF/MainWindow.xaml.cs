@@ -176,8 +176,7 @@ namespace POKEMONCALCULATORWPF
                 }
                 else
                 {
-                    string actualTeamName = File.ReadAllText("data/appData.json");
-                    string[] fichiersDansDossier = Directory.GetFiles($"{Pokemon.CHEMIN_DOSSIER}/{teams.ToList().Find(x => x == actualTeamName)}");
+                    string[] fichiersDansDossier = Directory.GetFiles($"{Pokemon.CHEMIN_DOSSIER}/{teams.ToList().Find(x => x == currentTeamName)}");
 
                     if (fichiersDansDossier.Length == 6)
                     {
@@ -235,15 +234,15 @@ namespace POKEMONCALCULATORWPF
             {
                 File.Create(appDataPath);
             }
-            else
-            {
-                File.WriteAllText(appDataPath, currentTeamName);
-            }
+            File.WriteAllText(appDataPath, currentTeamName);
         }
         private void ReadCurrentTeamName()
         {
             if (!File.Exists("data/appData.json")) return;
-            currentTeamName = File.ReadAllText("data/appData.json");
+            if (!String.IsNullOrWhiteSpace(File.ReadAllText("data/appData.json")))
+            {
+                currentTeamName = File.ReadAllText("data/appData.json");
+            }
         }
 
         public void ReSetWindowAndTeam(int index)
@@ -277,7 +276,7 @@ namespace POKEMONCALCULATORWPF
             if (isBtnRandomTeamBusy) return;
             if(String.IsNullOrWhiteSpace(tbTeamName.Text)) { MessageBox.Show("You must enter a team name", "NULL EXCEPTION", MessageBoxButton.OK, MessageBoxImage.Warning); return; }
             if(tbTeamName.Text.Length > 30) { MessageBox.Show("Team name must not exceed 30 characters", "LENGTH EXCEPTION", MessageBoxButton.OK, MessageBoxImage.Warning); return; }
-            if(!Regex.IsMatch(tbTeamName.Text, "^[a-zA-Z0-9]+$")){ MessageBox.Show("Team name must consist of letters or numbers", "FORMAT EXCEPTION", MessageBoxButton.OK, MessageBoxImage.Warning); return; }
+            if(!Regex.IsMatch(tbTeamName.Text, "^[a-zA-Z0-9_]+$")){ MessageBox.Show("Team name must consist of letters or numbers", "FORMAT EXCEPTION", MessageBoxButton.OK, MessageBoxImage.Warning); return; }
 
             string[] teams = Directory.GetDirectories(Pokemon.CHEMIN_DOSSIER);
             teams = PathToName(teams);
@@ -286,11 +285,12 @@ namespace POKEMONCALCULATORWPF
                 MessageBoxResult r = MessageBox.Show("Do you want to override an existing team ?", "Team Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (r == MessageBoxResult.No)
                 {
-                    tbTeamName.Text = currentTeamName;
+                    //tbTeamName.Text = currentTeamName;
                     return;
                 }
             }
 
+            // On crée le directory de la team si elle n'existe pas
             string teamPath = Pokemon.CHEMIN_DOSSIER + "/" + tbTeamName.Text.ToLower();
             if (!Directory.Exists(teamPath))
             {
@@ -306,6 +306,8 @@ namespace POKEMONCALCULATORWPF
             {
                 p.Serialize(tbTeamName.Text.ToLower());
             }
+            currentTeamName = tbTeamName.Text.ToLower();
+            WriteTeamNameInData();
 
         }
 
@@ -322,8 +324,8 @@ namespace POKEMONCALCULATORWPF
             if (result == CommonFileDialogResult.Ok)
             {
                 string teamName = Path.GetFileName(dialog.FileName);
-                tbTeamName.Text = teamName;
                 currentTeamName = teamName;
+                tbTeamName.Text = currentTeamName;
                 string[] fichiersDansDossier = Directory.GetFiles(dialog.FileName);
                 SwitchPokemonTeam(fichiersDansDossier);
             }
