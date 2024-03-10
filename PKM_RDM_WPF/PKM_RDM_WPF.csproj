@@ -8,27 +8,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="img\BugIC_SV.png" />
-    <None Remove="img\DarkIC_SV.png" />
-    <None Remove="img\DragonIC_SV.png" />
-    <None Remove="img\ElectricIC_SV.png" />
     <None Remove="img\exclamation_mark.png" />
-    <None Remove="img\FairyIC_SV.png" />
-    <None Remove="img\FightingIC_SV.png" />
-    <None Remove="img\FireIC_SV.png" />
-    <None Remove="img\FlyingIC_SV.png" />
-    <None Remove="img\GhostIC_SV.png" />
-    <None Remove="img\GrassIC_SV.png" />
-    <None Remove="img\GroundIC_SV.png" />
-    <None Remove="img\IceIC_SV.png" />
     <None Remove="img\icon.ico" />
     <None Remove="img\icon.png" />
-    <None Remove="img\NormalIC_SV.png" />
-    <None Remove="img\PoisonIC_SV.png" />
-    <None Remove="img\PsychicIC_SV.png" />
     <None Remove="img\question_mark.png" />
-    <None Remove="img\RockIC_SV.png" />
-    <None Remove="img\SteelIC_SV.png" />
     <None Remove="img\tera\BugIC_Tera.png" />
     <None Remove="img\tera\DarkIC_Tera.png" />
     <None Remove="img\tera\DragonIC_Tera.png" />
@@ -47,17 +30,29 @@
     <None Remove="img\tera\RockIC_Tera.png" />
     <None Remove="img\tera\SteelIC_Tera.png" />
     <None Remove="img\tera\WaterIC_Tera.png" />
-    <None Remove="img\WaterIC_SV.png" />
+    <None Remove="img\type\BugIC_SV.png" />
+    <None Remove="img\type\DarkIC_SV.png" />
+    <None Remove="img\type\DragonIC_SV.png" />
+    <None Remove="img\type\ElectricIC_SV.png" />
+    <None Remove="img\type\FairyIC_SV.png" />
+    <None Remove="img\type\FightingIC_SV.png" />
+    <None Remove="img\type\FireIC_SV.png" />
+    <None Remove="img\type\FlyingIC_SV.png" />
+    <None Remove="img\type\GhostIC_SV.png" />
+    <None Remove="img\type\GrassIC_SV.png" />
+    <None Remove="img\type\GroundIC_SV.png" />
+    <None Remove="img\type\IceIC_SV.png" />
+    <None Remove="img\type\NormalIC_SV.png" />
+    <None Remove="img\type\PoisonIC_SV.png" />
+    <None Remove="img\type\PsychicIC_SV.png" />
+    <None Remove="img\type\RockIC_SV.png" />
+    <None Remove="img\type\SteelIC_SV.png" />
+    <None Remove="img\type\WaterIC_SV.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="WindowsAPICodePack-Shell" Version="1.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="jsonstock\" />
-    <Folder Include="data\" />
+    <PackageReference Include="WindowsAPICodePack" Version="7.0.4" />
   </ItemGroup>
 
   <ItemGroup>
