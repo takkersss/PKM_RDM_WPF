@@ -33,3 +33,6 @@ F:\Documents\Pokemon Calculator\PKM_RDM_WPF\PKM_RDM_WPF\obj\Debug\net6.0-windows
 F:\Documents\Pokemon Calculator\PKM_RDM_WPF\PKM_RDM_WPF\obj\Debug\net6.0-windows\PKM_RDM_WPF.pdb
 F:\Documents\Pokemon Calculator\PKM_RDM_WPF\PKM_RDM_WPF\obj\Debug\net6.0-windows\PKM_RDM_WPF.genruntimeconfig.cache
 F:\Documents\Pokemon Calculator\PKM_RDM_WPF\PKM_RDM_WPF\obj\Debug\net6.0-windows\ref\PKM_RDM_WPF.dll
+F:\Documents\Pokemon Calculator\PKM_RDM_WPF\PKM_RDM_WPF\bin\Debug\net6.0-windows\MaterialDesignColors.dll
+F:\Documents\Pokemon Calculator\PKM_RDM_WPF\PKM_RDM_WPF\bin\Debug\net6.0-windows\MaterialDesignThemes.Wpf.dll
+F:\Documents\Pokemon Calculator\PKM_RDM_WPF\PKM_RDM_WPF\bin\Debug\net6.0-windows\Microsoft.Xaml.Behaviors.dll

@@ -1,11 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "GVa75O+WrHuMrasNiqZ48GPkpf8XqEz19C/oP53bNLlVKmkwg5XZux8lNGZVbB4nA4Z5PsFUhb3bcdKxujvK5w==",
+  "dgSpecHash": "v/W5hjItxOCmo/BALr32dznW4ldKj5G+f7T2jpyIGvSk5Hw1EYVeT2/+2DoKtHuYo7xDTZr3ks0ygzkOkIYHaQ==",
   "success": true,
   "projectFilePath": "F:\\Documents\\Pokemon Calculator\\PKM_RDM_WPF\\PKM_RDM_WPF\\PKM_RDM_WPF.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\hugo7\\.nuget\\packages\\materialdesigncolors\\3.0.0\\materialdesigncolors.3.0.0.nupkg.sha512",
+    "C:\\Users\\hugo7\\.nuget\\packages\\materialdesignthemes\\5.0.0\\materialdesignthemes.5.0.0.nupkg.sha512",
     "C:\\Users\\hugo7\\.nuget\\packages\\microsoft.netcore.platforms\\7.0.0\\microsoft.netcore.platforms.7.0.0.nupkg.sha512",
     "C:\\Users\\hugo7\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",
+    "C:\\Users\\hugo7\\.nuget\\packages\\microsoft.xaml.behaviors.wpf\\1.1.39\\microsoft.xaml.behaviors.wpf.1.1.39.nupkg.sha512",
     "C:\\Users\\hugo7\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\hugo7\\.nuget\\packages\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl\\4.3.2\\runtime.debian.8-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
     "C:\\Users\\hugo7\\.nuget\\packages\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl\\4.3.2\\runtime.fedora.23-x64.runtime.native.system.security.cryptography.openssl.4.3.2.nupkg.sha512",
