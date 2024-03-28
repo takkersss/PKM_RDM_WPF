@@ -134,8 +134,11 @@ namespace POKEMONCALCULATORWPF
             if (File.Exists(AllPokemon.CHEMIN_ALL_POKEMON_NAME)) // Si le fichier existe, on regarde si on peut le mettre à jour
             {
                 string jsonContenu = File.ReadAllText(AllPokemon.CHEMIN_ALL_POKEMON_NAME);
+                
                 // Désérialiser le contenu JSON en un objet
+                #warning todo : répétition pas opti, refaire système NB
                 allPokemonData = JsonConvert.DeserializeObject<AllPokemon>(jsonContenu);
+                await MainPokemonCalc.GetPokemonCount();
 
                 if (AllPokemon.NB_Pokemon != allPokemonData.Results.Count)
                 {

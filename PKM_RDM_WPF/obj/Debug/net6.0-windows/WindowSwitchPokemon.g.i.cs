@@ -102,7 +102,7 @@ namespace POKEMONCALCULATORWPF {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/PKM_RDM_WPF;component/windowswitchpokemon.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/PKM_RDM_WPF;V1.0.0.0;component/windowswitchpokemon.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\WindowSwitchPokemon.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

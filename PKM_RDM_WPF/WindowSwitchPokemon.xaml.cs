@@ -43,7 +43,11 @@ namespace POKEMONCALCULATORWPF
 
         private async void SetPokemon(Pokemon poke)
         {
-            imgSelectedPokemon.Source = new BitmapImage(new Uri(poke.Sprites.Front_default));
+            if(poke.Sprites.Front_default != null)
+            {
+                imgSelectedPokemon.Source = new BitmapImage(new Uri(poke.Sprites.Front_default));
+            }
+            
             foreach (string p in lvPokemonNameList.Items)
             {
                 if (p.Equals(poke.Name))
@@ -70,7 +74,11 @@ namespace POKEMONCALCULATORWPF
             if (((string)lvPokemonNameList.SelectedItem == null) || isWindowBusy) return;
             isWindowBusy = true;
             newSelectedPokemon = await MainPokemonCalc.GetPokemonByName(((string)lvPokemonNameList.SelectedItem));
-            imgSelectedPokemon.Source = new BitmapImage(new Uri(newSelectedPokemon.Sprites.Front_default));
+            if (newSelectedPokemon.Sprites.Front_default != null)
+            {
+                imgSelectedPokemon.Source = new BitmapImage(new Uri(newSelectedPokemon.Sprites.Front_default));
+            }else imgSelectedPokemon.Source = new BitmapImage(new Uri(MainPokemonCalc.ToDynamicPath("img/question_mark.png")));
+                
             isWindowBusy = false;
         }
 

@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace POKEMONCALCULATORWPF.model
@@ -754,6 +755,11 @@ namespace POKEMONCALCULATORWPF.model
         public static bool IsInternetConnected()
         {
             return NetworkInterface.GetIsNetworkAvailable();
+        }
+
+        public static string ToDynamicPath(string path)
+        {
+            return $"pack://application:,,,/{Assembly.GetExecutingAssembly().GetName().Name};component/{path}";
         }
     }
 }
