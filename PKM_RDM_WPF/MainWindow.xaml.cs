@@ -27,7 +27,7 @@ namespace POKEMONCALCULATORWPF
         private bool isBtnRandomTeamBusy;
         WindowSwitchPokemon winSwitch;
         private Pokemon currentPokemon;
-        private string currentTeamName;
+        private string currentTeamName = "Team Name";
         private AllPokemon allPokemonData;
 
         public MainWindow()
@@ -81,10 +81,11 @@ namespace POKEMONCALCULATORWPF
             if (isBtnRandomTeamBusy) return;
 
             isBtnRandomTeamBusy = true;
-            RandomTeamBtn.Background = Brushes.Red;
+            Brush baseBackgroundColor = RandomTeamBtn.Background.CloneCurrentValue();
+            RandomTeamBtn.Background = Brushes.Red; // Notifier du chargement
             applicationData.PokemonTeam = new ObservableCollection<Pokemon>(await MainPokemonCalc.GetRandomPokemonTeam());
             ReSetWindowAndTeam(0);
-            RandomTeamBtn.Background = Brushes.Gray;
+            RandomTeamBtn.Background = baseBackgroundColor;
             isBtnRandomTeamBusy = false;
         }
 
@@ -572,6 +573,11 @@ namespace POKEMONCALCULATORWPF
         private void cbAbility_MouseEnter(object sender, MouseEventArgs e)
         {
             SwitchTooltip();
+        }
+
+        private void tbTeamName_GotFocus(object sender, RoutedEventArgs e)
+        {
+            tbTeamName.Text = "";
         }
     }
 }

@@ -16,21 +16,24 @@ namespace POKEMONCALCULATORWPF.converter
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             double progress = (double)value;
-            Brush foreground = Brushes.Green;
+            Brush foreground;
 
-            if (progress >= 100d)
+            if (progress >= 100)
             {
-                foreground = Brushes.Green;
+                foreground = new SolidColorBrush(Color.FromRgb(152, 251, 152)); // Vert pastel
             }
             else if (progress > 75)
             {
-                foreground = Brushes.Yellow;
+                foreground = new SolidColorBrush(Color.FromRgb(255, 255, 153)); // Jaune pastel
             }
             else if (progress >= 60)
             {
-                foreground = Brushes.Orange;
-            }else foreground = Brushes.Red;
-
+                foreground = new SolidColorBrush(Color.FromRgb(255, 215, 0)); // Orange pastel
+            }
+            else
+            {
+                foreground = new SolidColorBrush(Color.FromRgb(255, 182, 193)); // Rose pastel
+            }
 
             return foreground;
         }

@@ -8,10 +8,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="img\copy.png" />
+    <None Remove="img\dices.png" />
     <None Remove="img\exclamation_mark.png" />
     <None Remove="img\icon.ico" />
     <None Remove="img\icon.png" />
+    <None Remove="img\load.png" />
     <None Remove="img\question_mark.png" />
+    <None Remove="img\save.png" />
     <None Remove="img\tera\BugIC_Tera.png" />
     <None Remove="img\tera\DarkIC_Tera.png" />
     <None Remove="img\tera\DragonIC_Tera.png" />
@@ -29,6 +33,7 @@
     <None Remove="img\tera\PsychicIC_Tera.png" />
     <None Remove="img\tera\RockIC_Tera.png" />
     <None Remove="img\tera\SteelIC_Tera.png" />
+    <None Remove="img\tera\StellarIC_Tera.png" />
     <None Remove="img\tera\WaterIC_Tera.png" />
     <None Remove="img\type\BugIC_SV.png" />
     <None Remove="img\type\DarkIC_SV.png" />
@@ -57,6 +62,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="img\copy.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\dices.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="img\exclamation_mark.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
@@ -66,7 +77,13 @@
     <Resource Include="img\icon.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="img\load.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="img\question_mark.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\save.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="img\tera\BugIC_Tera.png">
@@ -118,6 +135,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="img\tera\SteelIC_Tera.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\tera\StellarIC_Tera.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="img\tera\WaterIC_Tera.png">

@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:POKEMONCALCULATORWPF"
         mc:Ignorable="d"
-        Title="About the app" Height="270" Width="420" Icon="/img/exclamation_mark.png" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+        Title="About the app" Height="270" Width="440" Icon="/img/exclamation_mark.png" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        Style="{StaticResource MaterialDesignWindow}">
     <Grid>
         <StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
@@ -17,7 +18,11 @@
                 Creative Commons
                 </Hyperlink>
                 <LineBreak/>
-                Attribution-NonCommercial-ShareAlike 4.0 International License
+                - Attribution-NonCommercial-ShareAlike 4.0 International License
+                <LineBreak/>
+                - Not affiliated with The Pokémon Company
+                <LineBreak/>
+                - Main window icons by Freepik
             </TextBlock>
             <Label Content="Made by takkers" FontWeight="Bold" FontSize="17" Margin="5,20,0,0"></Label>
         </StackPanel>

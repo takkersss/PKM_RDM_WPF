@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace POKEMONCALCULATORWPF.model
@@ -46,22 +47,27 @@ namespace POKEMONCALCULATORWPF.model
                 }
                 else
                 {
-                    Console.WriteLine("problemo ability text requete");
+                    Console.WriteLine("problemo ability text requete"); // à changer 
                 }
             }
         }
 
         public string GetDescription()
         {
+            string desc; 
             if (!String.IsNullOrWhiteSpace(Effect.GetEnglishTextEffect()))
             {
-                return Effect.GetEnglishTextEffect();
+                desc = Effect.GetEnglishTextEffect();
             }
             else if (!String.IsNullOrWhiteSpace(EffectEntries.GetEnglishTextEffect()))
             {
-                return EffectEntries.GetEnglishTextEffect();
+                desc = EffectEntries.GetEnglishTextEffect();
             }
-            else return "no desc available";
+            else desc = "no desc available";
+
+            desc = Regex.Replace(desc, @"\n{2,}", "\n"); // Permet de supprimer le saut de ligne inutile
+
+            return desc;
         }
     }
 }

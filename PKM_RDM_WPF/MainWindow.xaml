@@ -7,7 +7,8 @@
         xmlns:model="clr-namespace:POKEMONCALCULATORWPF.model"
         xmlns:converter="clr-namespace:POKEMONCALCULATORWPF.converter"
         mc:Ignorable="d"
-        Title="Random Pokemon Teambuilder" Height="800" Width="1100" MinHeight="800" MinWidth="1100" Icon="/img/icon.png">
+        Title="Random Pokemon Teambuilder" Height="800" Width="1200" MinHeight="800" MinWidth="1200" Icon="/img/icon.png"
+        Style="{StaticResource MaterialDesignWindow}">
     <Window.DataContext>
         <model:ApplicationData x:Name="applicationData" />
     </Window.DataContext>
@@ -40,7 +41,7 @@
             </Menu>
         </DockPanel>
         <!-- FENETRE -->
-        <Grid Margin="0,20,0,0">
+        <Grid Margin="0,40,0,0">
             <!-- GRID /4 -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="6*"/>
@@ -53,7 +54,7 @@
 
             <!-- TEAM NAME INPUT -->
             <StackPanel Grid.Row="1">
-                <TextBox x:Name="tbTeamName" Margin="5,0,5,0"/>
+                <TextBox x:Name="tbTeamName" Margin="5,0,5,0" GotFocus="tbTeamName_GotFocus"/>
             </StackPanel>
 
             <Grid Grid.Row="0" Grid.Column="1">
@@ -160,7 +161,7 @@
                                 <Label Content="HP" HorizontalAlignment="Left" Width="60"/>
                                 <ProgressBar x:Name="pbHp" Maximum="255" Minimum="1" SmallChange="1" Value="{Binding Stats[0].Base_stat}" Orientation="Horizontal" Width="280" Background="#00E6E6E6"/>
                             </StackPanel>
-                            <Label Content="{Binding Stats[0].Base_stat}" HorizontalAlignment="Left" Width="61" VerticalAlignment="Top" Margin="60,10,0,0" Height="27"/>
+                            <Label Content="{Binding Stats[0].Base_stat}" HorizontalAlignment="Left" Width="61" VerticalAlignment="Top" Margin="60,10,0,0" Height="27" Foreground="Black"/>
                         </Grid>
                         <!-- Attack -->
                         <Grid>
@@ -168,7 +169,7 @@
                                 <Label Content="Attack" HorizontalAlignment="Left" Width="60"/>
                                 <ProgressBar x:Name="pbAttack" Maximum="255" Minimum="1" SmallChange="1" Value="{Binding Stats[1].Base_stat}" Orientation="Horizontal" Width="280" Background="#00E6E6E6"/>
                             </StackPanel>
-                            <Label Content="{Binding Stats[1].Base_stat}" HorizontalAlignment="Left" Width="61" VerticalAlignment="Top" Margin="60,10,0,0" Height="27"/>
+                            <Label Content="{Binding Stats[1].Base_stat}" HorizontalAlignment="Left" Width="61" VerticalAlignment="Top" Margin="60,10,0,0" Height="27" Foreground="Black"/>
                         </Grid>
                         <!-- Defense -->
                         <Grid>
@@ -176,7 +177,7 @@
                                 <Label Content="Defense" HorizontalAlignment="Left" Width="60"/>
                                 <ProgressBar x:Name="pbDefense" Maximum="255" Minimum="1" SmallChange="1" Value="{Binding Stats[2].Base_stat}" Orientation="Horizontal" Width="280" Background="#00E6E6E6"/>
                             </StackPanel>
-                            <Label Content="{Binding Stats[2].Base_stat}" HorizontalAlignment="Left" Width="61" VerticalAlignment="Center" Margin="60,0,0,0" Height="27"/>
+                            <Label Content="{Binding Stats[2].Base_stat}" HorizontalAlignment="Left" Width="61" VerticalAlignment="Center" Margin="60,0,0,0" Height="27" Foreground="Black"/>
                         </Grid>
                         <!-- Spe Attack -->
                         <Grid>
@@ -184,7 +185,7 @@
                                 <Label Content="Spe Att." HorizontalAlignment="Left" Width="60"/>
                                 <ProgressBar x:Name="pbSpeAttack" Maximum="255" Minimum="1" SmallChange="1" Value="{Binding Stats[3].Base_stat}" Orientation="Horizontal" Width="280" Background="#00E6E6E6"/>
                             </StackPanel>
-                            <Label Content="{Binding Stats[3].Base_stat}" HorizontalAlignment="Left" Width="61" VerticalAlignment="Top" Margin="60,10,0,0" Height="27"/>
+                            <Label Content="{Binding Stats[3].Base_stat}" HorizontalAlignment="Left" Width="61" VerticalAlignment="Top" Margin="60,10,0,0" Height="27" Foreground="Black"/>
                         </Grid>
                         <!-- Spe Defense -->
                         <Grid>
@@ -192,7 +193,7 @@
                                 <Label Content="Spe Def." HorizontalAlignment="Left" Width="60"/>
                                 <ProgressBar x:Name="pbSpeDefense" Maximum="255" Minimum="1" SmallChange="1" Value="{Binding Stats[4].Base_stat}" Orientation="Horizontal" Width="280" Background="#00E6E6E6"/>
                             </StackPanel>
-                            <Label Content="{Binding Stats[4].Base_stat}" HorizontalAlignment="Left" Width="61" VerticalAlignment="Top" Margin="60,10,0,0" Height="27"/>
+                            <Label Content="{Binding Stats[4].Base_stat}" HorizontalAlignment="Left" Width="61" VerticalAlignment="Top" Margin="60,10,0,0" Height="27" Foreground="Black"/>
                         </Grid>
                         <!-- Speed -->
                         <Grid>
@@ -200,7 +201,7 @@
                                 <Label Content="Speed" HorizontalAlignment="Left" Width="60"/>
                                 <ProgressBar x:Name="pbSpeed" Maximum="255" Minimum="1" SmallChange="1" Value="{Binding Stats[5].Base_stat}" Orientation="Horizontal" Width="280" Background="#00E6E6E6"/>
                             </StackPanel>
-                            <Label Content="{Binding Stats[5].Base_stat}" HorizontalAlignment="Left" Width="61" VerticalAlignment="Top" Margin="60,10,0,0" Height="27"/>
+                            <Label Content="{Binding Stats[5].Base_stat}" HorizontalAlignment="Left" Width="61" VerticalAlignment="Top" Margin="60,10,0,0" Height="27" Foreground="Black"/>
                         </Grid>
                     </StackPanel>
                     <!-- EVS -->
@@ -333,13 +334,44 @@
             </Grid>
 
 
-            <!-- BOUTONS -->
+            <!-- BOUTONS TEAM -->
             <StackPanel Grid.Column="0" Margin="0,0,0,0" Grid.Row="0" HorizontalAlignment="Left" Width="115">
-                <Button x:Name="RandomTeamBtn" Content="Random Team" Margin="10,10,10,0" Height="80" Click="RandomTeamBtn_Click" Width="95" />
-                <Button x:Name="CopyTeamBtn" Content="Copy Team" Margin="10,10,10,0" Height="80" Click="CopyTeamBtn_Click" Width="95" />
+                <!-- BTN Random team -->
+                <Button x:Name="RandomTeamBtn" Margin="10,10,10,0" Height="80" Width="95" Click="RandomTeamBtn_Click" Cursor="Hand">
+                    <Button.ToolTip>
+                        <ToolTip Content="Generate random team"/>
+                    </Button.ToolTip>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="img/dices.png" Margin="0,0,5,0" Width="60" Height="60"/>
+                    </StackPanel>
+                </Button>
+                <!-- BTN Copy team -->
+                <Button x:Name="CopyTeamBtn" Margin="10,10,10,0" Height="80" Click="CopyTeamBtn_Click" Width="95" Cursor="Hand">
+                    <Button.ToolTip>
+                        <ToolTip Content="Copy team (PShowdown! export)"/>
+                    </Button.ToolTip>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="img/copy.png" Margin="0,0,5,0" Width="50" Height="50"/>
+                    </StackPanel>
+                </Button>
                 <StackPanel Orientation="Horizontal">
-                    <Button x:Name="SaveTeamBtn" Content="Save" Height="51" Width="47.5" HorizontalAlignment="Left" Margin="5,10,3,0" Click="SaveTeamBtn_Click" />
-                    <Button x:Name="LoadTeamBtn" Content="Load" Height="51" Width="47.5" HorizontalAlignment="Left" Margin="5,10,0,0" Click="LoadTeamBtn_Click" />
+                    <!-- BTN Save team -->
+                    <Button x:Name="SaveTeamBtn" Height="51" Width="47.5" HorizontalAlignment="Left" Margin="5,10,3,0" Click="SaveTeamBtn_Click" Padding="0,0,0,0">
+                        <Button.ToolTip>
+                            <ToolTip Content="Save team"/>
+                        </Button.ToolTip>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="img/save.png" Width="30" Height="30" />
+                        </StackPanel>
+                    </Button>
+                    <Button x:Name="LoadTeamBtn" Height="51" Width="47.5" HorizontalAlignment="Left" Margin="5,10,0,0" Click="LoadTeamBtn_Click" Padding="0,0,0,0" Cursor="Hand">
+                        <Button.ToolTip>
+                            <ToolTip Content="Load team"/>
+                        </Button.ToolTip>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Source="img/load.png" Width="30" Height="30"/>
+                        </StackPanel>
+                    </Button>
                 </StackPanel>
             </StackPanel>
         </Grid>

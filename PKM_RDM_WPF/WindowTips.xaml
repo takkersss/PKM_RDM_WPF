@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:POKEMONCALCULATORWPF"
         mc:Ignorable="d"
-        Title="Tips" Height="270" Width="420" ResizeMode="NoResize" WindowStartupLocation="CenterOwner">
+        Title="Tips" Height="270" Width="420" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        Style="{StaticResource MaterialDesignWindow}">
     <Grid>
         <TextBlock Margin="10,10,10,10">
             - You can double-click on a Pokémon to change it using <LineBreak/> a dropdown list and a search bar.

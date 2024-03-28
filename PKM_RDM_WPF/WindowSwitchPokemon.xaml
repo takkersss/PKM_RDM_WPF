@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:POKEMONCALCULATORWPF"
         xmlns:model="clr-namespace:POKEMONCALCULATORWPF.model"
         mc:Ignorable="d"
-        Title="Pokemon Switching" Icon="img/icon.png" Height="450" Width="450" ResizeMode="NoResize" Closing="Window_Closing" Activated="Window_Activated">
+        Title="Pokemon Switching" Icon="img/icon.png" Height="450" Width="450" ResizeMode="NoResize" Closing="Window_Closing" Activated="Window_Activated"
+        Style="{StaticResource MaterialDesignWindow}">
     <Window.DataContext>
         <model:ApplicationData x:Name="applicationData" />
     </Window.DataContext>

@@ -19,7 +19,7 @@ namespace POKEMONCALCULATORWPF.converter
     "img/tera/ElectricIC_Tera.png", "img/tera/FairyIC_Tera.png", "img/tera/FireIC_Tera.png", "img/tera/IceIC_Tera.png",
     "img/tera/BugIC_Tera.png", "img/tera/NormalIC_Tera.png", "img/tera/GrassIC_Tera.png", "img/tera/PoisonIC_Tera.png",
     "img/tera/PsychicIC_Tera.png", "img/tera/RockIC_Tera.png", "img/tera/GroundIC_Tera.png", "img/tera/GhostIC_Tera.png",
-    "img/tera/DarkIC_Tera.png", "img/tera/FlyingIC_Tera.png"
+    "img/tera/DarkIC_Tera.png", "img/tera/FlyingIC_Tera.png" //, "img/tera/StellarIC_Tera.png"
 };
 
 
