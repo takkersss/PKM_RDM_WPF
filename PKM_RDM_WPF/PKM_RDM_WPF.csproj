@@ -14,6 +14,9 @@
     <None Remove="img\icon.ico" />
     <None Remove="img\icon.png" />
     <None Remove="img\load.png" />
+    <None Remove="img\moov_cat\PhysicalIC.png" />
+    <None Remove="img\moov_cat\SpecialIC.png" />
+    <None Remove="img\moov_cat\StatusIC.png" />
     <None Remove="img\question_mark.png" />
     <None Remove="img\save.png" />
     <None Remove="img\tera\BugIC_Tera.png" />
@@ -78,6 +81,15 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="img\load.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\moov_cat\PhysicalIC.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\moov_cat\SpecialIC.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\moov_cat\StatusIC.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="img\question_mark.png">

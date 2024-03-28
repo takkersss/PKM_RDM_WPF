@@ -1,13 +1,14 @@
-﻿<Window x:Class="POKEMONCALCULATORWPF.MainWindow"
+﻿<Window x:Class="PKM_RDM_WPF.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:POKEMONCALCULATORWPF"
-        xmlns:model="clr-namespace:POKEMONCALCULATORWPF.model"
-        xmlns:converter="clr-namespace:POKEMONCALCULATORWPF.converter"
+        xmlns:local="clr-namespace:PKM_RDM_WPF"
+        xmlns:model="clr-namespace:PKM_RDM_WPF.model"
+        xmlns:converter="clr-namespace:PKM_RDM_WPF.converter"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="Random Pokemon Teambuilder" Height="800" Width="1200" MinHeight="800" MinWidth="1200" Icon="/img/icon.png"
+        Title="Random Pokemon Teambuilder" Height="830" Width="1450" MinHeight="830" MinWidth="1450" Icon="/img/icon.png"
         Style="{StaticResource MaterialDesignWindow}">
     <Window.DataContext>
         <model:ApplicationData x:Name="applicationData" />
@@ -16,13 +17,14 @@
         <converter:ProgressForegroundConverter x:Key="ProgressForegroundConverter"/>
         <converter:TypeToImageTypeConverter x:Key="TypeToImageTypeConverter"/>
         <converter:TypeToImageTeraConverter x:Key="TypeToImageTeraConverter"/>
+        <converter:StringToCatImgConverter x:Key="StringToCatImgConverter"/>
         <Style TargetType="ProgressBar">
             <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Value, Converter={StaticResource ProgressForegroundConverter}}" />
         </Style>
     </Window.Resources>
     <Grid>
         <DockPanel>
-            <Menu DockPanel.Dock="Top">
+            <Menu DockPanel.Dock="Top" Height="40" VerticalAlignment="Top" Background="#FF292929">
                 <MenuItem Header="_File">
                     <MenuItem Header="_Exit" Click="miExit_Click" />
                 </MenuItem>
@@ -41,7 +43,7 @@
             </Menu>
         </DockPanel>
         <!-- FENETRE -->
-        <Grid Margin="0,40,0,0">
+        <Grid Margin="0,40,312,0">
             <!-- GRID /4 -->
             <Grid.RowDefinitions>
                 <RowDefinition Height="6*"/>
@@ -63,8 +65,9 @@
                     <RowDefinition Height="5*"/>
                 </Grid.RowDefinitions>
 
+                <materialDesign:Card Grid.RowSpan="2" Margin="2,2,0,2" HorizontalAlignment="Left" Width="950"></materialDesign:Card>
                 <!-- IMAGE LISTE -->
-                <ListView Grid.Row="0" x:Name="teamListImageView" ItemsSource="{Binding PokemonTeam}" Loaded="teamListBox_Loaded" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="0,10,65,0" SelectedIndex="0" SelectionMode="Single" SelectionChanged="teamListImageView_SelectionChanged">
+                <ListView Grid.Row="0" x:Name="teamListImageView" ItemsSource="{Binding PokemonTeam}" Loaded="teamListBox_Loaded" ScrollViewer.HorizontalScrollBarVisibility="Disabled" Margin="5,10,65,0" SelectedIndex="0" SelectionMode="Single" SelectionChanged="teamListImageView_SelectionChanged">
                     <ListView.ItemsPanel>
                         <ItemsPanelTemplate>
                             <StackPanel Orientation="Horizontal"/>
@@ -90,7 +93,7 @@
                     </Grid.ColumnDefinitions>
                     <StackPanel DataContext="{Binding SelectedItem, ElementName=teamListImageView}">
                         <Label x:Name="lbName" Content="{Binding Name}" VerticalAlignment="Top" Height="38" FontSize="20"/>
-                        <StackPanel Orientation="Horizontal" Height="20">
+                        <StackPanel Orientation="Horizontal" Height="20" Margin="3.2,0,0,0">
                             <Image x:Name="imgTyp1" Source="{Binding Types[0].Type.Name, Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20" HorizontalAlignment="Left"/>
                             <Image x:Name="imgTyp2" Source="{Binding Types[1].Type.Name, Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20" HorizontalAlignment="Left" />
                         </StackPanel>
@@ -133,10 +136,10 @@
             <Grid Grid.Column="1" Grid.Row="1">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="385*"/>
-                    <RowDefinition Height="227*"/>
+                    <RowDefinition Height="230*"/>
                 </Grid.RowDefinitions>
 
-
+                <materialDesign:Card Margin="2,2,0,2" HorizontalAlignment="Left" Width="950"></materialDesign:Card>
                 <!-- STATS & TYPE CHART -->
                 <Grid x:Name="statsGrid" DataContext="{Binding SelectedItem, ElementName=teamListImageView}">
                     <Grid.RowDefinitions>
@@ -250,8 +253,9 @@
                     <Label Grid.Column="1" x:Name="lbIVs" Content="IVs" Height="34" FontSize="20" VerticalContentAlignment="Top" FontWeight="Bold" HorizontalAlignment="Left" Margin="380.3,0,0,0"/>
                 </Grid>
 
+                <materialDesign:Card Grid.Row="1" Margin="2,2,0,2" HorizontalAlignment="Left" Width="950"></materialDesign:Card>
                 <!-- TYPE CHART -->
-                <StackPanel Grid.Row="2" DataContext="{Binding SelectedItem, ElementName=teamListImageView}" VerticalAlignment="Bottom">
+                <StackPanel Grid.Row="2" DataContext="{Binding SelectedItem, ElementName=teamListImageView}" VerticalAlignment="Bottom" Margin="0,0,0,10">
                     <Label Content="Weak to" FontWeight="Bold"/>
                     <StackPanel Orientation="Horizontal">
                         <Label Content="x4 : " />
@@ -263,7 +267,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20"/>
+                                    <Image Source="{Binding Converter={StaticResource TypeToImageTypeConverter}}" Width="80" Height="16"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -278,7 +282,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20"/>
+                                    <Image Source="{Binding Converter={StaticResource TypeToImageTypeConverter}}" Width="80" Height="16"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -294,7 +298,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20"/>
+                                    <Image Source="{Binding Converter={StaticResource TypeToImageTypeConverter}}" Width="80" Height="16"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -309,7 +313,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20"/>
+                                    <Image Source="{Binding Converter={StaticResource TypeToImageTypeConverter}}" Width="80" Height="16"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -324,7 +328,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Image Source="{Binding Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20"/>
+                                    <Image Source="{Binding Converter={StaticResource TypeToImageTypeConverter}}" Width="80" Height="16"/>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
@@ -374,6 +378,53 @@
                     </Button>
                 </StackPanel>
             </StackPanel>
+        </Grid>
+            <!-- MOVE POOL -->
+        <Grid Margin="1088,40,0,0">
+            <materialDesign:Card Margin="10,2,2,2">
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox x:Name="cbEnableMovepool" Click="cbEnableMovepool_Click"></CheckBox>
+                        <Label x:Name="lbEnableMovepool" Content="Enable Movepool system ?" FontSize="14" />
+                    </StackPanel>
+
+                    <StackPanel x:Name="spMoveInterface" IsEnabled="False" DataContext="{Binding SelectedItem, ElementName=teamListImageView}">
+                        <!-- LES 4 SLOTS DE MOOVS -->
+                        <StackPanel>
+                            <TextBox></TextBox>
+                            <TextBox></TextBox>
+                            <TextBox></TextBox>
+                            <TextBox></TextBox>
+                        </StackPanel>
+                        <Label Content="Possible moves :"></Label>
+                        <ListView x:Name="lvPossibleMoves" MaxHeight="590" ItemsSource="{Binding MovesOfThePokemon}">
+                            <ListView.View>
+                                <GridView>
+                                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding MoveGetted}"/>
+                                    <GridViewColumn Header="Power" DisplayMemberBinding="{Binding MoveGetted.Power}" />
+                                    <GridViewColumn Header="Accuracy" DisplayMemberBinding="{Binding MoveGetted.Accuracy}" />
+                                    <GridViewColumn Header="Category">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Source="{Binding MoveGetted.Damage_class.Name, Converter={StaticResource StringToCatImgConverter}}" Width="80" Height="20"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Type">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <Image Source="{Binding MoveGetted.Type.Name, Converter={StaticResource TypeToImageTypeConverter}}" Width="80" Height="16"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+
+                            </ListView.View>
+                        </ListView>
+                    </StackPanel>
+                    
+                </StackPanel>
+            </materialDesign:Card>
         </Grid>
 
     </Grid>

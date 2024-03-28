@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POKEMONCALCULATORWPF.model
+namespace PKM_RDM_WPF.model
 {
     public class ApplicationData
     {
@@ -19,7 +19,7 @@ namespace POKEMONCALCULATORWPF.model
 
         public ObservableCollection<String> AllPokemonNameFiltres { get; set; }
 
-        //public static List<Pokemon> pokemonTeam = new List<Pokemon>();
+        public ObservableCollection<MoveVersion> MovesOfThePokemon { get; set; }
 
         public ApplicationData()
         {

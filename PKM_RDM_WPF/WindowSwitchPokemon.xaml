@@ -1,10 +1,10 @@
-﻿<Window x:Class="POKEMONCALCULATORWPF.WindowSwitchPokemon"
+﻿<Window x:Class="PKM_RDM_WPF.WindowSwitchPokemon"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:POKEMONCALCULATORWPF"
-        xmlns:model="clr-namespace:POKEMONCALCULATORWPF.model"
+        xmlns:local="clr-namespace:PKM_RDM_WPF"
+        xmlns:model="clr-namespace:PKM_RDM_WPF.model"
         mc:Ignorable="d"
         Title="Pokemon Switching" Icon="img/icon.png" Height="450" Width="450" ResizeMode="NoResize" Closing="Window_Closing" Activated="Window_Activated"
         Style="{StaticResource MaterialDesignWindow}">

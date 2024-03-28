@@ -1,4 +1,4 @@
-﻿namespace POKEMONCALCULATORWPF.model
+﻿namespace PKM_RDM_WPF.model
 {
     public class Sprite
     {

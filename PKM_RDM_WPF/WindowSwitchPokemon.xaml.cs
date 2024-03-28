@@ -1,4 +1,4 @@
-﻿using POKEMONCALCULATORWPF.model;
+﻿using PKM_RDM_WPF.model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,7 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace POKEMONCALCULATORWPF
+namespace PKM_RDM_WPF
 {
     /// <summary>
     /// Logique d'interaction pour WindowSwitchPokemon.xaml

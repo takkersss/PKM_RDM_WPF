@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace POKEMONCALCULATORWPF.model
+namespace PKM_RDM_WPF.model
 {
     public class PokemonSpecies
     {

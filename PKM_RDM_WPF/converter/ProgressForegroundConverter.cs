@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media;
 
-namespace POKEMONCALCULATORWPF.converter
+namespace PKM_RDM_WPF.converter
 {
     public class ProgressForegroundConverter : IValueConverter
     {

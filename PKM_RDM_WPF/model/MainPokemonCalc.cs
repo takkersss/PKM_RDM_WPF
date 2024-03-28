@@ -9,7 +9,7 @@ using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace POKEMONCALCULATORWPF.model
+namespace PKM_RDM_WPF.model
 {
     public class MainPokemonCalc
     {
@@ -601,14 +601,13 @@ namespace POKEMONCALCULATORWPF.model
             List<Pokemon> equipePokemonAleatoire = new List<Pokemon>();
             Random random = new Random();
 
-            for (int i = 0; i < 6; i++)
+            while (equipePokemonAleatoire.Count < 6)
             {
                 Pokemon p = await GetRandomPokemon();
-                if (equipePokemonAleatoire.Contains(p))
+                if (!equipePokemonAleatoire.Any(x => x.Id == p.Id)) // Eviter les doublons
                 {
-                    i -= 1;
-                }else equipePokemonAleatoire.Add(p);
-
+                    equipePokemonAleatoire.Add(p);
+                }
             }
 
             return equipePokemonAleatoire;
@@ -622,7 +621,6 @@ namespace POKEMONCALCULATORWPF.model
             Pokemon pokemonAleatoire = await GetPokemonById(idPokemonAleatoire);
             if (pokemonAleatoire != null)
             {
-                await pokemonAleatoire.SetSpecies();
                 return pokemonAleatoire;
             }
             else return null;
@@ -630,46 +628,41 @@ namespace POKEMONCALCULATORWPF.model
 
         public static async Task<Pokemon> GetPokemonById(int id)
         {
-            if (!IsInternetConnected()) { MainWindow.ShowConnexionError($"error getting pokemon/{id}"); return null; }
-            using (HttpClient client = new HttpClient())
-            {
-                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{id}");
-                if (reponse.IsSuccessStatusCode)
-                {
-                    string contenu = await reponse.Content.ReadAsStringAsync();
-                    Pokemon pokemon = JsonConvert.DeserializeObject<Pokemon>(contenu);
-                    await pokemon.SetSpecies();
-                    return pokemon;
-                }
-                else
-                {
-                    MainWindow.ShowConnexionError($"error getting pokemon/{id}");
-                    return null;
-                }
-            }
+            return await GetPokemon($"https://pokeapi.co/api/v2/pokemon/{id}", $"error getting pokemon/{id}");
         }
 
         public static async Task<Pokemon> GetPokemonByName(string nom)
         {
-            if (!IsInternetConnected()) { MainWindow.ShowConnexionError($"error getting pokemon by name ({nom.ToLower()})"); return null; }
+            return await GetPokemon($"https://pokeapi.co/api/v2/pokemon/{nom.ToLower()}", $"error getting pokemon by name ({nom.ToLower()})");
+        }
+
+        private static async Task<Pokemon> GetPokemon(string url, string errorMessage)
+        {
+            if (!IsInternetConnected())
+            {
+                MainWindow.ShowConnexionError(errorMessage);
+                return null;
+            }
+
             using (HttpClient client = new HttpClient())
             {
-                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{nom.ToLower()}");
-                if (reponse.IsSuccessStatusCode)
+                HttpResponseMessage response = await client.GetAsync(url);
+                if (response.IsSuccessStatusCode)
                 {
-                    string contenu = await reponse.Content.ReadAsStringAsync();
-                    Pokemon pokemon = JsonConvert.DeserializeObject<Pokemon>(contenu);
-                    await pokemon.SetSpecies();
+                    string content = await response.Content.ReadAsStringAsync();
+                    Pokemon pokemon = JsonConvert.DeserializeObject<Pokemon>(content);
+                    await pokemon.SetRetrievedData();
                     currentPokemon = pokemon;
                     return pokemon;
                 }
                 else
                 {
-                    MainWindow.ShowConnexionError($"error getting pokemon/{nom.ToLower()}");
+                    MainWindow.ShowConnexionError(errorMessage);
                     return null;
                 }
             }
         }
+
 
         public static async Task<string> GetPokemonNameById(int id, string? lang)
         {

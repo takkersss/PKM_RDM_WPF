@@ -10,9 +10,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Navigation;
-using static POKEMONCALCULATORWPF.model.MainPokemonCalc;
+using static PKM_RDM_WPF.model.MainPokemonCalc;
 
-namespace POKEMONCALCULATORWPF.model
+namespace PKM_RDM_WPF.model
 {
     public class Pokemon
     {
@@ -27,6 +27,7 @@ namespace POKEMONCALCULATORWPF.model
         private List<Types> types;
         private Stat[] stats;
         private List<Abilities> abilities;
+        private List<MoveVersion> moves;
 
         public string Name { get => name; set => name = value.Substring(0, 1).ToUpper() + value.Substring(1).ToLower(); }
         public int Id { get => id; set => id = value; }
@@ -42,6 +43,9 @@ namespace POKEMONCALCULATORWPF.model
         private Nature wantedNature;
         private TypeP teraType;
         private int[] evs, ivs;
+        private List<TypeP> resistancesX2, resistancesX4, faiblessesX2, faiblessesX4, immunites;
+        private Move[] fourMoves;
+
         public string FrName { get => frName; set => frName = value; }
         public string TypeChartResume { get => typeChartResume; set => typeChartResume = value; }
         public List<TypeP> ResistancesX2 { get => resistancesX2; set => resistancesX2 = value; }
@@ -57,8 +61,8 @@ namespace POKEMONCALCULATORWPF.model
         public int[] Ivs { get => ivs; set => ivs = value; }
         public Nature WantedNature { get => wantedNature; set => wantedNature = value; }
         public string TeamName { get => teamName; set => teamName = value; }
-
-        private List<TypeP> resistancesX2, resistancesX4, faiblessesX2, faiblessesX4, immunites;
+        public List<MoveVersion> Moves { get => moves; set => moves = value; }
+        public Move[] FourMoves { get => fourMoves; set => fourMoves = value; }
 
         public int GetIndexOfWantedAbility()
         {
@@ -69,9 +73,30 @@ namespace POKEMONCALCULATORWPF.model
         public Pokemon()
         {}
 
-        public async Task SetSpecies()
+        public async Task SetRetrievedData()
         {
+            // SET SPECIE
             pSpecies = await GetPokemonSpeciesById(Id);
+        }
+
+        public async Task RetrievePossibleMoves()
+        {
+            // SET MOVES
+            using (HttpClient client = new HttpClient())
+            {
+                foreach (MoveVersion mv in Moves)
+                {
+                    try
+                    {
+                        await mv.GetMoveAsync(client); // regarder si on peut enlever les settigngs de la deserialisation JSON & header model + enlver try catch
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new Exception(ex.Message);
+                    }
+                }
+            }
+            //MessageBox.Show("Moovpool retrieved");
         }
 
         public bool HasTwoTypes()

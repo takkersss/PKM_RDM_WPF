@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using POKEMONCALCULATORWPF.model;
+using PKM_RDM_WPF.model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,7 +17,7 @@ using System.Windows.Shapes;
 using Path = System.IO.Path;
 using System.Text.RegularExpressions;
 
-namespace POKEMONCALCULATORWPF
+namespace PKM_RDM_WPF
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -29,6 +29,7 @@ namespace POKEMONCALCULATORWPF
         private Pokemon currentPokemon;
         private string currentTeamName = "Team Name";
         private AllPokemon allPokemonData;
+        private bool moovSystemEnabled = false;
 
         public MainWindow()
         {
@@ -357,6 +358,12 @@ namespace POKEMONCALCULATORWPF
             }
             UpdateShowedEVs();
             UpdateRemainingEvsText();
+            // Charger les moov
+            if (moovSystemEnabled)
+            {
+                if (currentPokemon.Moves.First().MoveGetted != null) ReloadDIsplayPokemonMoovpool();
+                else LoadPokemonMoovepool();
+            }
             //SwitchTooltip();
             //MessageBox.Show(currentPokemon.Name);
             canUpdate = true;
@@ -578,6 +585,31 @@ namespace POKEMONCALCULATORWPF
         private void tbTeamName_GotFocus(object sender, RoutedEventArgs e)
         {
             tbTeamName.Text = "";
+        }
+
+        private void cbEnableMovepool_Click(object sender, RoutedEventArgs e)
+        {
+            if (isBtnRandomTeamBusy) { cbEnableMovepool.IsChecked = false; return; }
+            spMoveInterface.IsEnabled = !spMoveInterface.IsEnabled;
+
+            if(spMoveInterface.IsEnabled && !moovSystemEnabled)
+            {
+                moovSystemEnabled = true;
+                lvPossibleMoves.Items.Clear();
+                LoadPokemonMoovepool();
+            }
+        }
+
+        private async void LoadPokemonMoovepool()
+        {
+            await currentPokemon.RetrievePossibleMoves();
+            ReloadDIsplayPokemonMoovpool();
+        }
+
+        private void ReloadDIsplayPokemonMoovpool()
+        {
+            applicationData.MovesOfThePokemon = new ObservableCollection<MoveVersion>(currentPokemon.Moves);
+            lvPossibleMoves.ItemsSource = applicationData.MovesOfThePokemon;
         }
     }
 }

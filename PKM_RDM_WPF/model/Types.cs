@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POKEMONCALCULATORWPF.model
+namespace PKM_RDM_WPF.model
 {
     public enum TypeP
     {

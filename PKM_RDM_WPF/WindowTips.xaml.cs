@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace POKEMONCALCULATORWPF
+namespace PKM_RDM_WPF
 {
     /// <summary>
     /// Logique d'interaction pour WindowTips.xaml

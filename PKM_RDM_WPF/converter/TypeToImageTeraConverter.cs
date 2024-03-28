@@ -1,4 +1,4 @@
-﻿using POKEMONCALCULATORWPF.model;
+﻿using PKM_RDM_WPF.model;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
 
-namespace POKEMONCALCULATORWPF.converter
+namespace PKM_RDM_WPF.converter
 {
     public class TypeToImageTeraConverter : IValueConverter
     {
