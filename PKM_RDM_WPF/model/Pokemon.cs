@@ -44,7 +44,7 @@ namespace PKM_RDM_WPF.model
         private TypeP teraType;
         private int[] evs, ivs;
         private List<TypeP> resistancesX2, resistancesX4, faiblessesX2, faiblessesX4, immunites;
-        private Move[] fourMoves;
+        private string[] fourMoves;
 
         public string FrName { get => frName; set => frName = value; }
         public string TypeChartResume { get => typeChartResume; set => typeChartResume = value; }
@@ -62,7 +62,8 @@ namespace PKM_RDM_WPF.model
         public Nature WantedNature { get => wantedNature; set => wantedNature = value; }
         public string TeamName { get => teamName; set => teamName = value; }
         public List<MoveVersion> Moves { get => moves; set => moves = value; }
-        public Move[] FourMoves { get => fourMoves; set => fourMoves = value; }
+        public string[] FourMoves {get => fourMoves; set{fourMoves = value;} }
+
 
         public int GetIndexOfWantedAbility()
         {
@@ -71,7 +72,9 @@ namespace PKM_RDM_WPF.model
         }
 
         public Pokemon()
-        {}
+        {
+            this.FourMoves = new string[4] {"", "", "", ""};
+        }
 
         public async Task SetRetrievedData()
         {
@@ -81,23 +84,25 @@ namespace PKM_RDM_WPF.model
 
         public async Task RetrievePossibleMoves()
         {
+            // Créer une liste de tâches asynchrones
+            List<Task> tasks = new List<Task>();
+
             // SET MOVES
             using (HttpClient client = new HttpClient())
             {
                 foreach (MoveVersion mv in Moves)
                 {
-                    try
-                    {
-                        await mv.GetMoveAsync(client); // regarder si on peut enlever les settigngs de la deserialisation JSON & header model + enlver try catch
-                    }
-                    catch (Exception ex)
-                    {
-                        throw new Exception(ex.Message);
-                    }
+                    // Ajouter chaque tâche à la liste
+                    tasks.Add(mv.GetMoveAsync(client));
                 }
+
+                // Attendre la fin de toutes les tâches
+                await Task.WhenAll(tasks);
             }
+
             //MessageBox.Show("Moovpool retrieved");
         }
+
 
         public bool HasTwoTypes()
         {
@@ -201,6 +206,8 @@ namespace PKM_RDM_WPF.model
 
         public void SetEvsAndIvs()
         {
+            //FourMoves = new string[4] { "dfg", "dfg", "dfg", "dfg"};
+
             Evs = new int[6] { 0, 0, 0, 0, 0, 0 };
             Ivs = new int[6] { 31, 31, 31, 31, 31, 31 };
 

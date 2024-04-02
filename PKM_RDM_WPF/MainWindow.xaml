@@ -39,7 +39,7 @@
                             <Image Source="img/exclamation_mark.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    </MenuItem>
+                </MenuItem>
             </Menu>
         </DockPanel>
         <!-- FENETRE -->
@@ -388,16 +388,16 @@
                         <Label x:Name="lbEnableMovepool" Content="Enable Movepool system ?" FontSize="14" />
                     </StackPanel>
 
-                    <StackPanel x:Name="spMoveInterface" IsEnabled="False" DataContext="{Binding SelectedItem, ElementName=teamListImageView}">
+                    <StackPanel x:Name="spMoveInterface" IsEnabled="False">
                         <!-- LES 4 SLOTS DE MOOVS -->
-                        <StackPanel>
-                            <TextBox></TextBox>
-                            <TextBox></TextBox>
-                            <TextBox></TextBox>
-                            <TextBox></TextBox>
+                        <StackPanel x:Name="sp_FourMoves" DataContext="{Binding SelectedItem, ElementName=teamListImageView}">
+                            <TextBox x:Name="tb_FourMove0" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" Text="{Binding FourMoves[0], Mode=TwoWay}"></TextBox>
+                            <TextBox x:Name="tb_FourMove1" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" Text="{Binding FourMoves[1], Mode=TwoWay}"></TextBox>
+                            <TextBox x:Name="tb_FourMove2" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" Text="{Binding FourMoves[2], Mode=TwoWay}"></TextBox>
+                            <TextBox x:Name="tb_FourMove3" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" Text="{Binding FourMoves[3], Mode=TwoWay}"></TextBox>
                         </StackPanel>
                         <Label Content="Possible moves :"></Label>
-                        <ListView x:Name="lvPossibleMoves" MaxHeight="590" ItemsSource="{Binding MovesOfThePokemon}">
+                        <ListView x:Name="lvPossibleMoves" MaxHeight="590" ItemsSource="{Binding MovesOfThePokemon}" MouseDoubleClick="lvAcceptMove_DoubleClick">
                             <ListView.View>
                                 <GridView>
                                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding MoveGetted}"/>
@@ -418,11 +418,9 @@
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
                                 </GridView>
-
                             </ListView.View>
                         </ListView>
                     </StackPanel>
-                    
                 </StackPanel>
             </materialDesign:Card>
         </Grid>

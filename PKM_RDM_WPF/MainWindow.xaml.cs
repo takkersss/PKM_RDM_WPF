@@ -16,6 +16,8 @@ using System.Windows.Data;
 using System.Windows.Shapes;
 using Path = System.IO.Path;
 using System.Text.RegularExpressions;
+using static PKM_RDM_WPF.utils.Utils;
+using Microsoft.VisualBasic.Devices;
 
 namespace PKM_RDM_WPF
 {
@@ -29,7 +31,11 @@ namespace PKM_RDM_WPF
         private Pokemon currentPokemon;
         private string currentTeamName = "Team Name";
         private AllPokemon allPokemonData;
+
+        // MOOV SYSTEM
         private bool moovSystemEnabled = false;
+        private TextBox currentMoveSlotSelected;
+        private bool isSwitchingMove = false;
 
         public MainWindow()
         {
@@ -71,6 +77,10 @@ namespace PKM_RDM_WPF
                 if (!String.IsNullOrEmpty(p.GetIvsTextForShowdown()))
                 {
                     team += "\n" + p.GetIvsTextForShowdown();
+                }
+                foreach (string move in p.FourMoves)
+                {
+                    team += "\n- " + move;
                 }
                 team += "\n\n";
             }
@@ -343,6 +353,7 @@ namespace PKM_RDM_WPF
 
         private bool canUpdate;
 
+        // Event lors du switch de pokémon
         private void teamListImageView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             canUpdate = false;
@@ -361,11 +372,12 @@ namespace PKM_RDM_WPF
             // Charger les moov
             if (moovSystemEnabled)
             {
-                if (currentPokemon.Moves.First().MoveGetted != null) ReloadDIsplayPokemonMoovpool();
-                else LoadPokemonMoovepool();
+                if (currentPokemon.Moves.First().MoveGetted != null) ReloadDisplayPokemonMovepool();
+                else LoadPokemonMovepool();
             }
             //SwitchTooltip();
             //MessageBox.Show(currentPokemon.Name);
+            sp_FourMoves.DataContext = teamListImageView.SelectedItem; // Permet de mettre à jour les 4 moves (patch behinding)
             canUpdate = true;
         }
 
@@ -571,6 +583,7 @@ namespace PKM_RDM_WPF
             winAbout.ShowDialog();
         }
 
+        // Open help window
         private void miHelp_Click(object sender, RoutedEventArgs e)
         {
             WindowTips winAbout = new WindowTips(this);
@@ -584,9 +597,10 @@ namespace PKM_RDM_WPF
 
         private void tbTeamName_GotFocus(object sender, RoutedEventArgs e)
         {
-            tbTeamName.Text = "";
+            if(tbTeamName.Text == "Team Name") tbTeamName.Text = "";
         }
 
+        // MOVES System
         private void cbEnableMovepool_Click(object sender, RoutedEventArgs e)
         {
             if (isBtnRandomTeamBusy) { cbEnableMovepool.IsChecked = false; return; }
@@ -596,19 +610,68 @@ namespace PKM_RDM_WPF
             {
                 moovSystemEnabled = true;
                 lvPossibleMoves.Items.Clear();
-                LoadPokemonMoovepool();
+                LoadPokemonMovepool();
             }
         }
 
-        private async void LoadPokemonMoovepool()
+        private async void LoadPokemonMovepool()
         {
             await currentPokemon.RetrievePossibleMoves();
-            ReloadDIsplayPokemonMoovpool();
+            ReloadDisplayPokemonMovepool();
         }
 
-        private void ReloadDIsplayPokemonMoovpool()
+        private void ReloadDisplayPokemonMovepool()
         {
             applicationData.MovesOfThePokemon = new ObservableCollection<MoveVersion>(currentPokemon.Moves);
+            lvPossibleMoves.ItemsSource = applicationData.MovesOfThePokemon;
+        }
+
+        private void tb_Move_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if (currentPokemon == null ||currentPokemon.Moves.First().MoveGetted == null || isSwitchingMove) return; // currentPokemon.Moves.All(mv => mv?.MoveGetted != null)
+
+            TextBox tbMove = (TextBox)sender;
+
+            UpdateMovepoolList(tbMove.Text);
+            isSwitchingMove = false;
+        }
+
+        private void lvAcceptMove_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (currentMoveSlotSelected == null) return;
+
+            MoveVersion selectedMove = (MoveVersion)lvPossibleMoves.SelectedItem;
+
+            isSwitchingMove = true;
+            currentMoveSlotSelected.Text = ToNiceString(selectedMove.MoveGetted.Name);
+            currentMoveSlotSelected.Focus();
+        }
+
+        private void tb_Move_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (currentPokemon.Moves.First().MoveGetted == null) return;
+            TextBox tbMove = (TextBox)sender;
+
+            if(currentMoveSlotSelected != null && currentMoveSlotSelected.Text == tbMove.Text)
+            {
+                UpdateMovepoolList();
+            }
+            else UpdateMovepoolList(tbMove.Text);
+
+            currentMoveSlotSelected = tbMove;
+            isSwitchingMove = false;
+        }
+
+        private void UpdateMovepoolList(string filterText = null)
+        {
+            List<MoveVersion> moves;
+            if (filterText != null && filterText != "")
+            {
+                moves = currentPokemon.Moves.FindAll(x => ToNiceString(x.MoveGetted.Name).StartsWith(ToNiceString(filterText)));
+            }
+            else moves = currentPokemon.Moves;
+
+            applicationData.MovesOfThePokemon = new ObservableCollection<MoveVersion>(moves);
             lvPossibleMoves.ItemsSource = applicationData.MovesOfThePokemon;
         }
     }
