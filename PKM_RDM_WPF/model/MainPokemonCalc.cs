@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using PKM_RDM_WPF.utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,6 +9,7 @@ using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Threading.Tasks;
+using static PKM_RDM_WPF.utils.Utils;
 
 namespace PKM_RDM_WPF.model
 {
@@ -640,7 +642,7 @@ namespace PKM_RDM_WPF.model
         {
             if (!IsInternetConnected())
             {
-                MainWindow.ShowConnexionError(errorMessage);
+                ShowConnexionError(errorMessage);
                 return null;
             }
 
@@ -657,7 +659,7 @@ namespace PKM_RDM_WPF.model
                 }
                 else
                 {
-                    MainWindow.ShowConnexionError(errorMessage);
+                    ShowConnexionError(errorMessage);
                     return null;
                 }
             }
@@ -666,7 +668,7 @@ namespace PKM_RDM_WPF.model
 
         public static async Task<string> GetPokemonNameById(int id, string? lang)
         {
-            if (!IsInternetConnected()) { MainWindow.ShowConnexionError($"error getting name of pokemon/{id}"); return null; }
+            if (!IsInternetConnected()) { ShowConnexionError($"error getting name of pokemon/{id}"); return null; }
             using (HttpClient client = new HttpClient())
             {
                 HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{id}");
@@ -678,7 +680,7 @@ namespace PKM_RDM_WPF.model
                 }
                 else
                 {
-                    MainWindow.ShowConnexionError($"error getting name of pokemon/{id}");
+                    ShowConnexionError($"error getting name of pokemon/{id}");
                     return null;
                 }
             }
@@ -686,7 +688,7 @@ namespace PKM_RDM_WPF.model
 
         public static async Task<int> GetPokemonIdByName(string nom)
         {
-            if (!IsInternetConnected()) { MainWindow.ShowConnexionError($"error getting id of {nom.ToLower()}"); return -1;}
+            if (!IsInternetConnected()) { ShowConnexionError($"error getting id of {nom.ToLower()}"); return -1;}
             using (HttpClient client = new HttpClient())
             {
                 HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{nom.ToLower()}");
@@ -698,7 +700,7 @@ namespace PKM_RDM_WPF.model
                 }
                 else
                 {
-                    MainWindow.ShowConnexionError($"error getting id of {nom.ToLower()}");
+                    ShowConnexionError($"error getting id of {nom.ToLower()}");
                     return -1;
                 }
             }
@@ -706,7 +708,7 @@ namespace PKM_RDM_WPF.model
 
         public static async Task<AllPokemon> GetAllPokemonNameUrl()
         {
-            if (!IsInternetConnected()) { MainWindow.ShowConnexionError("error getting name of all pokemon"); return null; }
+            if (!IsInternetConnected()) { ShowConnexionError("error getting name of all pokemon"); return null; }
             using (HttpClient client = new HttpClient())
             {
                 HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon?limit={AllPokemon.NB_Pokemon}");
@@ -718,7 +720,7 @@ namespace PKM_RDM_WPF.model
                 }
                 else
                 {
-                    MainWindow.ShowConnexionError("error getting name of all pokemon");
+                    ShowConnexionError("error getting name of all pokemon");
                     return null;
                 }
             }
@@ -727,7 +729,7 @@ namespace PKM_RDM_WPF.model
 
         public static async Task GetPokemonCount()
         {
-            if (!IsInternetConnected()) { MainWindow.ShowConnexionError("error getting pokemon count"); return; }
+            if (!IsInternetConnected()) { ShowConnexionError("error getting pokemon count"); return; }
             using (HttpClient client = new HttpClient())
             {
                 HttpResponseMessage reponse = await client.GetAsync("https://pokeapi.co/api/v2/pokemon-species");
@@ -740,7 +742,7 @@ namespace PKM_RDM_WPF.model
                 }
                 else
                 {
-                    MainWindow.ShowConnexionError("error getting pokemon count");
+                    ShowConnexionError("error getting pokemon count");
                 }
             }
         }

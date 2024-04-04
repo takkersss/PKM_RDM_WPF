@@ -828,12 +828,9 @@ namespace PKM_RDM_WPF
                     (move.MoveGetted.Type.Name == currentPokemon.Types[0].Type.Name ||
                     (currentPokemon.Types.Count > 1 && currentPokemon.Types[1] != null && move.MoveGetted.Type.Name == currentPokemon.Types[1].Type.Name)))
                 {
-                    return 0; // Placer le mouvement au début s'il correspond à l'un des types du Pokémon
+                    return 0;
                 }
-                else
-                {
-                    return 1; // Placer le mouvement après les mouvements qui ne correspondent pas aux types du Pokémon
-                }
+                else return 1;
             }).ThenBy(move => move.MoveGetted.Type.Name).ToList();
 
             ReloadDisplayPokemonMovepool(moves);
