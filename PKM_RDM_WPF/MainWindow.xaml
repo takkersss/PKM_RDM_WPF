@@ -7,8 +7,9 @@
         xmlns:model="clr-namespace:PKM_RDM_WPF.model"
         xmlns:converter="clr-namespace:PKM_RDM_WPF.converter"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        xmlns:fa="http://schemas.fontawesome.io/icons/"
         mc:Ignorable="d"
-        Title="Random Pokemon Teambuilder" Height="830" Width="1450" MinHeight="830" MinWidth="1450" Icon="/img/icon.png"
+        Title="Random Pokemon Teambuilder" Height="830" Width="1520" MinHeight="830" MinWidth="1520" Icon="/img/icon.png"
         Style="{StaticResource MaterialDesignWindow}">
     <Window.DataContext>
         <model:ApplicationData x:Name="applicationData" />
@@ -23,6 +24,7 @@
         </Style>
     </Window.Resources>
     <Grid>
+        <!-- MENU DU HAUT -->
         <DockPanel>
             <Menu DockPanel.Dock="Top" Height="40" VerticalAlignment="Top" Background="#FF292929">
                 <MenuItem Header="_File">
@@ -57,6 +59,7 @@
             <!-- TEAM NAME INPUT -->
             <StackPanel Grid.Row="1">
                 <TextBox x:Name="tbTeamName" Margin="5,0,5,0" GotFocus="tbTeamName_GotFocus"/>
+                <fa:ImageAwesome x:Name="iconLoading" Icon="Refresh" Spin="False" Height="48" Width="48" Visibility="Hidden" Margin="0,10,0,0"/>
             </StackPanel>
 
             <Grid Grid.Row="0" Grid.Column="1">
@@ -94,8 +97,8 @@
                     <StackPanel DataContext="{Binding SelectedItem, ElementName=teamListImageView}">
                         <Label x:Name="lbName" Content="{Binding Name}" VerticalAlignment="Top" Height="38" FontSize="20"/>
                         <StackPanel Orientation="Horizontal" Height="20" Margin="3.2,0,0,0">
-                            <Image x:Name="imgTyp1" Source="{Binding Types[0].Type.Name, Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20" HorizontalAlignment="Left"/>
-                            <Image x:Name="imgTyp2" Source="{Binding Types[1].Type.Name, Converter={StaticResource TypeToImageTypeConverter}}" Width="100" Height="20" HorizontalAlignment="Left" />
+                            <Image x:Name="imgTyp1" Source="{Binding Types[0].Type.Name, Converter={StaticResource TypeToImageTypeConverter}}" Width="95" Height="20" HorizontalAlignment="Left"/>
+                            <Image x:Name="imgTyp2" Source="{Binding Types[1].Type.Name, Converter={StaticResource TypeToImageTypeConverter}}" Width="95" Height="20" HorizontalAlignment="Left" />
                         </StackPanel>
                     </StackPanel>
 
@@ -396,29 +399,51 @@
                             <TextBox x:Name="tb_FourMove2" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" Text="{Binding FourMoves[2], Mode=TwoWay}"></TextBox>
                             <TextBox x:Name="tb_FourMove3" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" Text="{Binding FourMoves[3], Mode=TwoWay}"></TextBox>
                         </StackPanel>
-                        <Label Content="Possible moves :"></Label>
+                        <Grid Margin="5,10,5,0">
+                            <Button HorizontalAlignment="Left" Click="btn_ReloadPanel">
+                                <fa:ImageAwesome Icon="Refresh"></fa:ImageAwesome>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Refresh Movepool"/>
+                                </Button.ToolTip>
+                            </Button>
+                            <Button HorizontalAlignment="Left" Margin="60,0,0,0" Click="btn_RandomMovepool">
+                                <fa:ImageAwesome Icon="Random"></fa:ImageAwesome>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Random Movepool"/>
+                                </Button.ToolTip>
+                            </Button>
+                        </Grid>
+                        <StackPanel Orientation="Horizontal" Margin="0,2,0,5">
+                            <TextBlock x:Name="tbMoveNameHeader" Width="120" Text="Name" TextAlignment="Center"/>
+                            <TextBlock x:Name="tbMovePowerHeader" Width="40" Text="Pow" Cursor="Hand" MouseLeftButtonDown="tbMovePowerHeader_MouseLeftButtonDown">
+                                <TextBlock.ToolTip>
+                                    <ToolTip Content="Power"/>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <TextBlock x:Name="tbMoveAccuracyHeader" Width="40" Text="Acc">
+                                <TextBlock.ToolTip>
+                                    <ToolTip Content="Accuracy"/>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <TextBlock x:Name="tbMoveCategoryHeader" Width="80" Text="Cat" TextAlignment="Center">
+                                <TextBlock.ToolTip>
+                                    <ToolTip Content="Category"/>
+                                </TextBlock.ToolTip>
+                            </TextBlock>
+                            <TextBlock x:Name="tbMoveTypeHeader" Width="80" Text="Type" TextAlignment="Center" Cursor="Hand" MouseLeftButtonDown="tbMoveTypeHeader_MouseLeftButtonDown"/>
+                        </StackPanel>
                         <ListView x:Name="lvPossibleMoves" MaxHeight="590" ItemsSource="{Binding MovesOfThePokemon}" MouseDoubleClick="lvAcceptMove_DoubleClick">
-                            <ListView.View>
-                                <GridView>
-                                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding MoveGetted}"/>
-                                    <GridViewColumn Header="Power" DisplayMemberBinding="{Binding MoveGetted.Power}" />
-                                    <GridViewColumn Header="Accuracy" DisplayMemberBinding="{Binding MoveGetted.Accuracy}" />
-                                    <GridViewColumn Header="Category">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Image Source="{Binding MoveGetted.Damage_class.Name, Converter={StaticResource StringToCatImgConverter}}" Width="80" Height="20"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                    <GridViewColumn Header="Type">
-                                        <GridViewColumn.CellTemplate>
-                                            <DataTemplate>
-                                                <Image Source="{Binding MoveGetted.Type.Name, Converter={StaticResource TypeToImageTypeConverter}}" Width="80" Height="16"/>
-                                            </DataTemplate>
-                                        </GridViewColumn.CellTemplate>
-                                    </GridViewColumn>
-                                </GridView>
-                            </ListView.View>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding MoveGetted}" Width="{Binding Width, ElementName=tbMoveNameHeader}"/>
+                                        <TextBlock Text="{Binding MoveGetted.Power}" Width="{Binding Width, ElementName=tbMovePowerHeader}"/>
+                                        <TextBlock Text="{Binding MoveGetted.Accuracy}" Width="{Binding Width, ElementName=tbMoveAccuracyHeader}"/>
+                                        <Image Source="{Binding MoveGetted.Damage_class.Name, Converter={StaticResource StringToCatImgConverter}}" Width="{Binding Width, ElementName=tbMoveCategoryHeader}" Height="20"/>
+                                        <Image Source="{Binding MoveGetted.Type.Name, Converter={StaticResource TypeToImageTypeConverter}}" Width="{Binding Width, ElementName=tbMoveTypeHeader}" Height="16"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
                         </ListView>
                     </StackPanel>
                 </StackPanel>

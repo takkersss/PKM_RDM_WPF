@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Navigation;
 using static PKM_RDM_WPF.model.MainPokemonCalc;
+using static PKM_RDM_WPF.utils.Utils;
 
 namespace PKM_RDM_WPF.model
 {
@@ -81,28 +82,6 @@ namespace PKM_RDM_WPF.model
             // SET SPECIE
             pSpecies = await GetPokemonSpeciesById(Id);
         }
-
-        public async Task RetrievePossibleMoves()
-        {
-            // Créer une liste de tâches asynchrones
-            List<Task> tasks = new List<Task>();
-
-            // SET MOVES
-            using (HttpClient client = new HttpClient())
-            {
-                foreach (MoveVersion mv in Moves)
-                {
-                    // Ajouter chaque tâche à la liste
-                    tasks.Add(mv.GetMoveAsync(client));
-                }
-
-                // Attendre la fin de toutes les tâches
-                await Task.WhenAll(tasks);
-            }
-
-            //MessageBox.Show("Moovpool retrieved");
-        }
-
 
         public bool HasTwoTypes()
         {
@@ -432,6 +411,49 @@ namespace PKM_RDM_WPF.model
 
             string resume = $"(+{bestStat}, -{worstStat})";
             WantedNature = new Nature(Nature.NATURES.ToList().Find(x => x.Contains(resume)));
+        }
+
+        // MOVEPOOL
+        public async Task RetrievePossibleMoves()
+        {
+            // Créer une liste de tâches asynchrones
+            List<Task> tasks = new List<Task>();
+
+            // SET MOVES
+            using (HttpClient client = new HttpClient())
+            {
+                foreach (MoveVersion mv in Moves)
+                {
+                    // Ajouter chaque tâche à la liste
+                    tasks.Add(mv.GetMoveAsync(client));
+                }
+
+                // Attendre la fin de toutes les tâches
+                await Task.WhenAll(tasks);
+            }
+
+            //MessageBox.Show("Moovpool retrieved");
+        }
+
+        public void RandomizeFourMoves()
+        {
+            int movesNb = this.Moves.Count;
+
+            Random random = new Random();
+
+            int appliedMoves = 0;
+            while (appliedMoves != 4)
+            {
+                int randomIndex = random.Next(0, movesNb);
+                MoveVersion selectedMove = this.Moves[randomIndex];
+
+                // Vérifiez si le mouvement sélectionné n'est pas déjà présent dans les mouvements du Pokémon
+                if (!this.FourMoves.Contains(ToNiceString(selectedMove.MoveGetted.Name)))
+                {
+                    this.FourMoves[appliedMoves] = ToNiceString(selectedMove.MoveGetted.Name);
+                    appliedMoves++;
+                }
+            }
         }
     }
 }
