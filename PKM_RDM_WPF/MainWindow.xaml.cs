@@ -18,6 +18,7 @@ using Path = System.IO.Path;
 using System.Text.RegularExpressions;
 using static PKM_RDM_WPF.utils.Utils;
 using Microsoft.VisualBasic.Devices;
+using PKM_RDM_WPF.engine;
 
 namespace PKM_RDM_WPF
 {
@@ -28,8 +29,8 @@ namespace PKM_RDM_WPF
     {
         private bool isWindowBusy; // isRandomizingTeam
         WindowSwitchPokemon winSwitch;
-        private Pokemon currentPokemon;
-        private string currentTeamName = "Team Name";
+        private Pokemon currentPokemon; //private string currentTeamName = "Team Name";
+        private AppOptions appOptions;
         private AllPokemon allPokemonData;
 
         // MOVE SYSTEM
@@ -197,7 +198,7 @@ namespace PKM_RDM_WPF
         {
             await MainPokemonCalc.GetPokemonCount(); // On fait une requete pour avoir le nb de pokemon
             LoadAllPokemonName();
-            ReadCurrentTeamName();
+            ReadAppOptionsName();
             applicationData.AllType = new ObservableCollection<string>(Enum.GetNames(typeof(TypeP)));
             applicationData.AllNature = new ObservableCollection<string>(Nature.NATURES);
             if (Directory.Exists(Pokemon.CHEMIN_DOSSIER))
@@ -211,7 +212,7 @@ namespace PKM_RDM_WPF
                 }
                 else
                 {
-                    string[] fichiersDansDossier = Directory.GetFiles($"{Pokemon.CHEMIN_DOSSIER}/{teams.ToList().Find(x => x == currentTeamName)}");
+                    string[] fichiersDansDossier = Directory.GetFiles($"{Pokemon.CHEMIN_DOSSIER}/{teams.ToList().Find(x => x == appOptions.CurrentTeamName)}");
 
                     if (fichiersDansDossier.Length == 6)
                     {
@@ -231,10 +232,11 @@ namespace PKM_RDM_WPF
                 NewRandomTeam();
                 currentPokemon = (Pokemon)teamListImageView.SelectedItem;
             }
-            tbTeamName.Text = currentTeamName;
+            tbTeamName.Text = appOptions.CurrentTeamName;
+            spMoveInterface.IsEnabled = appOptions.MoveSystemEnabledAtStart;
+            cbEnableMovepool.IsChecked = appOptions.MoveSystemEnabledAtStart;
         }
 
-        // TEAM NAME
         private void SwitchPokemonTeam(string[] filesInFolder)
         {
             List<Pokemon> pokemons = new List<Pokemon>();
@@ -249,10 +251,11 @@ namespace PKM_RDM_WPF
             applicationData.PokemonTeam = new ObservableCollection<Pokemon>(pokemons);
             RefreshWindow(0);
             SwitchTooltip();
-            WriteTeamNameInData();
+            WriteAppOptionsInData();
         }
 
-        private void WriteTeamNameInData()
+        // APP OPTIONS
+        private void WriteAppOptionsInData()
         {
             string appDataPath = "data/appData.json";
 
@@ -262,16 +265,20 @@ namespace PKM_RDM_WPF
             // Utilisez StreamWriter pour écrire le contenu dans le fichier
             using (StreamWriter writer = new StreamWriter(appDataPath))
             {
-                writer.Write(currentTeamName);
+                writer.Write(JsonConvert.SerializeObject(appOptions));
             }
         }
-        private void ReadCurrentTeamName()
+        private void ReadAppOptionsName()
         {
-            if (!File.Exists("data/appData.json")) return;
-            string tn = File.ReadAllText("data/appData.json");
-            if (!String.IsNullOrWhiteSpace(tn))
+            if (!File.Exists("data/appData.json")){
+                appOptions = new AppOptions();
+            }
+            else
             {
-                currentTeamName = tn;
+                string optsStr = File.ReadAllText("data/appData.json");
+                AppOptions opts = JsonConvert.DeserializeObject<AppOptions>(optsStr);
+
+                appOptions = opts;
             }
         }
 
@@ -344,8 +351,8 @@ namespace PKM_RDM_WPF
             {
                 p.Serialize(tbTeamName.Text.ToLower());
             }
-            currentTeamName = tbTeamName.Text.ToLower();
-            WriteTeamNameInData();
+            appOptions.CurrentTeamName = tbTeamName.Text.ToLower();
+            WriteAppOptionsInData();
 
         }
 
@@ -363,8 +370,8 @@ namespace PKM_RDM_WPF
             if (result == CommonFileDialogResult.Ok)
             {
                 string teamName = Path.GetFileName(dialog.FileName);
-                currentTeamName = teamName;
-                tbTeamName.Text = currentTeamName;
+                appOptions.CurrentTeamName = teamName;
+                tbTeamName.Text = appOptions.CurrentTeamName;
                 string[] fichiersDansDossier = Directory.GetFiles(dialog.FileName);
                 SwitchPokemonTeam(fichiersDansDossier);
             }
@@ -634,6 +641,9 @@ namespace PKM_RDM_WPF
                     LoadCurrentPokemonMovepool();
                 }
             }
+
+            appOptions.MoveSystemEnabledAtStart = spMoveInterface.IsEnabled;
+            WriteAppOptionsInData();
         }
 
         private async void LoadCurrentPokemonMovepool()

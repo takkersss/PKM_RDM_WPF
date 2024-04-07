@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PKM_RDM_WPF"
-        xmlns:model="clr-namespace:PKM_RDM_WPF.model"
+        xmlns:model="clr-namespace:PKM_RDM_WPF.engine"
         mc:Ignorable="d"
         Title="Pokemon Switching" Icon="img/icon.png" Height="450" Width="450" ResizeMode="NoResize" Closing="Window_Closing" Activated="Window_Activated"
         Style="{StaticResource MaterialDesignWindow}">

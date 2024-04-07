@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PKM_RDM_WPF"
-        xmlns:model="clr-namespace:PKM_RDM_WPF.model"
+        xmlns:model="clr-namespace:PKM_RDM_WPF.engine"
         xmlns:converter="clr-namespace:PKM_RDM_WPF.converter"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:fa="http://schemas.fontawesome.io/icons/"
@@ -399,6 +399,7 @@
                             <TextBox x:Name="tb_FourMove2" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" Text="{Binding FourMoves[2], Mode=TwoWay}"></TextBox>
                             <TextBox x:Name="tb_FourMove3" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" Text="{Binding FourMoves[3], Mode=TwoWay}"></TextBox>
                         </StackPanel>
+                        <!-- BOUTONS -->
                         <Grid Margin="5,10,5,0">
                             <Button HorizontalAlignment="Left" Click="btn_ReloadPanel">
                                 <fa:ImageAwesome Icon="Refresh"></fa:ImageAwesome>
@@ -413,6 +414,7 @@
                                 </Button.ToolTip>
                             </Button>
                         </Grid>
+                        <!-- LA LISTE DES MOVES -->
                         <StackPanel Orientation="Horizontal" Margin="0,2,0,5">
                             <TextBlock x:Name="tbMoveNameHeader" Width="120" Text="Name" TextAlignment="Center"/>
                             <TextBlock x:Name="tbMovePowerHeader" Width="40" Text="Pow" Cursor="Hand" MouseLeftButtonDown="tbMovePowerHeader_MouseLeftButtonDown">

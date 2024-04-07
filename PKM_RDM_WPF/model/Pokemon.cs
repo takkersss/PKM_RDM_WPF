@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PKM_RDM_WPF.engine;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Navigation;
-using static PKM_RDM_WPF.model.MainPokemonCalc;
+using static PKM_RDM_WPF.engine.MainPokemonCalc;
 using static PKM_RDM_WPF.utils.Utils;
 
 namespace PKM_RDM_WPF.model

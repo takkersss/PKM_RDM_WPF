@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using PKM_RDM_WPF.model;
 using PKM_RDM_WPF.utils;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using static PKM_RDM_WPF.utils.Utils;
 
-namespace PKM_RDM_WPF.model
+namespace PKM_RDM_WPF.engine
 {
     public class MainPokemonCalc
     {
@@ -147,7 +148,7 @@ namespace PKM_RDM_WPF.model
             TypeP deuxiemeType;
             TypeP atkType = TexteToType(typeAtk);
 
-            if (!String.IsNullOrEmpty(type2))
+            if (!string.IsNullOrEmpty(type2))
             {
                 deuxiemeType = TexteToType(type2);
             }
@@ -164,7 +165,7 @@ namespace PKM_RDM_WPF.model
             return (TypeP)Enum.Parse(typeof(TypeP), type.ToLower());
         }
         */
-        
+
 
         public static TypeP TexteToType(string type1)
         {
@@ -206,7 +207,7 @@ namespace PKM_RDM_WPF.model
 
         public static Dictionary<TypeP, double> GetFaiblesses(string type1, string type2)
         {
-            if (String.IsNullOrEmpty(type2))
+            if (string.IsNullOrEmpty(type2))
             {
                 return GetFaiblessesAuType(type1);
             }
@@ -250,7 +251,7 @@ namespace PKM_RDM_WPF.model
 
         public static Dictionary<TypeP, double> GetResistances(string type1, string type2)
         {
-            if (String.IsNullOrEmpty(type2))
+            if (string.IsNullOrEmpty(type2))
             {
                 return GetResistancesAuType(type1);
             }
@@ -461,10 +462,10 @@ namespace PKM_RDM_WPF.model
             }
         }
 
-        public static String DictionnaireToString(Dictionary<TypeP, double> d)
+        public static string DictionnaireToString(Dictionary<TypeP, double> d)
         {
             int i = 0;
-            string txt ="";
+            string txt = "";
             foreach (KeyValuePair<TypeP, double> paire in d)
             {
                 txt += paire.Key + " x" + paire.Value;
@@ -688,7 +689,7 @@ namespace PKM_RDM_WPF.model
 
         public static async Task<int> GetPokemonIdByName(string nom)
         {
-            if (!IsInternetConnected()) { ShowConnexionError($"error getting id of {nom.ToLower()}"); return -1;}
+            if (!IsInternetConnected()) { ShowConnexionError($"error getting id of {nom.ToLower()}"); return -1; }
             using (HttpClient client = new HttpClient())
             {
                 HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon/{nom.ToLower()}");
