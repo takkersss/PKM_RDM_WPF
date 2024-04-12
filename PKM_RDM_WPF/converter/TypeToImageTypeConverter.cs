@@ -51,7 +51,7 @@ namespace PKM_RDM_WPF.converter
             {
                 return typeImages[index];
             }
-            return null; // ou une valeur par défaut si nécessaire
+            return "img/null.png"; // ou une valeur par défaut si nécessaire
         }
     }
 }

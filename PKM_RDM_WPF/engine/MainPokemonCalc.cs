@@ -602,7 +602,6 @@ namespace PKM_RDM_WPF.engine
         public static async Task<List<Pokemon>> GetRandomPokemonTeam()
         {
             List<Pokemon> equipePokemonAleatoire = new List<Pokemon>();
-            Random random = new Random();
 
             while (equipePokemonAleatoire.Count < 6)
             {
@@ -624,6 +623,15 @@ namespace PKM_RDM_WPF.engine
             Pokemon pokemonAleatoire = await GetPokemonById(idPokemonAleatoire);
             if (pokemonAleatoire != null)
             {
+                if(pokemonAleatoire.OtherForms.Count > 0)
+                {
+                    bool switchForm = random.Next(0, 100) < 40; // 40% de chance de changer la form
+                    if (switchForm)
+                    {
+                        int randomPok = random.Next(0, pokemonAleatoire.OtherForms.Count);
+                        pokemonAleatoire = pokemonAleatoire.OtherForms[randomPok];
+                    }
+                }
                 return pokemonAleatoire;
             }
             else return null;
@@ -639,7 +647,7 @@ namespace PKM_RDM_WPF.engine
             return await GetPokemon($"https://pokeapi.co/api/v2/pokemon/{nom.ToLower()}", $"error getting pokemon by name ({nom.ToLower()})");
         }
 
-        private static async Task<Pokemon> GetPokemon(string url, string errorMessage)
+        public static async Task<Pokemon> GetPokemon(string url, string errorMessage)
         {
             if (!IsInternetConnected())
             {
@@ -712,7 +720,7 @@ namespace PKM_RDM_WPF.engine
             if (!IsInternetConnected()) { ShowConnexionError("error getting name of all pokemon"); return null; }
             using (HttpClient client = new HttpClient())
             {
-                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon?limit={AllPokemon.NB_Pokemon}");
+                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon?limit=20000");
                 if (reponse.IsSuccessStatusCode)
                 {
                     string contenu = await reponse.Content.ReadAsStringAsync();

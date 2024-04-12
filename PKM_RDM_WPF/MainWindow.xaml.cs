@@ -37,7 +37,7 @@ namespace PKM_RDM_WPF
         private bool moovSystemEnabled = false; // ne sert qu'une fois !
         private TextBox currentMoveSlotSelected;
         private bool isSwitchingMove = false;
-        private bool isLoadingNewRandomTeam = true;
+        private bool isLoadingNewRandomTeam = false;
 
         // SORT MOVE SYSTEM
         private bool moovSortIsPowerAsc = true;
@@ -110,7 +110,7 @@ namespace PKM_RDM_WPF
         {
             foreach (Pokemon p in applicationData.PokemonTeam)
             {
-                p.SetFrName();
+                //p.SetFrName();
                 p.SetDoubleTypesSpecifiations();
                 if (p.Abilities.Count > 1)
                 {
@@ -131,7 +131,7 @@ namespace PKM_RDM_WPF
                 p.ChooseBestNature();        
             }
             // MOVES
-            if (spMoveInterface.IsEnabled)
+            if (moovSystemEnabled)
             {
                 await LoadPokemonsMovepool(applicationData.PokemonTeam.ToList());
                 foreach(Pokemon p in applicationData.PokemonTeam)
@@ -232,8 +232,10 @@ namespace PKM_RDM_WPF
                 NewRandomTeam();
                 currentPokemon = (Pokemon)teamListImageView.SelectedItem;
             }
+            // Chargement des options au start de la page
             tbTeamName.Text = appOptions.CurrentTeamName;
             spMoveInterface.IsEnabled = appOptions.MoveSystemEnabledAtStart;
+            moovSystemEnabled = appOptions.MoveSystemEnabledAtStart;
             cbEnableMovepool.IsChecked = appOptions.MoveSystemEnabledAtStart;
         }
 
@@ -396,7 +398,7 @@ namespace PKM_RDM_WPF
             UpdateShowedEVs();
             UpdateRemainingEvsText();
             // Charger les moov
-            if (spMoveInterface.IsEnabled)
+            if (moovSystemEnabled)
             {
                 if (currentPokemon.Moves.First().MoveGetted != null) ReloadDisplayPokemonMovepool();
                 else { 
@@ -626,14 +628,13 @@ namespace PKM_RDM_WPF
         // MOVES System
         private void cbEnableMovepool_Click(object sender, RoutedEventArgs e)
         {
-            if (isWindowBusy) { cbEnableMovepool.IsChecked = false; return; }
-            if (!MainPokemonCalc.IsInternetConnected() && cbEnableMovepool.IsChecked == true) { ShowConnexionError("You must be connected to internet"); cbEnableMovepool.IsChecked = false; return; }
-            spMoveInterface.IsEnabled = !spMoveInterface.IsEnabled;
+            //MessageBox.Show(cbEnableMovepool.IsChecked.ToString() + ' ' + isLoadingNewRandomTeam.ToString() + ' ' + isWindowBusy.ToString());
+            if (isWindowBusy || isLoadingNewRandomTeam) { cbEnableMovepool.IsChecked = !cbEnableMovepool.IsChecked; return; }
+            if (!MainPokemonCalc.IsInternetConnected()) { ShowConnexionError("You must be connected to internet"); cbEnableMovepool.IsChecked = !cbEnableMovepool.IsChecked; return; }
+            moovSystemEnabled = (bool)cbEnableMovepool.IsChecked;
 
-            if(spMoveInterface.IsEnabled && !moovSystemEnabled) // Permet de le faire qu'une fois
+            if(moovSystemEnabled) // Permet de le faire qu'une fois
             {
-                
-                moovSystemEnabled = true;
                 if (currentPokemon.Moves.First().MoveGetted == null)
                 {
                     lvPossibleMoves.ItemsSource = null;
@@ -642,7 +643,7 @@ namespace PKM_RDM_WPF
                 }
             }
 
-            appOptions.MoveSystemEnabledAtStart = spMoveInterface.IsEnabled;
+            appOptions.MoveSystemEnabledAtStart = moovSystemEnabled;
             WriteAppOptionsInData();
         }
 

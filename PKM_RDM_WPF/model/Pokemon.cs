@@ -24,6 +24,7 @@ namespace PKM_RDM_WPF.model
 
         private string name;
         private int id;
+        private int order;
         private Sprite sprites;
         private PokemonSpecies pSpecies;
         private List<Types> types;
@@ -37,9 +38,11 @@ namespace PKM_RDM_WPF.model
         public PokemonSpecies PSpecies { get => pSpecies; set => pSpecies = value; }
         public List<Types> Types { get => types; set => types = value; }
         public Stat[] Stats { get => stats; set => stats = value; }
+        public int Order { get => order; set => order = value; }
 
 
         // WPF
+        private List<Pokemon> otherForms;
         private string frName, typeChartResume, wantedAbility, teamName;
         private int bst;
         private Nature wantedNature;
@@ -65,7 +68,7 @@ namespace PKM_RDM_WPF.model
         public string TeamName { get => teamName; set => teamName = value; }
         public List<MoveVersion> Moves { get => moves; set => moves = value; }
         public string[] FourMoves {get => fourMoves; set{fourMoves = value;} }
-
+        public List<Pokemon> OtherForms { get => otherForms; set => otherForms = value; }
 
         public int GetIndexOfWantedAbility()
         {
@@ -78,10 +81,25 @@ namespace PKM_RDM_WPF.model
             this.FourMoves = new string[4] {"", "", "", ""};
         }
 
+        // Récupération pokemonSpecies et forms
         public async Task SetRetrievedData()
         {
             // SET SPECIE
             pSpecies = await GetPokemonSpeciesById(Id);
+
+            // SET FORMS
+            this.OtherForms = new List<Pokemon>();
+            if (pSpecies != null && pSpecies.Varieties != null && pSpecies.Varieties.Count > 1)
+            {
+                foreach (Variety variety in pSpecies.Varieties)
+                {
+                    if (!variety.Is_default)
+                    {
+                        Pokemon form = await MainPokemonCalc.GetPokemon(variety.Pokemon.Url, "error getting pokemon form by url");
+                        this.OtherForms.Add(form);
+                    }
+                }
+            }
         }
 
         public bool HasTwoTypes()
@@ -89,13 +107,13 @@ namespace PKM_RDM_WPF.model
             return this.Types.Count == 2 ? true : false;
         }
 
-        private string ToFrString()
+        /*private string ToFrString()
         {
             string frName = PSpecies.Names.Find(x => x.Language.Name == "Fr").Name;
             return frName;
         }
 
-        public void SetFrName() { FrName = ToFrString();}
+        public void SetFrName() { FrName = ToFrString();}*/
 
         // Méthode pour récupérer l'espèce du pokemon à partir de son id
         public static async Task<PokemonSpecies> GetPokemonSpeciesById(int id) //url de pokemonspecies à mettre à la place

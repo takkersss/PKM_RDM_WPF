@@ -24,7 +24,7 @@ namespace PKM_RDM_WPF.model
             get { return name; }
             set
             {
-                this.name = value.Substring(0, 1).ToUpper() + value.Substring(1).ToLower();
+                this.name = value.Substring(0, 1).ToUpper() + value.Substring(1).ToLower(); // ToNiceString(value)
             }
         }
         public string Url { get => url; set => url = value; }
