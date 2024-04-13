@@ -40,103 +40,6 @@ namespace PKM_RDM_WPF.engine
             { 1, 0.5, 1, 1, 2, 1, 1, 2, 0.5, 1, 0.5, 1, 1, 2, 0, 1, 1, 1 } // Vol
         };
 
-        /*
-        static async Task Main(string[] args)
-        {
-            string userEntry = "";
-            string type1, type2, typeAtk, pkmName;
-            do
-            {
-                Console.Clear();
-                Console.WriteLine("1. Calculer multiplicateur");
-                Console.WriteLine("=============================");
-                /*Console.WriteLine("2. Obtenir faiblesses du type");
-                Console.WriteLine("3. Obtenir resistances du type");
-                Console.WriteLine("-----------------------------");
-                Console.WriteLine("4. Obtenir attaques efficaces sur type");
-                Console.WriteLine("5. Obtenir attaques peu efficace sur type");
-                Console.WriteLine("=============================");
-                Console.WriteLine("6. Obtenir les faiblesses du pokemon (par les 2 types)");
-                Console.WriteLine("7. Obtenir les resistances du pokemon (par les 2 types)");
-                Console.WriteLine("=============================");
-                Console.WriteLine("8. Résumé d'un pokémon (grâce au nom)");
-                Console.WriteLine("=============================");
-                Console.WriteLine("9. Team Aléatoire");
-                Console.WriteLine("=============================");
-                Console.WriteLine("q. Quitter");
-                Console.WriteLine("=============================");
-                userEntry = Console.ReadLine();
-                switch (userEntry)
-                {
-                    case "1":
-                        Console.Clear();
-                        AskPokemonTypes(out type1, out type2);
-                        AskType(out typeAtk, false);
-                        Console.WriteLine("Multiplicateur : " + CalculMultiplicator(type1, type2, typeAtk));
-                        Console.ReadLine();
-                        break;
-                    
-                    case "2":
-                        Console.Clear();
-                        AskType(out type1, true);
-                        AfficheDictionnaire(GetFaiblessesAuType(type1));
-                        Console.ReadLine();
-                        break;
-                    case "3":
-                        Console.Clear();
-                        AskType(out type1, true);
-                        AfficheDictionnaire(GetResistancesAuType(type1));
-                        Console.ReadLine();
-                        break;
-                    
-                    case "4":
-                        Console.Clear();
-                        AskType(out typeAtk, false);
-                        AfficheListe(GetEfficaceSurType(typeAtk));
-                        Console.ReadLine();
-                        break;
-                    case "5":
-                        Console.Clear();
-                        AskType(out typeAtk, false);
-                        AfficheListe(GetPeuEfficaceSurType(typeAtk));
-                        Console.ReadLine();
-                        break;
-                    case "6":
-                        Console.Clear();
-                        AskPokemonTypes(out type1, out type2);
-                        AfficheDictionnaire(GetFaiblesses(type1, type2));
-                        Console.ReadLine();
-                        break;
-                    case "7":
-                        Console.Clear();
-                        AskPokemonTypes(out type1, out type2);
-                        AfficheDictionnaire(GetResistances(type1, type2));
-                        Console.ReadLine();
-                        break;
-                    case "8":
-                        Console.Clear();
-                        Console.WriteLine("Nom du pokémon (en anglais) :");
-                        pkmName = Console.ReadLine();
-                        Console.Clear();
-                        await GetPokemonByName(pkmName.ToLower());
-                        ResumeUnPokemon(currentPokemon);
-                        Console.ReadLine();
-                        break;
-                    case "9":
-                        Console.Clear();
-                        foreach (Pokemon p in await GetRandomPokemonTeam())
-                        {
-                            Console.WriteLine(p.ToFrString());
-                        }
-                        Console.ReadLine();
-                        break;
-                    case "q":
-                        break;
-                }
-
-            } while (userEntry.ToLower() != "q");
-        }*/
-
         public static double CalculMultiplicator(TypeP type1, TypeP type2, TypeP typeAtk)
         {
             return CalculMultiplicator(type1.ToString(), type2.ToString(), typeAtk.ToString());
@@ -178,24 +81,6 @@ namespace PKM_RDM_WPF.engine
             {
                 throw new ArgumentException(type1);
             }
-        }
-
-        public static void AskPokemonTypes(out string type1, out string type2)
-        {
-            Console.WriteLine("1er type du pokemon :");
-            type1 = Console.ReadLine();
-            Console.WriteLine("2eme type du pokemon (enter si 1 seul type) :");
-            type2 = Console.ReadLine();
-        }
-
-        public static void AskType(out string type, bool isPokemon)
-        {
-            if (isPokemon)
-            {
-                Console.WriteLine("Type du pokemon :");
-            }
-            else Console.WriteLine("Type de l'attaque :");
-            type = Console.ReadLine();
         }
 
         // FAIBLESSES
@@ -559,43 +444,6 @@ namespace PKM_RDM_WPF.engine
             return types;
         }
 
-        /*
-        public static void ResumeUnPokemon(Pokemon p)
-        {
-            Console.WriteLine("Nom : " + p.Name);
-            Console.Write("Types : ");
-            foreach (Types types in currentPokemon.Types)
-            {
-                if (types == currentPokemon.Types.Last() && currentPokemon.HasTwoTypes())
-                {
-                    Console.Write(" , " + types.Type.Name);
-                }
-                else Console.Write(types.Type.Name);
-            }
-            Console.WriteLine("\n==================================");
-            Console.WriteLine("------- FAIBLESSES -------");
-            if (currentPokemon.HasTwoTypes()) AfficheDictionnaire(GetFaiblesses(p.GetType(1), p.GetType(2)));
-            else AfficheDictionnaire(GetFaiblessesAuType(p.GetType(1)));
-
-            Console.WriteLine("\n------- RESISTANCES -------");
-            if (currentPokemon.HasTwoTypes()) AfficheDictionnaire(GetResistances(p.GetType(1), p.GetType(2)));
-            else AfficheDictionnaire(GetResistancesAuType(p.GetType(1)));
-
-            Console.WriteLine();
-        }
-        */
-
-        /*
-        public static List<string> ConvertPokemonListToFr(List<Pokemon> pokemons)
-        {
-            List<Pokemon> pokemonsTrad = new List<Pokemon>();
-
-            foreach (Pokemon pok in pokemons)
-            {
-
-                pokemonsTrad.Add();
-            }
-        }*/
 
         // REQUETES POKEAPI
 
@@ -618,14 +466,14 @@ namespace PKM_RDM_WPF.engine
         public static async Task<Pokemon> GetRandomPokemon()
         {
             Random random = new Random();
-            int idPokemonAleatoire = random.Next(1, AllPokemon.NB_Pokemon + 1); // Il y a actuellement 1020 Pokémon répertoriés dans l'API
+            int idPokemonAleatoire = random.Next(1, AllPokemon.NB_Pokemon + 1); // Il y a actuellement 1020 Pokémon répertoriés dans l'API mais ~300 formes de +
 
             Pokemon pokemonAleatoire = await GetPokemonById(idPokemonAleatoire);
             if (pokemonAleatoire != null)
             {
                 if(pokemonAleatoire.OtherForms.Count > 0)
                 {
-                    bool switchForm = random.Next(0, 100) < 40; // 40% de chance de changer la form
+                    bool switchForm = random.Next(0, 100) < 40; // 40% de chance de changer la forme
                     if (switchForm)
                     {
                         int randomPok = random.Next(0, pokemonAleatoire.OtherForms.Count);
@@ -741,7 +589,7 @@ namespace PKM_RDM_WPF.engine
             if (!IsInternetConnected()) { ShowConnexionError("error getting pokemon count"); return; }
             using (HttpClient client = new HttpClient())
             {
-                HttpResponseMessage reponse = await client.GetAsync("https://pokeapi.co/api/v2/pokemon-species");
+                HttpResponseMessage reponse = await client.GetAsync("https://pokeapi.co/api/v2/pokemon-species"); // 1025
                 if (reponse.IsSuccessStatusCode)
                 {
                     string contenu = await reponse.Content.ReadAsStringAsync();
@@ -752,6 +600,47 @@ namespace PKM_RDM_WPF.engine
                 else
                 {
                     ShowConnexionError("error getting pokemon count");
+                }
+            }
+        }
+
+        // ITEMS
+        public static async Task<AllItems> GetAllItems()
+        {
+            if (!IsInternetConnected()) { ShowConnexionError("error getting items, connexion issue"); return null; }
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage reponse = await client.GetAsync("https://pokeapi.co/api/v2/item-attribute/5/");
+                if (reponse.IsSuccessStatusCode)
+                {
+                    string contenu = await reponse.Content.ReadAsStringAsync();
+                    AllItems allItems = JsonConvert.DeserializeObject<AllItems>(contenu);
+                    return allItems;
+                }
+                else
+                {
+                    ShowConnexionError("error getting all items");
+                    return null;
+                }
+            }
+        }
+
+        public static async Task<Item> GetItemByUrl(string url)
+        {
+            if (!IsInternetConnected()) { ShowConnexionError("error getting item, connexion issue"); return null; }
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage reponse = await client.GetAsync(url);
+                if (reponse.IsSuccessStatusCode)
+                {
+                    string contenu = await reponse.Content.ReadAsStringAsync();
+                    Item item = JsonConvert.DeserializeObject<Item>(contenu);
+                    return item;
+                }
+                else
+                {
+                    ShowConnexionError("error getting item");
+                    return null;
                 }
             }
         }

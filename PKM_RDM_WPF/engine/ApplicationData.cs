@@ -22,6 +22,8 @@ namespace PKM_RDM_WPF.engine
 
         public ObservableCollection<MoveVersion> MovesOfThePokemon { get; set; }
 
+        public ObservableCollection<Item> AllItems { get; set; }
+
         public ApplicationData()
         {
 

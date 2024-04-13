@@ -124,12 +124,29 @@
                                 </ComboBox>
                             </StackPanel>
                         </StackPanel>
-                        <!-- NATURE -->
-                        <StackPanel Orientation="Horizontal" Margin="20,0,0,0" Width="357">
-                            <Label x:Name="lbNature" Content="Nature : " FontSize="20" Width="110" VerticalAlignment="Top"/>
-                            <ComboBox x:Name="cbNature" Width="244" ItemsSource="{Binding AllNature}" FontSize="18" VerticalContentAlignment="Center" VerticalAlignment="Top" SelectionChanged="cbNature_SelectionChanged" Height="36.6"/>
+                        <StackPanel>
+                            <!-- NATURE -->
+                            <StackPanel Orientation="Horizontal" Margin="20,0,0,0" Width="357">
+                                <Label x:Name="lbNature" Content="Nature : " FontSize="20" Width="110" VerticalAlignment="Top"/>
+                                <ComboBox x:Name="cbNature" Width="244" ItemsSource="{Binding AllNature}" FontSize="18" VerticalContentAlignment="Center" VerticalAlignment="Top" SelectionChanged="cbNature_SelectionChanged" Height="36.6"/>
+                            </StackPanel>
+                            <!-- ITEM -->
+                            <StackPanel Orientation="Horizontal" Margin="20,0,0,0" Width="357">
+                                <Label x:Name="lbItem" Content="Item : " FontSize="20" Width="110" VerticalAlignment="Top"/>
+                                <ComboBox x:Name="cbItem" Width="300" FontSize="18" VerticalContentAlignment="Center" VerticalAlignment="Top" SelectionChanged="cbItem_SelectionChanged">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <!-- Afficher l'image de l'item -->
+                                                <Image Source="{Binding Sprites.Default}" Width="37" Height="37" Margin="0,0,10,0"/>
+                                                <!-- Afficher le nom de l'item -->
+                                                <TextBlock Text="{Binding}" FontSize="18" VerticalAlignment="Center"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
+                            </StackPanel>
                         </StackPanel>
-
                     </StackPanel>
 
                 </Grid>
@@ -434,7 +451,7 @@
                             </TextBlock>
                             <TextBlock x:Name="tbMoveTypeHeader" Width="80" Text="Type" TextAlignment="Center" Cursor="Hand" MouseLeftButtonDown="tbMoveTypeHeader_MouseLeftButtonDown"/>
                         </StackPanel>
-                        <ListView x:Name="lvPossibleMoves" MaxHeight="590" ItemsSource="{Binding MovesOfThePokemon}" MouseDoubleClick="lvAcceptMove_DoubleClick">
+                        <ListView x:Name="lvPossibleMoves" MaxHeight="550" ItemsSource="{Binding MovesOfThePokemon}" MouseDoubleClick="lvAcceptMove_DoubleClick">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal">

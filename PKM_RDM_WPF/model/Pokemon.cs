@@ -50,6 +50,7 @@ namespace PKM_RDM_WPF.model
         private int[] evs, ivs;
         private List<TypeP> resistancesX2, resistancesX4, faiblessesX2, faiblessesX4, immunites;
         private string[] fourMoves;
+        private Item wantedItem;
 
         public string FrName { get => frName; set => frName = value; }
         public string TypeChartResume { get => typeChartResume; set => typeChartResume = value; }
@@ -69,6 +70,7 @@ namespace PKM_RDM_WPF.model
         public List<MoveVersion> Moves { get => moves; set => moves = value; }
         public string[] FourMoves {get => fourMoves; set{fourMoves = value;} }
         public List<Pokemon> OtherForms { get => otherForms; set => otherForms = value; }
+        public Item WantedItem { get => wantedItem; set => wantedItem = value; }
 
         public int GetIndexOfWantedAbility()
         {

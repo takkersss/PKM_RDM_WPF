@@ -31,7 +31,9 @@ namespace PKM_RDM_WPF
         WindowSwitchPokemon winSwitch;
         private Pokemon currentPokemon; //private string currentTeamName = "Team Name";
         private AppOptions appOptions;
-        private AllPokemon allPokemonData;
+
+        private AllPokemon allPokemon;
+        private AllItems allItems;
 
         // MOVE SYSTEM
         private bool moovSystemEnabled = false; // ne sert qu'une fois !
@@ -57,43 +59,6 @@ namespace PKM_RDM_WPF
             if (!MainPokemonCalc.IsInternetConnected()) { ShowConnexionError("You must be connected to internet"); return; }
             await NewRandomTeam();
             tbTeamName.Text = "";
-        }
-
-        // COPY team button
-        private void CopyTeamBtn_Click(object sender, RoutedEventArgs e)
-        {
-            if (isWindowBusy) return;
-            if (!string.IsNullOrEmpty(GetPokemonsNamesTeam()))
-            {
-                Clipboard.SetText(GetPokemonsNamesTeam()); // Copie le texte dans le presse-papiers
-            }
-            else
-            {
-                MessageBox.Show("Le champ de texte est vide. Rien à copier.");
-            }
-        }
-
-        private string GetPokemonsNamesTeam()
-        {
-            string team ="";
-
-            foreach (Pokemon p in applicationData.PokemonTeam)
-            {
-                team +=p.Name + "\nAbility: " + p.WantedAbility;
-                team += "\nTera Type: " + p.TeraType.ToString();
-                team += "\nEVs: " + p.GetEvsTextForShowdown();
-                team += "\n" + p.WantedNature.GetOnlyNatureName() + " Nature";
-                if (!String.IsNullOrEmpty(p.GetIvsTextForShowdown()))
-                {
-                    team += "\n" + p.GetIvsTextForShowdown();
-                }
-                foreach (string move in p.FourMoves)
-                {
-                    team += "\n- " + move;
-                }
-                team += "\n\n";
-            }
-            return team;
         }
 
         private async Task NewRandomTeam() {
@@ -128,15 +93,16 @@ namespace PKM_RDM_WPF
                 Random r = new Random();
                 p.WantedAbility = p.Abilities[r.Next(0, p.Abilities.Count)].Ability.Name;
                 p.TeraType = (TypeP)Enum.Parse(typeof(TypeP), applicationData.AllType[r.Next(0,18)]);
+                p.WantedItem = applicationData.AllItems[r.Next(applicationData.AllItems.Count)]; // todo:  Item en fonction des stats
                 p.ChooseBestNature();        
             }
             // MOVES
-            if (moovSystemEnabled)
+            if (moovSystemEnabled) 
             {
                 await LoadPokemonsMovepool(applicationData.PokemonTeam.ToList());
                 foreach(Pokemon p in applicationData.PokemonTeam)
                 {
-                    p.RandomizeFourMoves();
+                    p.RandomizeFourMoves(); // todo: Moovs en fonctions de l'item
                     ActualizeFourMovesDisplay();
                 }
             }
@@ -162,21 +128,22 @@ namespace PKM_RDM_WPF
         }
 
         // LOAD all pokemon names for switch window
-        private async void LoadAllPokemonName()
+        private async void LoadAllPokemonNames()
         {
             if (File.Exists(AllPokemon.CHEMIN_ALL_POKEMON_NAME)) // Si le fichier existe, on regarde si on peut le mettre à jour
             {
                 string jsonContenu = File.ReadAllText(AllPokemon.CHEMIN_ALL_POKEMON_NAME);
-                
+
                 // Désérialiser le contenu JSON en un objet
-                #warning todo : répétition pas opti, refaire système NB
-                allPokemonData = JsonConvert.DeserializeObject<AllPokemon>(jsonContenu);
+                // à optimiser : appel await MainPokemonCalc.GetPokemonCount(); x2
+                allPokemon = JsonConvert.DeserializeObject<AllPokemon>(jsonContenu);
                 await MainPokemonCalc.GetPokemonCount();
 
-                if (AllPokemon.NB_Pokemon != allPokemonData.Results.Count)
+                //MessageBox.Show($"{AllPokemon.NB_Pokemon} - {allPokemon.Results.Count}");
+                if (AllPokemon.NB_Pokemon != allPokemon.Results.Count)
                 {
                     //MessageBox.Show(AllPokemon.NB_POKEMON + " " + allPokemonData.Results.Count);
-                    allPokemonData = await MainPokemonCalc.GetAllPokemonNameUrl();
+                    allPokemon = await MainPokemonCalc.GetAllPokemonNameUrl();
                 }
             }
             else // Si le fichier n'existe pas, on le crée et on lui assigne les données
@@ -185,19 +152,43 @@ namespace PKM_RDM_WPF
                 {
                     Directory.CreateDirectory("data");
                 }
-
                 string json = JsonConvert.SerializeObject(await MainPokemonCalc.GetAllPokemonNameUrl());
                 File.WriteAllText(AllPokemon.CHEMIN_ALL_POKEMON_NAME, json);
-                allPokemonData = JsonConvert.DeserializeObject<AllPokemon>(File.ReadAllText(AllPokemon.CHEMIN_ALL_POKEMON_NAME));
+                allPokemon = JsonConvert.DeserializeObject<AllPokemon>(File.ReadAllText(AllPokemon.CHEMIN_ALL_POKEMON_NAME));
             }
-            applicationData.AllPokemonName = new ObservableCollection<string>(allPokemonData.GetAllPokemonName());
+            applicationData.AllPokemonName = new ObservableCollection<string>(allPokemon.GetAllPokemonName());
+        }
+
+        private async Task LoadAllItems()
+        {
+            if (File.Exists(AllItems.CHEMIN_ALL_ITEMS)) // todo : mettre items automatiquement à jour
+            {
+                string jsonContenu = File.ReadAllText(AllItems.CHEMIN_ALL_ITEMS);
+
+                // Désérialiser le contenu JSON en un objet
+                allItems = JsonConvert.DeserializeObject<AllItems>(jsonContenu);
+            }
+            else // Si le fichier n'existe pas, on le crée et on lui assigne les données
+            {
+                if (!Directory.Exists("data"))
+                {
+                    Directory.CreateDirectory("data");
+                }
+                AllItems items = await AllItems.GetBattleItems();
+                await items.RetrieveItems(); // todo : éviter bloquer affichage
+                string jsonItems = JsonConvert.SerializeObject(items);
+                File.WriteAllText(AllItems.CHEMIN_ALL_ITEMS, jsonItems);
+                allItems = items;
+            }
+            applicationData.AllItems = new ObservableCollection<Item>(allItems.ItemsGetted);
         }
 
         // Se lance au chargement de la fenetre (listview)
         private async void teamListBox_Loaded(object sender, RoutedEventArgs e)
         {
-            await MainPokemonCalc.GetPokemonCount(); // On fait une requete pour avoir le nb de pokemon
-            LoadAllPokemonName();
+            await MainPokemonCalc.GetPokemonCount(); // à optimiser
+            LoadAllPokemonNames();
+            await LoadAllItems();
             ReadAppOptionsName();
             applicationData.AllType = new ObservableCollection<string>(Enum.GetNames(typeof(TypeP)));
             applicationData.AllNature = new ObservableCollection<string>(Nature.NATURES);
@@ -233,6 +224,11 @@ namespace PKM_RDM_WPF
                 currentPokemon = (Pokemon)teamListImageView.SelectedItem;
             }
             // Chargement des options au start de la page
+            LoadAppOptions();
+        }
+
+        private void LoadAppOptions()
+        {
             tbTeamName.Text = appOptions.CurrentTeamName;
             spMoveInterface.IsEnabled = appOptions.MoveSystemEnabledAtStart;
             moovSystemEnabled = appOptions.MoveSystemEnabledAtStart;
@@ -256,6 +252,7 @@ namespace PKM_RDM_WPF
             WriteAppOptionsInData();
         }
 
+        #region APP OPTIONS
         // APP OPTIONS
         private void WriteAppOptionsInData()
         {
@@ -283,6 +280,7 @@ namespace PKM_RDM_WPF
                 appOptions = opts;
             }
         }
+        #endregion APP OPTIONS
 
         private void tbTeamName_GotFocus(object sender, RoutedEventArgs e)
         {
@@ -301,6 +299,8 @@ namespace PKM_RDM_WPF
             teamListImageView.ItemsSource = applicationData.PokemonTeam; 
             cbTera.ItemsSource = applicationData.AllType;
             cbNature.ItemsSource = applicationData.AllNature;
+            cbItem.ItemsSource = applicationData.AllItems;
+            //MessageBox.Show(applicationData.AllItems.ToList().First().Name);
             teamListImageView.SelectedIndex = index; 
         }
 
@@ -317,6 +317,7 @@ namespace PKM_RDM_WPF
             }
         }
 
+        #region SAVE TEAM
         // BUTTON save team
         private void SaveTeamBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -357,7 +358,9 @@ namespace PKM_RDM_WPF
             WriteAppOptionsInData();
 
         }
+        #endregion SAVE TEAM
 
+        #region LOAD TEAM
         // BUTTON load team
         private void LoadTeamBtn_Click(object sender, RoutedEventArgs e)
         {
@@ -378,6 +381,47 @@ namespace PKM_RDM_WPF
                 SwitchPokemonTeam(fichiersDansDossier);
             }
         }
+        #endregion LOAD TEAM
+
+        #region SHOWDOWN EXPORT
+        // COPY team button
+        private void CopyTeamBtn_Click(object sender, RoutedEventArgs e)
+        {
+            if (isWindowBusy) return;
+            if (!string.IsNullOrEmpty(GetPokemonsNamesTeam()))
+            {
+                Clipboard.SetText(GetPokemonsNamesTeam()); // Copie le texte dans le presse-papiers
+            }
+            else
+            {
+                MessageBox.Show("Le champ de texte est vide. Rien à copier.");
+            }
+        }
+
+        private string GetPokemonsNamesTeam()
+        {
+            string team = "";
+
+            foreach (Pokemon p in applicationData.PokemonTeam)
+            {
+                team += p.Name + " @ " + p.WantedItem;
+                team += "\nAbility: " + p.WantedAbility;
+                team += "\nTera Type: " + p.TeraType.ToString();
+                team += "\nEVs: " + p.GetEvsTextForShowdown();
+                team += "\n" + p.WantedNature.GetOnlyNatureName() + " Nature";
+                if (!String.IsNullOrEmpty(p.GetIvsTextForShowdown()))
+                {
+                    team += "\n" + p.GetIvsTextForShowdown();
+                }
+                foreach (string move in p.FourMoves)
+                {
+                    team += "\n- " + move;
+                }
+                team += "\n\n";
+            }
+            return team;
+        }
+        #endregion SHOWDOWN EXPORT
 
         private bool canUpdate;
 
@@ -394,6 +438,12 @@ namespace PKM_RDM_WPF
             if(currentPokemon.WantedNature != null)
             {
                 cbNature.SelectedIndex = GetIndexOfWantedNature(currentPokemon);
+            }
+            if (currentPokemon.WantedItem != null)
+            {
+                /*cbItem.DataContext = applicationData.AllItems;
+                /*MessageBox.Show(applicationData.AllItems.First().ToString());*/
+                cbItem.SelectedIndex = GetIndexOfWantedItem(currentPokemon);
             }
             UpdateShowedEVs();
             UpdateRemainingEvsText();
@@ -413,6 +463,7 @@ namespace PKM_RDM_WPF
             canUpdate = true;
         }
 
+        #region ABILITY
         // Ability
         private void cbAbility_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -436,8 +487,10 @@ namespace PKM_RDM_WPF
         {
             SwitchTooltip();
         }
+        #endregion ABILITY
 
-        // Tera
+        #region TERA
+        //TERA
         private void cbTera_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (currentPokemon == null) return;
@@ -450,7 +503,9 @@ namespace PKM_RDM_WPF
             int index = applicationData.AllType.IndexOf(applicationData.AllType.ToList().Find(x => x == p.TeraType.ToString()));
             return index;
         }
+        #endregion TERA
 
+        #region NATURE
         // Nature
         private int GetIndexOfWantedNature(Pokemon p)
         {
@@ -464,7 +519,25 @@ namespace PKM_RDM_WPF
             if (cbNature.SelectedIndex == -1) return;
             currentPokemon.WantedNature.Name = applicationData.AllNature[cbNature.SelectedIndex];
         }
+        #endregion NATURE
 
+        #region ITEM
+        // ITEM
+        private int GetIndexOfWantedItem(Pokemon p)
+        {
+            int index = applicationData.AllItems.IndexOf(applicationData.AllItems.ToList().Find(x => x.Name == p.WantedItem.Name));
+            return index;
+        }
+
+        private void cbItem_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (currentPokemon == null) return;
+            if (cbItem.SelectedIndex == -1) return;
+            currentPokemon.WantedItem = applicationData.AllItems[cbItem.SelectedIndex];
+        }
+        #endregion ITEM
+
+        #region EVs & IVs
         // EVs et IVs
         private void UpdateEvAndSlider(int index, int value, Slider slider)
         {
@@ -604,6 +677,7 @@ namespace PKM_RDM_WPF
         {
             lbRemainingEVsValue.Content = currentPokemon.GetRemainingEvs().ToString();
         }
+        #endregion EVs & IVs
 
         // Exit app
         private void miExit_Click(object sender, RoutedEventArgs e)
@@ -625,6 +699,7 @@ namespace PKM_RDM_WPF
             winAbout.ShowDialog();
         }
 
+        #region MOVES
         // MOVES System
         private void cbEnableMovepool_Click(object sender, RoutedEventArgs e)
         {
@@ -632,8 +707,9 @@ namespace PKM_RDM_WPF
             if (isWindowBusy || isLoadingNewRandomTeam) { cbEnableMovepool.IsChecked = !cbEnableMovepool.IsChecked; return; }
             if (!MainPokemonCalc.IsInternetConnected()) { ShowConnexionError("You must be connected to internet"); cbEnableMovepool.IsChecked = !cbEnableMovepool.IsChecked; return; }
             moovSystemEnabled = (bool)cbEnableMovepool.IsChecked;
+            spMoveInterface.IsEnabled = moovSystemEnabled;
 
-            if(moovSystemEnabled) // Permet de le faire qu'une fois
+            if (moovSystemEnabled) // Permet de le faire qu'une fois
             {
                 if (currentPokemon.Moves.First().MoveGetted == null)
                 {
@@ -846,6 +922,7 @@ namespace PKM_RDM_WPF
 
             ReloadDisplayPokemonMovepool(moves);
         }
+        #endregion MOVES
 
         // Loading Icon
         private void LoadingIcon(bool isLoading = true)
