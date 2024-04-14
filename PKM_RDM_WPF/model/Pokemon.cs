@@ -181,17 +181,6 @@ namespace PKM_RDM_WPF.model
             }
         }
 
-        // BST : Base Stat Total
-        public int GetTotalEvs()
-        {
-            int totalEvs = 0;
-            foreach (int ev in Evs)
-            {
-                totalEvs += ev;
-            }
-            return totalEvs;
-        }
-
         // Get the index of the best BASE STAT
         private int GetBestStatIndex()
         {
@@ -321,6 +310,17 @@ namespace PKM_RDM_WPF.model
             }
             return MAX_EV_DISTRIBUTION - distribuedEvs;
         }
+
+        public int GetTotalEvs()
+        {
+            int totalEvs = 0;
+            foreach (int ev in Evs)
+            {
+                totalEvs += ev;
+            }
+            return totalEvs;
+        }
+
         #endregion EVs & IVs
 
         #region SHOWDOWN FORMAT EXPORT
@@ -463,6 +463,74 @@ namespace PKM_RDM_WPF.model
                     appliedMoves++;
                 }
             }
+        }
+
+        // ITEM
+        public void ChooseBestItemButRandom(List<Item> items)
+        {
+            Random r = new Random();
+            int applyThisItem = r.Next(100); // Générer un nombre aléatoire entre 0 et 99
+
+            //MessageBox.Show(this.Bst.ToString());
+            if(this.Bst <= 420)
+            {
+                if(applyThisItem < 25) // 25% chance of getting eviolite if base stat under 421
+                {
+                    this.WantedItem = items.First(x => x.Name.ToLower().Contains("eviolite"));
+                    return;
+                }
+            }
+
+            if (GetBestStatIndex() == 0)
+            {
+
+                String[] thoseItems = new string[] { "sitrus-berry", "leftovers", "aguav-berry" };
+                string itemName = ApplyItem(r, 40, thoseItems);
+                if (!String.IsNullOrEmpty(itemName))
+                {
+                    this.WantedItem = items.First(x => x.Name.ToLower().Contains(itemName));
+                    return;
+                }
+            }
+            if (GetBestStatIndex() == 1)
+            {
+                String[] thoseItems = new string[] { "choice-band", "life-orb", "choice-scarf" };
+                string itemName = ApplyItem(r, 40, thoseItems);
+                if (!String.IsNullOrEmpty(itemName))
+                {
+                    this.WantedItem = items.First(x => x.Name.ToLower().Contains(itemName));
+                    return;
+                }
+            }
+            if (GetBestStatIndex() == 2)
+            {
+                String[] thoseItems = new string[] { "rocky-helmet", "sitrus-berry" };
+                string itemName = ApplyItem(r, 40, thoseItems);
+                if (!String.IsNullOrEmpty(itemName))
+                {
+                    this.WantedItem = items.First(x => x.Name.ToLower().Contains(itemName));
+                    return;
+                }
+            }
+            this.WantedItem = items[r.Next(items.Count)];
+            
+        }
+
+        private string ApplyItem(Random r, int applyItemChance, string[] itemsName)
+        {
+            int applyThisItem = r.Next(100);
+
+            if (applyThisItem < applyItemChance)
+            {
+                string itemName;
+                int itemChance = r.Next(itemsName.Length);
+
+                itemName = itemsName[itemChance]; // item aléatoire entre tous
+
+                ///MessageBox.Show(itemName);
+                return itemName;
+            }
+            return null;
         }
     }
 }

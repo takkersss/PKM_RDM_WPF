@@ -90,11 +90,11 @@ namespace PKM_RDM_WPF
                     p.Bst += stat.Base_stat;
                 }
                 p.SetEvsAndIvs();
+                p.ChooseBestNature();
                 Random r = new Random();
                 p.WantedAbility = p.Abilities[r.Next(0, p.Abilities.Count)].Ability.Name;
                 p.TeraType = (TypeP)Enum.Parse(typeof(TypeP), applicationData.AllType[r.Next(0,18)]);
-                p.WantedItem = applicationData.AllItems[r.Next(applicationData.AllItems.Count)]; // todo:  Item en fonction des stats
-                p.ChooseBestNature();        
+                p.ChooseBestItemButRandom(applicationData.AllItems.ToList()); // todo:  Item en fonction des stats       
             }
             // MOVES
             if (moovSystemEnabled) 
@@ -450,7 +450,7 @@ namespace PKM_RDM_WPF
             // Charger les moov
             if (moovSystemEnabled)
             {
-                if (currentPokemon.Moves.First().MoveGetted != null) ReloadDisplayPokemonMovepool();
+                if (currentPokemon.Moves.First().MoveGetted != null) ReloadDisplayPokemonMovepool(); // crash : vérifier moovSystemEnabled
                 else { 
                     LoadCurrentPokemonMovepool();
                 }
