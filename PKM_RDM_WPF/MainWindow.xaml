@@ -19,6 +19,7 @@
         <converter:TypeToImageTypeConverter x:Key="TypeToImageTypeConverter"/>
         <converter:TypeToImageTeraConverter x:Key="TypeToImageTeraConverter"/>
         <converter:StringToCatImgConverter x:Key="StringToCatImgConverter"/>
+        <converter:CheckNotNullImageConverter x:Key="CheckNotNullImageConverter"/>
         <Style TargetType="ProgressBar">
             <Setter Property="Foreground" Value="{Binding RelativeSource={RelativeSource Mode=Self}, Path=Value, Converter={StaticResource ProgressForegroundConverter}}" />
         </Style>
@@ -138,7 +139,7 @@
                                         <DataTemplate>
                                             <StackPanel Orientation="Horizontal">
                                                 <!-- Afficher l'image de l'item -->
-                                                <Image Source="{Binding Sprites.Default}" Width="37" Height="37" Margin="0,0,10,0"/>
+                                                <Image Source="{Binding Sprites.Default, Converter={StaticResource CheckNotNullImageConverter}}" Width="37" Height="37" Margin="0,0,10,0"/>
                                                 <!-- Afficher le nom de l'item -->
                                                 <TextBlock Text="{Binding}" FontSize="18" VerticalAlignment="Center"/>
                                             </StackPanel>

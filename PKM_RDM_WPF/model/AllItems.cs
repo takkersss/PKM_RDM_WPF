@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace PKM_RDM_WPF.model
 {
@@ -61,7 +62,7 @@ namespace PKM_RDM_WPF.model
             allItem.Items.RemoveRange(0, 69); // Suppression items de non-combat
 
             List<string> toSuppItem = new List<string>(NO_ITEMS);
-            allItem.Items.RemoveAll(item => toSuppItem.Contains(item.Name)); // Suppression items de la NO LIST
+            int nbItemSupp = allItem.Items.RemoveAll(item => toSuppItem.Any(s => string.Equals(s, item.Name, StringComparison.OrdinalIgnoreCase))); // Suppression items de la NO LIST - not working ?
 
             for (int i = allItem.Items.Count - 1; i >= 0; i--) // Suppression items INCENSE
             {
@@ -72,6 +73,7 @@ namespace PKM_RDM_WPF.model
                     allItem.Items.Remove(item);
                 }
             }
+            MessageBox.Show(allItem.Items.Count.ToString(), "eh beh");
             return allItem;
         }
 

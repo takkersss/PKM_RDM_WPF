@@ -9,6 +9,7 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.NetworkInformation;
 using System.Reflection;
+using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using static PKM_RDM_WPF.utils.Utils;
 
@@ -604,6 +605,26 @@ namespace PKM_RDM_WPF.engine
             }
         }
 
+        // Get the pokemon specie by it's id (in Pokemon)
+        public static async Task<PokemonSpecies> GetPokemonSpeciesById(int id) //url de pokemonspecies à mettre à la place
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon-species/{id}");
+                if (reponse.IsSuccessStatusCode)
+                {
+                    string contenu = await reponse.Content.ReadAsStringAsync();
+                    PokemonSpecies especePokemon = JsonConvert.DeserializeObject<PokemonSpecies>(contenu);
+                    return especePokemon;
+                }
+                else
+                {
+                    Console.WriteLine($"Erreur lors de la récupération du Pokémon avec l'ID {id}.");
+                    return null;
+                }
+            }
+        }
+
         // ITEMS
         public static async Task<AllItems> GetAllItems()
         {
@@ -615,6 +636,15 @@ namespace PKM_RDM_WPF.engine
                 {
                     string contenu = await reponse.Content.ReadAsStringAsync();
                     AllItems allItems = JsonConvert.DeserializeObject<AllItems>(contenu);
+
+                    // Fetch to the missings batlle items
+                    List<NameUrl> missingsItems = await GetMissingBattleItems(client);
+                    allItems.Items.AddRange(missingsItems);
+
+                    // Fetch to the missings berries
+                    List<NameUrl> missingsBerries = await GetBerries(client);
+                    allItems.Items.AddRange(missingsBerries);
+
                     return allItems;
                 }
                 else
@@ -622,6 +652,56 @@ namespace PKM_RDM_WPF.engine
                     ShowConnexionError("error getting all items");
                     return null;
                 }
+            }
+        }
+
+        public static async Task<List<NameUrl>> GetMissingBattleItems(HttpClient client)
+        {
+            HttpResponseMessage reponse = await client.GetAsync("https://pokeapi.co/api/v2/item-category/12/");
+            if (reponse.IsSuccessStatusCode)
+            {
+                string contenu = await reponse.Content.ReadAsStringAsync();
+                JObject json = JObject.Parse(contenu);
+                List<NameUrl> items = json["items"].ToObject<List<NameUrl>>();
+
+                // We take only the items that missing in the previous fetch
+                items.RemoveAll(item =>
+                {
+                    int id = item.GetIdInUrl();
+                    return id < 580;
+                });
+
+                return items;
+            }
+            else
+            {
+                ShowConnexionError("error getting all items");
+                return null;
+            }
+        }
+
+        public static async Task<List<NameUrl>> GetBerries(HttpClient client)
+        {
+            HttpResponseMessage reponse = await client.GetAsync("https://pokeapi.co/api/v2/item-attribute/7/");
+            if (reponse.IsSuccessStatusCode)
+            {
+                string contenu = await reponse.Content.ReadAsStringAsync();
+                JObject json = JObject.Parse(contenu);
+                List<NameUrl> items = json["items"].ToObject<List<NameUrl>>();
+
+                // We take only the items that missing in the previous fetch
+                items.RemoveAll(item =>
+                {
+                    int id = item.GetIdInUrl();
+                    return id > 189;
+                });
+
+                return items;
+            }
+            else
+            {
+                ShowConnexionError("error getting all items");
+                return null;
             }
         }
 

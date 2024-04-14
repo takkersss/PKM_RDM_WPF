@@ -28,5 +28,22 @@ namespace PKM_RDM_WPF.model
             }
         }
         public string Url { get => url; set => url = value; }
+
+        public int GetIdInUrl() // Must be / at the end
+        {
+            string[] segments = this.Url.Split('/');
+            string lastSegment = segments[segments.Length - 2];
+
+            // Convertit le dernier segment en entier
+            if (int.TryParse(lastSegment, out int id))
+            {
+                return id;
+            }
+            else
+            {
+                // Si la conversion échoue, retourne -1 ou lance une exception selon vos besoins
+                return -1; // Ou lancez une exception ici
+            }
+        }
     }
 }

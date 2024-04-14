@@ -43,7 +43,7 @@ namespace PKM_RDM_WPF.model
 
         // WPF
         private List<Pokemon> otherForms;
-        private string frName, typeChartResume, wantedAbility, teamName;
+        private string typeChartResume, wantedAbility, teamName;
         private int bst;
         private Nature wantedNature;
         private TypeP teraType;
@@ -52,7 +52,7 @@ namespace PKM_RDM_WPF.model
         private string[] fourMoves;
         private Item wantedItem;
 
-        public string FrName { get => frName; set => frName = value; }
+        //public string FrName { get => frName; set => frName = value; }
         public string TypeChartResume { get => typeChartResume; set => typeChartResume = value; }
         public List<TypeP> ResistancesX2 { get => resistancesX2; set => resistancesX2 = value; }
         public List<TypeP> ResistancesX4 { get => resistancesX4; set => resistancesX4 = value; }
@@ -71,12 +71,6 @@ namespace PKM_RDM_WPF.model
         public string[] FourMoves {get => fourMoves; set{fourMoves = value;} }
         public List<Pokemon> OtherForms { get => otherForms; set => otherForms = value; }
         public Item WantedItem { get => wantedItem; set => wantedItem = value; }
-
-        public int GetIndexOfWantedAbility()
-        {
-            int index = this.Abilities.IndexOf(this.Abilities.Find(x => x.Ability.Name == WantedAbility));
-            return index;
-        }
 
         public Pokemon()
         {
@@ -104,39 +98,7 @@ namespace PKM_RDM_WPF.model
             }
         }
 
-        public bool HasTwoTypes()
-        {
-            return this.Types.Count == 2 ? true : false;
-        }
-
-        /*private string ToFrString()
-        {
-            string frName = PSpecies.Names.Find(x => x.Language.Name == "Fr").Name;
-            return frName;
-        }
-
-        public void SetFrName() { FrName = ToFrString();}*/
-
-        // Méthode pour récupérer l'espèce du pokemon à partir de son id
-        public static async Task<PokemonSpecies> GetPokemonSpeciesById(int id) //url de pokemonspecies à mettre à la place
-        {
-            using (HttpClient client = new HttpClient())
-            {
-                HttpResponseMessage reponse = await client.GetAsync($"https://pokeapi.co/api/v2/pokemon-species/{id}");
-                if (reponse.IsSuccessStatusCode)
-                {
-                    string contenu = await reponse.Content.ReadAsStringAsync();
-                    PokemonSpecies especePokemon = JsonConvert.DeserializeObject<PokemonSpecies>(contenu);
-                    return especePokemon;
-                }
-                else
-                {
-                    Console.WriteLine($"Erreur lors de la récupération du Pokémon avec l'ID {id}.");
-                    return null;
-                }
-            }
-        }
-
+        // Parser le pokémon en json et le sauvegarder en tant que fichier
         public void Serialize(string teamName)
         {
             this.TeamName = teamName;
@@ -155,6 +117,21 @@ namespace PKM_RDM_WPF.model
             return Name;
         }
 
+        public bool HasTwoTypes()
+        {
+            return this.Types.Count == 2 ? true : false;
+        }
+
+        private bool IsSpecialAttacker()
+        {
+            if (Stats[3].Base_stat - 25 > Stats[1].Base_stat)
+            {
+                return true;
+            }
+            else return false;
+        }
+
+        // Apply weaknesses, strengths, etc..
         public void SetDoubleTypesSpecifiations()
         {
             ResistancesX2 = new List<TypeP>();
@@ -204,34 +181,7 @@ namespace PKM_RDM_WPF.model
             }
         }
 
-        public void SetEvsAndIvs()
-        {
-            //FourMoves = new string[4] { "dfg", "dfg", "dfg", "dfg"};
-
-            Evs = new int[6] { 0, 0, 0, 0, 0, 0 };
-            Ivs = new int[6] { 31, 31, 31, 31, 31, 31 };
-
-            int[] baseStats = GetDescendingStatsIndex();
-            Evs[baseStats[0]] = 252; // On met les 2 stats les plus fortes à 252
-            Evs[baseStats[1]] = 252;
-            DistributeRemainingEVs();
-
-            if (IsSpecialAttacker())
-            {
-                Ivs[1] = 0;
-            }
-
-        }
-
-        private bool IsSpecialAttacker()
-        {
-            if (Stats[3].Base_stat - 25 > Stats[1].Base_stat)
-            {
-                return true;
-            }
-            else return false;
-        }
-
+        // BST : Base Stat Total
         public int GetTotalEvs()
         {
             int totalEvs = 0;
@@ -242,6 +192,7 @@ namespace PKM_RDM_WPF.model
             return totalEvs;
         }
 
+        // Get the index of the best BASE STAT
         private int GetBestStatIndex()
         {
             int max = 0;
@@ -260,6 +211,7 @@ namespace PKM_RDM_WPF.model
 
         }
 
+        // Get the index of the worst BASE STAT
         private int GetWorstStatIndex()
         {
             int min = 1000;
@@ -277,6 +229,7 @@ namespace PKM_RDM_WPF.model
             return index;
         }
 
+        // Sort the from the best BASE STAT to the worst
         private int[] GetDescendingStatsIndex()
         {
             int[] tableauBaseStats = new int[6];
@@ -300,6 +253,28 @@ namespace PKM_RDM_WPF.model
             return indicesTries;
         }
 
+        #region EVs & IVs
+        // Application of Evs & IVs
+        public void SetEvsAndIvs()
+        {
+            //FourMoves = new string[4] { "dfg", "dfg", "dfg", "dfg"};
+
+            Evs = new int[6] { 0, 0, 0, 0, 0, 0 };
+            Ivs = new int[6] { 31, 31, 31, 31, 31, 31 };
+
+            int[] baseStats = GetDescendingStatsIndex();
+            Evs[baseStats[0]] = 252; // On met les 2 stats les plus fortes à 252
+            Evs[baseStats[1]] = 252;
+            DistributeRemainingEVs();
+
+            if (IsSpecialAttacker())
+            {
+                Ivs[1] = 0;
+            }
+
+        }
+
+        // Distribute the remaining EVs
         public void DistributeRemainingEVs()
         {
             int[] baseStats = GetDescendingStatsIndex();
@@ -336,6 +311,20 @@ namespace PKM_RDM_WPF.model
             }
         }
 
+        // Get the remaining EVs that can be distributed
+        public int GetRemainingEvs()
+        {
+            int distribuedEvs = 0;
+            foreach (int i in Evs)
+            {
+                distribuedEvs += i;
+            }
+            return MAX_EV_DISTRIBUTION - distribuedEvs;
+        }
+        #endregion EVs & IVs
+
+        #region SHOWDOWN FORMAT EXPORT
+        // SHOWDOWN FORMAT EXPORT
         public string GetEvsTextForShowdown()
         {
             string txt = "";
@@ -386,17 +375,9 @@ namespace PKM_RDM_WPF.model
 
             return txt;
         }
+        #endregion SHOWDOWN FORMAT EXPORT
 
-        public int GetRemainingEvs()
-        {
-            int distribuedEvs = 0;
-            foreach (int i in Evs)
-            {
-                distribuedEvs += i;
-            }
-            return MAX_EV_DISTRIBUTION - distribuedEvs;
-        }
-
+        // NATURE
         public void ChooseBestNature()
         {
             string bestStat, worstStat;
@@ -432,6 +413,13 @@ namespace PKM_RDM_WPF.model
 
             string resume = $"(+{bestStat}, -{worstStat})";
             WantedNature = new Nature(Nature.NATURES.ToList().Find(x => x.Contains(resume)));
+        }
+
+        // ABILITY
+        public int GetIndexOfWantedAbility()
+        {
+            int index = this.Abilities.IndexOf(this.Abilities.Find(x => x.Ability.Name == WantedAbility));
+            return index;
         }
 
         // MOVEPOOL
