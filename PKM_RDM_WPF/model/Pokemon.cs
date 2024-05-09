@@ -13,6 +13,7 @@ using System.Windows.Documents;
 using System.Windows.Navigation;
 using static PKM_RDM_WPF.engine.MainPokemonCalc;
 using static PKM_RDM_WPF.utils.Utils;
+using static System.Windows.Forms.AxHost;
 
 namespace PKM_RDM_WPF.model
 {
@@ -471,7 +472,6 @@ namespace PKM_RDM_WPF.model
             Random r = new Random();
             int applyThisItem = r.Next(100); // Générer un nombre aléatoire entre 0 et 99
 
-            //MessageBox.Show(this.Bst.ToString());
             if(this.Bst <= 420)
             {
                 if(applyThisItem < 25) // 25% chance of getting eviolite if base stat under 421
@@ -481,49 +481,60 @@ namespace PKM_RDM_WPF.model
                 }
             }
 
-            if (GetBestStatIndex() == 0)
-            {
+            List<string> itemsList;
+            bool result;
 
-                String[] thoseItems = new string[] { "sitrus-berry", "leftovers", "aguav-berry" };
-                string itemName = ApplyItem(r, 40, thoseItems);
-                if (!String.IsNullOrEmpty(itemName))
-                {
-                    this.WantedItem = items.First(x => x.Name.ToLower().Contains(itemName));
-                    return;
-                }
-            }
-            if (GetBestStatIndex() == 1)
-            {
-                String[] thoseItems = new string[] { "choice-band", "life-orb", "choice-scarf" };
-                string itemName = ApplyItem(r, 40, thoseItems);
-                if (!String.IsNullOrEmpty(itemName))
-                {
-                    this.WantedItem = items.First(x => x.Name.ToLower().Contains(itemName));
-                    return;
-                }
-            }
-            if (GetBestStatIndex() == 2)
-            {
-                String[] thoseItems = new string[] { "rocky-helmet", "sitrus-berry" };
-                string itemName = ApplyItem(r, 40, thoseItems);
-                if (!String.IsNullOrEmpty(itemName))
-                {
-                    this.WantedItem = items.First(x => x.Name.ToLower().Contains(itemName));
-                    return;
-                }
-            }
+            // HP
+            itemsList = new List<string> { "sitrus-berry", "leftovers", "aguav-berry" };
+            if (ApplyItemWithChanceStat(0, r, 40, itemsList, items)) return;
+
+            // Atk
+            itemsList = new List<string> { "choice-band", "life-orb", "choice-scarf" };
+            if (ApplyItemWithChanceStat(1, r, 40, itemsList, items)) return;
+
+            // Def
+            itemsList = new List<string> { "rocky-helmet", "sitrus-berry", "covert-cloak", "lum-berry" };
+            if (ApplyItemWithChanceStat(2, r, 40, itemsList, items)) return;
+
+            // Spe Atk
+            itemsList = new List<string> { "choice-specs", "life-orb", "choice-scarf" };
+            if (ApplyItemWithChanceStat(3, r, 40, itemsList, items)) return;
+
+            // Spe Def
+            itemsList = new List<string> { "assault-vest", "sitrus-berry", "covert-cloak", "lum-berry" };
+            if (ApplyItemWithChanceStat(4, r, 40, itemsList, items)) return;
+
+            // Speed
+            itemsList = new List<string> { "metronome" };
+            itemsList.Add(IsSpecialAttacker() ? "choice-specs" : "choice-band");
+            if (ApplyItemWithChanceStat(5, r, 40, itemsList, items)) return;
+
+            // Sinon full aléatoire
             this.WantedItem = items[r.Next(items.Count)];
-            
         }
 
-        private string ApplyItem(Random r, int applyItemChance, string[] itemsName)
+        private bool ApplyItemWithChanceStat(int iStat, Random r, int applyItemChance, List<string> itemsName, List<Item> items)
+        {
+            if (GetBestStatIndex() == iStat)
+            {
+                string itemName = ApplyItem(r, applyItemChance, itemsName);
+                if (!String.IsNullOrEmpty(itemName))
+                {
+                    this.WantedItem = items.First(x => x.Name.ToLower().Contains(itemName));
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        private string ApplyItem(Random r, int applyItemChance, List<string> itemsName)
         {
             int applyThisItem = r.Next(100);
 
             if (applyThisItem < applyItemChance)
             {
                 string itemName;
-                int itemChance = r.Next(itemsName.Length);
+                int itemChance = r.Next(itemsName.Count);
 
                 itemName = itemsName[itemChance]; // item aléatoire entre tous
 
