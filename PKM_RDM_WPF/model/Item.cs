@@ -13,8 +13,12 @@ namespace PKM_RDM_WPF.model
         private string name;
         private OneSprite sprites;
 
-        public Item()
+        public Item(){}
+
+        public Item(string name, string spritePath = null)
         {
+            this.Name = name;
+            this.Sprites = new OneSprite(spritePath);
         }
 
         public List<EffectEntry> Effect_entries { get => effect_entries; set => effect_entries = value; }

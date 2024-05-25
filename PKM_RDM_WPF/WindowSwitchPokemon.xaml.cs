@@ -111,7 +111,7 @@ namespace PKM_RDM_WPF
             this.Owner.DataContext = appData;
             txtBoxRecherche.Text = "";
 
-            ((MainWindow)this.Owner).ReSetWindowAndTeam(index);
+            ((MainWindow)this.Owner).ReSetPokemonAndTeam(index);
             this.Hide();
         }
 

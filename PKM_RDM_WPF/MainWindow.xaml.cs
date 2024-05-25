@@ -35,6 +35,9 @@ namespace PKM_RDM_WPF
         private AllPokemon allPokemon;
         private AllItems allItems;
 
+        // RANDOMIZATION PARAMETERS
+        private bool randStrongPokemons = false;
+
         // MOVE SYSTEM
         private bool moovSystemEnabled = false; // ne sert qu'une fois !
         private TextBox currentMoveSlotSelected;
@@ -66,8 +69,36 @@ namespace PKM_RDM_WPF
             if (isWindowBusy) return;
             LoadingIcon(); // Notifier du chargement
             isLoadingNewRandomTeam = true;
-            applicationData.PokemonTeam = new ObservableCollection<Pokemon>(await MainPokemonCalc.GetRandomPokemonTeam());
+            applicationData.PokemonTeam = new ObservableCollection<Pokemon>(await MainPokemonCalc.GetRandomPokemonTeam(randStrongPokemons));
             ReSetWindowAndTeam(0);
+        }
+
+        // SET properties of a pokemon
+        private async Task SetPokemonProperties(Pokemon p)
+        {
+            // p.SetFrName();
+            p.SetDoubleTypesSpecifiations();
+            if (p.Abilities.Count > 1)
+            {
+                if (p.Abilities.First().Ability.Name == p.Abilities.Last().Ability.Name)
+                {
+                    p.Abilities.Remove(p.Abilities.Last());
+                }
+            }
+            p.Bst = p.Stats.Sum(stat => stat.Base_stat);
+            p.SetEvsAndIvs();
+            p.ChooseBestNature();
+            Random r = new Random();
+            p.WantedAbility = p.Abilities[r.Next(0, p.Abilities.Count)].Ability.Name;
+            p.TeraType = (TypeP)Enum.Parse(typeof(TypeP), applicationData.AllType[r.Next(0, 18)]);
+            p.ChooseBestItemButRandom(applicationData.AllItems.ToList()); // todo: Item en fonction des stats
+
+            // MOVES
+            if (moovSystemEnabled)
+            {
+                await LoadPokemonMovepool(p);
+                p.RandomizeFourMoves(); // todo: Moovs en fonctions de l'item
+            }
         }
 
         // LOAD properties of the pokemons of the team
@@ -75,42 +106,28 @@ namespace PKM_RDM_WPF
         {
             foreach (Pokemon p in applicationData.PokemonTeam)
             {
-                //p.SetFrName();
-                p.SetDoubleTypesSpecifiations();
-                if (p.Abilities.Count > 1)
-                {
-                    if (p.Abilities.First().Ability.Name == p.Abilities.Last().Ability.Name)
-                    {
-                        p.Abilities.Remove(p.Abilities.Last());
-                    }
-                }
-                p.Bst = 0;
-                foreach (Stat stat in p.Stats)
-                {
-                    p.Bst += stat.Base_stat;
-                }
-                p.SetEvsAndIvs();
-                p.ChooseBestNature();
-                Random r = new Random();
-                p.WantedAbility = p.Abilities[r.Next(0, p.Abilities.Count)].Ability.Name;
-                p.TeraType = (TypeP)Enum.Parse(typeof(TypeP), applicationData.AllType[r.Next(0,18)]);
-                p.ChooseBestItemButRandom(applicationData.AllItems.ToList()); // todo:  Item en fonction des stats       
+                await SetPokemonProperties(p);
             }
-            // MOVES
-            if (moovSystemEnabled) 
-            {
-                await LoadPokemonsMovepool(applicationData.PokemonTeam.ToList());
-                foreach(Pokemon p in applicationData.PokemonTeam)
-                {
-                    p.RandomizeFourMoves(); // todo: Moovs en fonctions de l'item
-                    ActualizeFourMovesDisplay();
-                }
-            }
+            currentPokemon = applicationData.PokemonTeam[0];
+            ActualizeFourMovesDisplay();
             LoadingIcon(false);
             isLoadingNewRandomTeam = false;
 
             await LoadTooltip(); // en dernier
         }
+
+        // LOAD properties for one pokemon of the team
+        private async void LoadPropertiesForOnePokemon(int pIndex)
+        {
+            await SetPokemonProperties(applicationData.PokemonTeam[pIndex]);
+            currentPokemon = applicationData.PokemonTeam[0];
+            ActualizeFourMovesDisplay();
+            LoadingIcon(false);
+            isLoadingNewRandomTeam = false;
+
+            await LoadTooltip(); // en dernier
+        }
+
 
         // LOAD tooltip for abilities
         private async Task LoadTooltip() {
@@ -287,10 +304,17 @@ namespace PKM_RDM_WPF
             if (tbTeamName.Text == "Team Name") tbTeamName.Text = "";
         }
 
-        // UPDATE window
+        // REFRESH window
         public void ReSetWindowAndTeam(int index)
         {
             LoadProperties();
+            RefreshWindow(index);
+        }
+
+        // REFRESH window - switchPokemon
+        public void ReSetPokemonAndTeam(int index)
+        {
+            LoadPropertiesForOnePokemon(index);
             RefreshWindow(index);
         }
 
@@ -741,6 +765,12 @@ namespace PKM_RDM_WPF
             ReloadDisplayPokemonMovepool();
         }
 
+        private async Task LoadPokemonMovepool(Pokemon p)
+        {
+            await p.RetrievePossibleMoves();
+            ReloadDisplayPokemonMovepool();
+        }
+
         private void ReloadDisplayPokemonMovepool(List<MoveVersion> moves = null)
         {
             if (applicationData.MovesOfThePokemon == new ObservableCollection<MoveVersion>(currentPokemon.Moves)) return;
@@ -932,6 +962,13 @@ namespace PKM_RDM_WPF
 
             iconLoading.Spin = isLoading;
             isWindowBusy = isLoading;
+        }
+
+        // Randomization Options
+        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            randStrongPokemons = (bool)((CheckBox)sender).IsChecked;
+            //MessageBox.Show(randStrongPokemons.ToString());
         }
     }
 }

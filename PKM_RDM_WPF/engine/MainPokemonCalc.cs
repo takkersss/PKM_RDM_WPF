@@ -448,7 +448,7 @@ namespace PKM_RDM_WPF.engine
 
         // REQUETES POKEAPI
 
-        public static async Task<List<Pokemon>> GetRandomPokemonTeam()
+        public static async Task<List<Pokemon>> GetRandomPokemonTeam(bool strongPokemons)
         {
             List<Pokemon> equipePokemonAleatoire = new List<Pokemon>();
 
@@ -457,7 +457,11 @@ namespace PKM_RDM_WPF.engine
                 Pokemon p = await GetRandomPokemon();
                 if (!equipePokemonAleatoire.Any(x => x.Id == p.Id)) // Eviter les doublons
                 {
-                    equipePokemonAleatoire.Add(p);
+                    if (strongPokemons) // Si l'on veut que des pokemons forts, on vérifie le BST
+                    {
+                        if(p.Stats.Sum(stat => stat.Base_stat) >= Pokemon.EVOLVED_MIN_BST) equipePokemonAleatoire.Add(p);
+                    }
+                    else equipePokemonAleatoire.Add(p);
                 }
             }
 

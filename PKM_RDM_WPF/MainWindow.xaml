@@ -57,11 +57,28 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- TEAM NAME INPUT -->
             <StackPanel Grid.Row="1">
+                <!-- TEAM NAME INPUT -->
                 <TextBox x:Name="tbTeamName" Margin="5,0,5,0" GotFocus="tbTeamName_GotFocus"/>
+                <!-- Spin Icon -->
                 <fa:ImageAwesome x:Name="iconLoading" Icon="Refresh" Spin="False" Height="48" Width="48" Visibility="Hidden" Margin="0,10,0,0"/>
+                <!-- Randomization checkboxes -->
+                <Label Grid.Row="1" Height="50" VerticalAlignment="Top">
+                    <materialDesign:Card Padding="2">
+                        <TextBlock>
+                            Randomization
+                            <LineBreak/>
+                            Options :
+                        </TextBlock>
+                    </materialDesign:Card>
+                </Label>
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5,5,5,0" Height="20" VerticalAlignment="Top">
+                    <!-- Pokemon with BST > 420 -->
+                    <CheckBox Margin="5,0,0,0" ToolTip="Only strong pokemons" Click="CheckBox_Click"></CheckBox>
+                </StackPanel>
             </StackPanel>
+
+
 
             <Grid Grid.Row="0" Grid.Column="1">
                 <Grid.RowDefinitions>

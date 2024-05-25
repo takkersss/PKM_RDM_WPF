@@ -22,6 +22,7 @@ namespace PKM_RDM_WPF.model
         public const string CHEMIN_DOSSIER = "teams";
         public static readonly string[] EVS_NAME = new string[] { "HP", "Atk", "Def", "SpA", "SpD", "Spe" };
         public const int MAX_EV_DISTRIBUTION = 508;
+        public const int EVOLVED_MIN_BST = 420;
 
         private string name;
         private int id;
@@ -472,7 +473,7 @@ namespace PKM_RDM_WPF.model
             Random r = new Random();
             int applyThisItem = r.Next(100); // Générer un nombre aléatoire entre 0 et 99
 
-            if(this.Bst <= 420)
+            if(this.Bst <= EVOLVED_MIN_BST)
             {
                 if(applyThisItem < 25) // 25% chance of getting eviolite if base stat under 421
                 {
@@ -487,6 +488,8 @@ namespace PKM_RDM_WPF.model
             // HP
             itemsList = new List<string> { "sitrus-berry", "leftovers", "aguav-berry" };
             if (ApplyItemWithChanceStat(0, r, 40, itemsList, items)) return;
+            itemsList = new List<string> { "focus-sash"};
+            if (ApplyItemWithChanceStat(0, r, 40, itemsList, items, false)) return;
 
             // Atk
             itemsList = new List<string> { "choice-band", "life-orb", "choice-scarf" };
@@ -509,22 +512,62 @@ namespace PKM_RDM_WPF.model
             itemsList.Add(IsSpecialAttacker() ? "choice-specs" : "choice-band");
             if (ApplyItemWithChanceStat(5, r, 40, itemsList, items)) return;
 
+            // Balloon
+            if(this.FaiblessesX2.Contains(TypeP.Ground) || this.FaiblessesX4.Contains(TypeP.Ground))
+            {
+                itemsList = new List<string> { "air-balloon" };
+                if (ApplyItemWithChance(r, 40, itemsList, items)) return;
+            }
+
+            // Weakness Policy
+            if (this.FaiblessesX4.Count >= 2 && this.WantedAbility.ToLower() != "levitation")
+            {
+                itemsList = new List<string> { "weakness-policy" };
+                if (ApplyItemWithChance(r, 40, itemsList, items)) return;
+            }
+
+            // Energy Booster
+            if(this.WantedAbility.ToLower() == "protosynthesis" || this.WantedAbility.ToLower() == "quark-drive")
+            {
+                itemsList = new List<string> { "energy-booster" };
+                if (ApplyItemWithChance(r, 40, itemsList, items)) return;
+            }
+
             // Sinon full aléatoire
             this.WantedItem = items[r.Next(items.Count)];
         }
 
-        private bool ApplyItemWithChanceStat(int iStat, Random r, int applyItemChance, List<string> itemsName, List<Item> items)
+        // Set an item (one of the list) with a probability
+        private bool ApplyItemWithChance(Random r, int applyItemChance, List<string> itemsName, List<Item> items)
         {
-            if (GetBestStatIndex() == iStat)
+            string itemName = ApplyItem(r, applyItemChance, itemsName);
+            if (!String.IsNullOrEmpty(itemName))
             {
-                string itemName = ApplyItem(r, applyItemChance, itemsName);
-                if (!String.IsNullOrEmpty(itemName))
-                {
-                    this.WantedItem = items.First(x => x.Name.ToLower().Contains(itemName));
-                    return true;
-                }
+                this.WantedItem = items.First(x => x.Name.ToLower().Contains(itemName));
+                return true;
             }
             return false;
+        }
+
+        // Set an item (one of the list) with a probability & if it's his best stat
+        private bool ApplyItemWithChanceStat(int iStat, Random r, int applyItemChance, List<string> itemsName, List<Item> items, bool bestStat = true)
+        {
+            if (bestStat)
+            {
+                if (GetBestStatIndex() == iStat)
+                {
+                    return ApplyItemWithChance(r, applyItemChance, itemsName, items);
+                }
+                return false;
+            }
+            else
+            {
+                if (GetWorstStatIndex() == iStat)
+                {
+                    return ApplyItemWithChance(r, applyItemChance, itemsName, items);
+                }
+                return false;
+            }
         }
 
         private string ApplyItem(Random r, int applyItemChance, List<string> itemsName)

@@ -14,6 +14,10 @@ namespace PKM_RDM_WPF.model
 
         public OneSprite(){}
 
+        public OneSprite(string spriteUrl) {
+            this.Default = spriteUrl;
+        }
+
         public string Default { get => url; set => url = value; }
     }
 }
