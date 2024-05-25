@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "v/W5hjItxOCmo/BALr32dznW4ldKj5G+f7T2jpyIGvSk5Hw1EYVeT2/+2DoKtHuYo7xDTZr3ks0ygzkOkIYHaQ==",
+  "dgSpecHash": "89hlYxVChOeBGfH2eTIcDn8NmZcKkSL2Rg4P4FYdps/JEoX+cqiXLq32ArxKc0qoSXOjdGlFwVgGDHRMh4BO8Q==",
   "success": true,
   "projectFilePath": "F:\\Documents\\Pokemon Calculator\\PKM_RDM_WPF\\PKM_RDM_WPF\\PKM_RDM_WPF.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\hugo7\\.nuget\\packages\\fontawesome.wpf\\4.7.0.9\\fontawesome.wpf.4.7.0.9.nupkg.sha512",
     "C:\\Users\\hugo7\\.nuget\\packages\\materialdesigncolors\\3.0.0\\materialdesigncolors.3.0.0.nupkg.sha512",
     "C:\\Users\\hugo7\\.nuget\\packages\\materialdesignthemes\\5.0.0\\materialdesignthemes.5.0.0.nupkg.sha512",
     "C:\\Users\\hugo7\\.nuget\\packages\\microsoft.netcore.platforms\\7.0.0\\microsoft.netcore.platforms.7.0.0.nupkg.sha512",
@@ -59,5 +60,16 @@
     "C:\\Users\\hugo7\\.nuget\\packages\\system.threading.tasks\\4.3.0\\system.threading.tasks.4.3.0.nupkg.sha512",
     "C:\\Users\\hugo7\\.nuget\\packages\\windowsapicodepack\\7.0.4\\windowsapicodepack.7.0.4.nupkg.sha512"
   ],
-  "logs": []
+  "logs": [
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Le package 'FontAwesome.WPF 4.7.0.9' a été restauré en utilisant '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' au lieu du framework cible du projet 'net6.0-windows7.0'. Ce package n'est peut-être pas totalement compatible avec votre projet.",
+      "libraryId": "FontAwesome.WPF",
+      "targetGraphs": [
+        "net6.0-windows7.0"
+      ]
+    }
+  ]
 }
