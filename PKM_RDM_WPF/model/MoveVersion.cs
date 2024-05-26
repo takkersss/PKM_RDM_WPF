@@ -45,5 +45,23 @@ namespace PKM_RDM_WPF.model
         {
             return ToNiceString(this.Move.Name);
         }
+
+        public string GetMoveName()
+        {
+            return ToNiceString(this.MoveGetted.Name);
+        }
+
+        // FILTERS
+        public static List<MoveVersion> GetGoodPhysicalMoves(List<MoveVersion> allMoves)
+        {
+            allMoves = allMoves.FindAll(m => m.MoveGetted.isPhysical() && m.MoveGetted.isAGoodAttack());
+            return allMoves;
+        }
+
+        public static List<MoveVersion> GetGoodSpecialMoves(List<MoveVersion> allMoves)
+        {
+            allMoves = allMoves.FindAll(m => m.MoveGetted.isSpecial() && m.MoveGetted.isAGoodAttack());
+            return allMoves;
+        }
     }
 }

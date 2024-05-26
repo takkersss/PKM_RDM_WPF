@@ -446,22 +446,40 @@ namespace PKM_RDM_WPF.model
             //MessageBox.Show("Moovpool retrieved");
         }
 
-        public void RandomizeFourMoves()
+        // RANDOMIZATION of the four moves
+        public void RandomizeFourMoves(bool smart = false)
         {
-            int movesNb = this.Moves.Count;
-
             Random random = new Random();
+
+            List<MoveVersion> moveList;
+            if (smart)
+            {
+                string pItem = this.WantedItem.Name;
+                if (pItem == "choice-band" || ((pItem == "assault-vest" || pItem == "choice-scarf") && !this.IsSpecialAttacker()))
+                {
+                    moveList = MoveVersion.GetGoodPhysicalMoves(this.Moves);
+                }
+                else if(pItem == "choice-specs" || ((pItem == "assault-vest" || pItem == "choice-scarf") && this.IsSpecialAttacker()))
+                {
+                    moveList = MoveVersion.GetGoodSpecialMoves(this.Moves);
+                }
+                else moveList = this.Moves;
+            }
+            else moveList = this.Moves;
+            int movesNb = moveList.Count;
+
 
             int appliedMoves = 0;
             while (appliedMoves != 4)
             {
                 int randomIndex = random.Next(0, movesNb);
-                MoveVersion selectedMove = this.Moves[randomIndex];
+                MoveVersion selectedMove = moveList[randomIndex];
 
                 // Vérifiez si le mouvement sélectionné n'est pas déjà présent dans les mouvements du Pokémon
-                if (!this.FourMoves.Contains(ToNiceString(selectedMove.MoveGetted.Name)))
+                if (!this.FourMoves.Contains(selectedMove.GetMoveName()))
                 {
-                    this.FourMoves[appliedMoves] = ToNiceString(selectedMove.MoveGetted.Name);
+                    //MessageBox.Show(selectedMove.GetMoveName(), "good Attack: "+selectedMove.MoveGetted.isAGoodAttack().ToString());
+                    this.FourMoves[appliedMoves] = selectedMove.GetMoveName();
                     appliedMoves++;
                 }
             }
@@ -475,7 +493,7 @@ namespace PKM_RDM_WPF.model
 
             if(this.Bst <= EVOLVED_MIN_BST)
             {
-                if(applyThisItem < 25) // 25% chance of getting eviolite if base stat under 421
+                if(applyThisItem < 30) // 30% chance of getting eviolite if base stat under 421
                 {
                     this.WantedItem = items.First(x => x.Name.ToLower().Contains("eviolite"));
                     return;
@@ -523,14 +541,21 @@ namespace PKM_RDM_WPF.model
             if (this.FaiblessesX4.Count >= 2 && this.WantedAbility.ToLower() != "levitation")
             {
                 itemsList = new List<string> { "weakness-policy" };
-                if (ApplyItemWithChance(r, 40, itemsList, items)) return;
+                if (ApplyItemWithChance(r, 60, itemsList, items)) return;
             }
 
             // Energy Booster
             if(this.WantedAbility.ToLower() == "protosynthesis" || this.WantedAbility.ToLower() == "quark-drive")
             {
                 itemsList = new List<string> { "energy-booster" };
-                if (ApplyItemWithChance(r, 40, itemsList, items)) return;
+                if (ApplyItemWithChance(r, 60, itemsList, items)) return;
+            }
+
+            // Eject Button
+            if (this.WantedAbility.ToLower() == "regenerator")
+            {
+                itemsList = new List<string> { "eject-button" };
+                if (ApplyItemWithChance(r, 60, itemsList, items)) return;
             }
 
             // Sinon full aléatoire

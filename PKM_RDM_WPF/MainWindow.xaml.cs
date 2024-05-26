@@ -19,6 +19,7 @@ using System.Text.RegularExpressions;
 using static PKM_RDM_WPF.utils.Utils;
 using Microsoft.VisualBasic.Devices;
 using PKM_RDM_WPF.engine;
+using MaterialDesignThemes.Wpf;
 
 namespace PKM_RDM_WPF
 {
@@ -896,23 +897,35 @@ namespace PKM_RDM_WPF
             ReloadDisplayPokemonMovepool();
         }
 
-        // Boutons reload Moovepool
+        // Button reload Moovepool
         private void btn_ReloadPanel(object sender, RoutedEventArgs e)
         {
             if (isWindowBusy) return;
             ReloadDisplayPokemonMovepool();
         }
 
-        // Boutons Four Moves
+        // Button Four Moves
         private void btn_RandomMovepool(object sender, RoutedEventArgs e) // todo MAJ VISUELLE
+        {
+            RandomizeButtonFourMoves();
+        }
+
+        // Button
+        private void btn_SmartRandomMovepool(object sender, RoutedEventArgs e)
+        {
+            RandomizeButtonFourMoves(true);
+        }
+
+        private void RandomizeButtonFourMoves(bool smart = false)
         {
             if (isWindowBusy) return;
 
-            currentPokemon.RandomizeFourMoves();
+            if(smart) currentPokemon.RandomizeFourMoves(true);
+            else currentPokemon.RandomizeFourMoves();
             ActualizeFourMovesDisplay();
         }
 
-        // Boutons SORT Moovepool
+        // Boutons SORT Moovepool by power
         private void tbMovePowerHeader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if(isWindowBusy) return;
@@ -931,6 +944,7 @@ namespace PKM_RDM_WPF
             ReloadDisplayPokemonMovepool(moves);
         }
 
+        // SORT of the moves by attack type
         private void tbMoveTypeHeader_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (isWindowBusy) return;
@@ -952,6 +966,7 @@ namespace PKM_RDM_WPF
 
             ReloadDisplayPokemonMovepool(moves);
         }
+
         #endregion MOVES
 
         // Loading Icon

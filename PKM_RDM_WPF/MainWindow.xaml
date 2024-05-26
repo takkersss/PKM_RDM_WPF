@@ -435,20 +435,26 @@
                             <TextBox x:Name="tb_FourMove3" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" Text="{Binding FourMoves[3], Mode=TwoWay}"></TextBox>
                         </StackPanel>
                         <!-- BOUTONS -->
-                        <Grid Margin="5,10,5,0">
-                            <Button HorizontalAlignment="Left" Click="btn_ReloadPanel">
+                        <StackPanel Margin="5,10,5,0" Orientation="Horizontal">
+                            <Button HorizontalAlignment="Left" Click="btn_ReloadPanel" Margin="10,0,0,0">
                                 <fa:ImageAwesome Icon="Refresh"></fa:ImageAwesome>
                                 <Button.ToolTip>
-                                    <ToolTip Content="Refresh Movepool"/>
+                                    <ToolTip Content="Reset Move List"/>
                                 </Button.ToolTip>
                             </Button>
-                            <Button HorizontalAlignment="Left" Margin="60,0,0,0" Click="btn_RandomMovepool">
+                            <Button HorizontalAlignment="Left" Click="btn_RandomMovepool" Margin="10,0,0,0">
                                 <fa:ImageAwesome Icon="Random"></fa:ImageAwesome>
                                 <Button.ToolTip>
                                     <ToolTip Content="Random Movepool"/>
                                 </Button.ToolTip>
                             </Button>
-                        </Grid>
+                            <Button HorizontalAlignment="Left" Click="btn_SmartRandomMovepool" Margin="10,0,0,0">
+                                <fa:ImageAwesome Icon="Random"></fa:ImageAwesome>
+                                <Button.ToolTip>
+                                    <ToolTip Content="Smart Random Movepool"/>
+                                </Button.ToolTip>
+                            </Button>
+                        </StackPanel>
                         <!-- LA LISTE DES MOVES -->
                         <StackPanel Orientation="Horizontal" Margin="0,2,0,5">
                             <TextBlock x:Name="tbMoveNameHeader" Width="120" Text="Name" TextAlignment="Center"/>

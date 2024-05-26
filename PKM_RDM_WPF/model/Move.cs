@@ -43,14 +43,35 @@ namespace PKM_RDM_WPF.model
             return utils.Utils.ToNiceString(this.Name);
         }
 
-        public string GetDamageClasse()
+        public string GetDamageClass() // Physical, Special, Status
         {
-            return utils.Utils.ToNiceString(this.Damage_class.Name);
+            return this.Damage_class.Name.ToLower();
+        }
+
+        public bool isAnAttack() // Is this an attack ? Else a status
+        {
+            return isPhysical() || isSpecial();
+        }
+
+        public bool isPhysical() // Is this an attack ? Else a status
+        {
+            return GetDamageClass() == "physical";
+        }
+
+        public bool isSpecial()
+        {
+            return GetDamageClass() == "special";
+        }
+
+        // Attack power >= 65 + bullet seed etc + heavy slam etc
+        public bool isAGoodAttack()
+        {
+            return (isAnAttack() || (isAnAttack() && this.Power == null)) && (this.Power >= 65 || this.Power == 55);
         }
 
         public string GetType()
         {
-            return utils.Utils.ToNiceString(this.Type.Name);
+            return this.Type.Name.ToLower();
         }
     }
 }
