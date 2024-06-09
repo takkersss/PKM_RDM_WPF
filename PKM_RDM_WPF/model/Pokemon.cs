@@ -579,7 +579,7 @@ namespace PKM_RDM_WPF.model
         {
             if (bestStat)
             {
-                if (GetBestStatIndex() == iStat)
+                if (GetBestStatIndex() == iStat || this.Stats[iStat].Base_stat >= 110 )
                 {
                     return ApplyItemWithChance(r, applyItemChance, itemsName, items);
                 }

@@ -74,7 +74,9 @@
                 </Label>
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5,5,5,0" Height="20" VerticalAlignment="Top">
                     <!-- Pokemon with BST > 420 -->
-                    <CheckBox Margin="5,0,0,0" ToolTip="Only strong pokemons" Click="CheckBox_Click"></CheckBox>
+                    <CheckBox Margin="5,0,0,0" ToolTip="Only strong pokemons" Click="cb_randomStrongPokemons"></CheckBox>
+                    <!-- Pokemon with Smart Moveppol -->
+                    <CheckBox Margin="5,0,0,0" ToolTip="Only strong moves corresponding the item" Click="cb_randomSmartMoves" IsChecked="True"></CheckBox>
                 </StackPanel>
             </StackPanel>
 

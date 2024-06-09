@@ -38,6 +38,7 @@ namespace PKM_RDM_WPF
 
         // RANDOMIZATION PARAMETERS
         private bool randStrongPokemons = false;
+        private bool randSmartMoves = true;
 
         // MOVE SYSTEM
         private bool moovSystemEnabled = false; // ne sert qu'une fois !
@@ -98,7 +99,7 @@ namespace PKM_RDM_WPF
             if (moovSystemEnabled)
             {
                 await LoadPokemonMovepool(p);
-                p.RandomizeFourMoves(); // todo: Moovs en fonctions de l'item
+                p.RandomizeFourMoves(randSmartMoves);
             }
         }
 
@@ -412,7 +413,7 @@ namespace PKM_RDM_WPF
         // COPY team button
         private void CopyTeamBtn_Click(object sender, RoutedEventArgs e)
         {
-            if (isWindowBusy) return;
+            if (isWindowBusy) return; // todo: pouvoir copier meme quand re reload ?
             if (!string.IsNullOrEmpty(GetPokemonsNamesTeam()))
             {
                 Clipboard.SetText(GetPokemonsNamesTeam()); // Copie le texte dans le presse-papiers
@@ -979,11 +980,16 @@ namespace PKM_RDM_WPF
             isWindowBusy = isLoading;
         }
 
-        // Randomization Options
-        private void CheckBox_Click(object sender, RoutedEventArgs e)
+        // Randomization Team Options
+        private void cb_randomStrongPokemons(object sender, RoutedEventArgs e)
         {
             randStrongPokemons = (bool)((CheckBox)sender).IsChecked;
             //MessageBox.Show(randStrongPokemons.ToString());
+        }
+
+        private void cb_randomSmartMoves(object sender, RoutedEventArgs e)
+        {
+            randSmartMoves = (bool)((CheckBox)sender).IsChecked;
         }
     }
 }
