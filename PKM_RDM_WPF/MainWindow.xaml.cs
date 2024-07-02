@@ -205,12 +205,17 @@ namespace PKM_RDM_WPF
         // Se lance au chargement de la fenetre (listview)
         private async void teamListBox_Loaded(object sender, RoutedEventArgs e)
         {
+            // Chargement des options au start de la page
+            ReadAppOptions();
+            LoadAppOptions();
+            // Chargement du nb de pokémons, de leurs noms, et des items
             await MainPokemonCalc.GetPokemonCount(); // à optimiser
             LoadAllPokemonNames();
             await LoadAllItems();
-            ReadAppOptionsName();
+            // Initialisation des types et natures -> applicationData
             applicationData.AllType = new ObservableCollection<string>(Enum.GetNames(typeof(TypeP)));
             applicationData.AllNature = new ObservableCollection<string>(Nature.NATURES);
+            // Chargement d'une team existante ou fetch d'une nouvelle
             if (Directory.Exists(Pokemon.CHEMIN_DOSSIER))
             {
                 string[] teams = Directory.GetDirectories(Pokemon.CHEMIN_DOSSIER);
@@ -233,7 +238,6 @@ namespace PKM_RDM_WPF
                         NewRandomTeam();
                     }
                     currentPokemon = (Pokemon)teamListImageView.SelectedItem;
-                    //MessageBox.Show(currentPokemon.Name);
                 }
             }
             else // Si le dossier n'existe pas, on le crée
@@ -242,8 +246,6 @@ namespace PKM_RDM_WPF
                 NewRandomTeam();
                 currentPokemon = (Pokemon)teamListImageView.SelectedItem;
             }
-            // Chargement des options au start de la page
-            LoadAppOptions();
         }
 
         private void LoadAppOptions()
@@ -252,6 +254,8 @@ namespace PKM_RDM_WPF
             spMoveInterface.IsEnabled = appOptions.MoveSystemEnabledAtStart;
             moovSystemEnabled = appOptions.MoveSystemEnabledAtStart;
             cbEnableMovepool.IsChecked = appOptions.MoveSystemEnabledAtStart;
+            cbRandomSmartMoves.IsChecked = randStrongPokemons;
+            cbRandomSmartMoves.IsChecked = randSmartMoves;
         }
 
         private void SwitchPokemonTeam(string[] filesInFolder)
@@ -286,7 +290,7 @@ namespace PKM_RDM_WPF
                 writer.Write(JsonConvert.SerializeObject(appOptions));
             }
         }
-        private void ReadAppOptionsName()
+        private void ReadAppOptions()
         {
             if (!File.Exists("data/appData.json")){
                 appOptions = new AppOptions();
@@ -981,13 +985,13 @@ namespace PKM_RDM_WPF
         }
 
         // Randomization Team Options
-        private void cb_randomStrongPokemons(object sender, RoutedEventArgs e)
+        private void cb_randomStrongPokemons_Click(object sender, RoutedEventArgs e)
         {
             randStrongPokemons = (bool)((CheckBox)sender).IsChecked;
             //MessageBox.Show(randStrongPokemons.ToString());
         }
 
-        private void cb_randomSmartMoves(object sender, RoutedEventArgs e)
+        private void cb_randomSmartMoves_Click(object sender, RoutedEventArgs e)
         {
             randSmartMoves = (bool)((CheckBox)sender).IsChecked;
         }

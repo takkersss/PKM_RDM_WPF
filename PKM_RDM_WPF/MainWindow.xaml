@@ -72,15 +72,19 @@
                         </TextBlock>
                     </materialDesign:Card>
                 </Label>
-                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="5,5,5,0" Height="20" VerticalAlignment="Top">
+                <StackPanel Grid.Row="1" Margin="5,5,5,0" VerticalAlignment="Top">
                     <!-- Pokemon with BST > 420 -->
-                    <CheckBox Margin="5,0,0,0" ToolTip="Only strong pokemons" Click="cb_randomStrongPokemons"></CheckBox>
+                    <StackPanel Orientation="Horizontal" ToolTip="Only pokemons with a BST > 420">
+                        <Label Content="POKEMONS"></Label>
+                        <CheckBox Margin="5,0,0,0" Name="cbRandomStrongPokemons" Click="cb_randomStrongPokemons_Click"></CheckBox>
+                    </StackPanel>
                     <!-- Pokemon with Smart Moveppol -->
-                    <CheckBox Margin="5,0,0,0" ToolTip="Only strong moves corresponding the item" Click="cb_randomSmartMoves" IsChecked="True"></CheckBox>
+                    <StackPanel Orientation="Horizontal" ToolTip="Match moves corresponding the item">
+                        <Label Content="MOVES"></Label>
+                        <CheckBox Margin="5,0,0,0" Name="cbRandomSmartMoves" Click="cb_randomSmartMoves_Click"></CheckBox>
+                    </StackPanel>
                 </StackPanel>
             </StackPanel>
-
-
 
             <Grid Grid.Row="0" Grid.Column="1">
                 <Grid.RowDefinitions>
