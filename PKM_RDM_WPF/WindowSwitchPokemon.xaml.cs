@@ -92,7 +92,7 @@ namespace PKM_RDM_WPF
         private void txtBoxRecherche_SelectionChanged(object sender, RoutedEventArgs e)
         {
             if (!String.IsNullOrEmpty(txtBoxRecherche.Text)){
-                appData.AllPokemonNameFiltres = new ObservableCollection<string>(appData.AllPokemonName.ToList().FindAll(x => x.StartsWith(txtBoxRecherche.Text.Substring(0,1).ToUpper()+ txtBoxRecherche.Text.Substring(1, txtBoxRecherche.Text.Length-1).ToLower())));
+                appData.AllPokemonNameFiltres = new ObservableCollection<string>(appData.AllPokemonName.ToList().FindAll(x => x.ToLower().Contains(txtBoxRecherche.Text.ToLower())));
                 RefreshList();
             }
             else
