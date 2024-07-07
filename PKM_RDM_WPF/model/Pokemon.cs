@@ -467,7 +467,7 @@ namespace PKM_RDM_WPF.model
             }
             else moveList = this.Moves;
             int movesNb = moveList.Count;
-
+            if (moveList == null) MessageBox.Show(this.Moves.ToString()); // todo: patch bug
 
             int appliedMoves = 0;
             while (appliedMoves != 4)

@@ -36,10 +36,6 @@ namespace PKM_RDM_WPF
         private AllPokemon allPokemon;
         private AllItems allItems;
 
-        // RANDOMIZATION PARAMETERS
-        private bool randStrongPokemons = false;
-        private bool randSmartMoves = true;
-
         // MOVE SYSTEM
         private bool moovSystemEnabled = false; // ne sert qu'une fois !
         private TextBox currentMoveSlotSelected;
@@ -71,7 +67,7 @@ namespace PKM_RDM_WPF
             if (isWindowBusy) return;
             LoadingIcon(); // Notifier du chargement
             isLoadingNewRandomTeam = true;
-            applicationData.PokemonTeam = new ObservableCollection<Pokemon>(await MainPokemonCalc.GetRandomPokemonTeam(randStrongPokemons));
+            applicationData.PokemonTeam = new ObservableCollection<Pokemon>(await MainPokemonCalc.GetRandomPokemonTeam(appOptions.RandStrongPokemons));
             ReSetWindowAndTeam(0);
         }
 
@@ -99,7 +95,7 @@ namespace PKM_RDM_WPF
             if (moovSystemEnabled)
             {
                 await LoadPokemonMovepool(p);
-                p.RandomizeFourMoves(randSmartMoves);
+                p.RandomizeFourMoves(appOptions.RandSmartMoves);
             }
         }
 
@@ -251,11 +247,13 @@ namespace PKM_RDM_WPF
         private void LoadAppOptions()
         {
             tbTeamName.Text = appOptions.CurrentTeamName;
+
             spMoveInterface.IsEnabled = appOptions.MoveSystemEnabledAtStart;
             moovSystemEnabled = appOptions.MoveSystemEnabledAtStart;
             cbEnableMovepool.IsChecked = appOptions.MoveSystemEnabledAtStart;
-            cbRandomSmartMoves.IsChecked = randStrongPokemons;
-            cbRandomSmartMoves.IsChecked = randSmartMoves;
+
+            cbRandomStrongPokemons.IsChecked = appOptions.RandStrongPokemons;
+            cbRandomSmartMoves.IsChecked = appOptions.RandSmartMoves;
         }
 
         private void SwitchPokemonTeam(string[] filesInFolder)
@@ -803,7 +801,7 @@ namespace PKM_RDM_WPF
             TextBox moveTb = null;
             if (getFocusedTextBox() == null) 
             {
-                moveTb = getTextBoxMove();
+                moveTb = getFreeTextBoxMove();
                 if (moveTb == null) {
                     if(currentMoveSlotSelected != null)
                     {
@@ -824,7 +822,7 @@ namespace PKM_RDM_WPF
 
         }
 
-        private TextBox getTextBoxMove()
+        private TextBox getFreeTextBoxMove()
         {
             if (string.IsNullOrWhiteSpace(tb_FourMove0.Text))
             {
@@ -881,6 +879,38 @@ namespace PKM_RDM_WPF
 
             currentMoveSlotSelected = tbMove;
             isSwitchingMove = false;
+        }
+
+        private void tb_Move_Enter(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Enter) return;
+            TextBox tbMove = (TextBox)sender;
+
+            bool existingMove = lvPossibleMoves.Items.OfType<MoveVersion>().Any(mv => ToNiceString(mv.MoveGetted.Name).Equals(tbMove.Text, StringComparison.OrdinalIgnoreCase));
+            
+            // Assigner le premier élément de lvPossibleMoves à moveTb.Text
+            if (lvPossibleMoves.Items.Count > 0 && !existingMove)
+            {
+                MoveVersion firstMove = (MoveVersion)lvPossibleMoves.Items[0];
+                tbMove.Text = ToNiceString(firstMove.MoveGetted.Name);
+            }
+
+            // Passer le focus à la textbox suivante
+            if (tbMove == tb_FourMove0)
+            {
+                tb_FourMove1.Focus();
+                tb_FourMove1.CaretIndex = tb_FourMove1.Text.Length;
+            }
+            else if (tbMove == tb_FourMove1)
+            {
+                tb_FourMove2.Focus();
+                tb_FourMove2.CaretIndex = tb_FourMove2.Text.Length;
+            }
+            else if (tbMove == tb_FourMove2)
+            {
+                tb_FourMove3.Focus();
+                tb_FourMove3.CaretIndex = tb_FourMove3.Text.Length;
+            }
         }
 
         private void UpdateMovepoolList(string filterText)
@@ -987,13 +1017,14 @@ namespace PKM_RDM_WPF
         // Randomization Team Options
         private void cb_randomStrongPokemons_Click(object sender, RoutedEventArgs e)
         {
-            randStrongPokemons = (bool)((CheckBox)sender).IsChecked;
-            //MessageBox.Show(randStrongPokemons.ToString());
+            appOptions.RandStrongPokemons = (bool)((CheckBox)sender).IsChecked;
+            WriteAppOptionsInData();
         }
 
         private void cb_randomSmartMoves_Click(object sender, RoutedEventArgs e)
         {
-            randSmartMoves = (bool)((CheckBox)sender).IsChecked;
+            appOptions.RandSmartMoves = (bool)((CheckBox)sender).IsChecked;
+            WriteAppOptionsInData();
         }
     }
 }

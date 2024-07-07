@@ -435,10 +435,10 @@
                     <StackPanel x:Name="spMoveInterface" IsEnabled="False">
                         <!-- LES 4 SLOTS DE MOOVS -->
                         <StackPanel x:Name="sp_FourMoves" DataContext="{Binding SelectedItem, ElementName=teamListImageView}">
-                            <TextBox x:Name="tb_FourMove0" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" Text="{Binding FourMoves[0], Mode=TwoWay}"></TextBox>
-                            <TextBox x:Name="tb_FourMove1" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" Text="{Binding FourMoves[1], Mode=TwoWay}"></TextBox>
-                            <TextBox x:Name="tb_FourMove2" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" Text="{Binding FourMoves[2], Mode=TwoWay}"></TextBox>
-                            <TextBox x:Name="tb_FourMove3" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" Text="{Binding FourMoves[3], Mode=TwoWay}"></TextBox>
+                            <TextBox x:Name="tb_FourMove0" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" KeyDown="tb_Move_Enter" Text="{Binding FourMoves[0], Mode=TwoWay}"></TextBox>
+                            <TextBox x:Name="tb_FourMove1" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" KeyDown="tb_Move_Enter" Text="{Binding FourMoves[1], Mode=TwoWay}"></TextBox>
+                            <TextBox x:Name="tb_FourMove2" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" KeyDown="tb_Move_Enter" Text="{Binding FourMoves[2], Mode=TwoWay}"></TextBox>
+                            <TextBox x:Name="tb_FourMove3" TextChanged="tb_Move_TextChanged" GotFocus="tb_Move_GotFocus" KeyDown="tb_Move_Enter" Text="{Binding FourMoves[3], Mode=TwoWay}"></TextBox>
                         </StackPanel>
                         <!-- BOUTONS -->
                         <StackPanel Margin="5,10,5,0" Orientation="Horizontal">
