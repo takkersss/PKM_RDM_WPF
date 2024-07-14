@@ -12,6 +12,8 @@ namespace PKM_RDM_WPF.model
     public class AllPokemon
     {
         public const string CHEMIN_ALL_POKEMON_NAME = "data/allPokemonName.json";
+        public static List<string> banPokemonsByName = new List<string>() { "-gmax" };
+
         [JsonProperty]
         private static int nB_Pokemon; // contient les formes ~1300
 

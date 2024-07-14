@@ -476,7 +476,11 @@ namespace PKM_RDM_WPF.engine
             Pokemon pokemonAleatoire = await GetPokemonById(idPokemonAleatoire);
             if (pokemonAleatoire != null)
             {
-                if(pokemonAleatoire.OtherForms.Count > 0)
+                pokemonAleatoire.OtherForms = pokemonAleatoire.OtherForms
+                    .Where(form => !AllPokemon.banPokemonsByName.Any(ban => form.Name.Contains(ban, StringComparison.OrdinalIgnoreCase)))
+                    .ToList();
+
+                if (pokemonAleatoire.OtherForms.Count > 0)
                 {
                     bool switchForm = random.Next(0, 100) < 40; // 40% de chance de changer la forme
                     if (switchForm)
@@ -568,7 +572,7 @@ namespace PKM_RDM_WPF.engine
             }
         }
 
-        public static async Task<AllPokemon> GetAllPokemonNameUrl()
+        public static async Task<AllPokemon> GetAllPokemonNameUrl(List<string> filtersAllPokemon = null)
         {
             if (!IsInternetConnected()) { ShowConnexionError("error getting name of all pokemon"); return null; }
             using (HttpClient client = new HttpClient())
@@ -578,6 +582,14 @@ namespace PKM_RDM_WPF.engine
                 {
                     string contenu = await reponse.Content.ReadAsStringAsync();
                     AllPokemon allPokemon = JsonConvert.DeserializeObject<AllPokemon>(contenu);
+
+                    if (filtersAllPokemon != null)
+                    {
+                        allPokemon.Results = allPokemon.Results
+                            .Where(pokemon => !filtersAllPokemon.Any(filter => pokemon.Name.Contains(filter, StringComparison.OrdinalIgnoreCase)))
+                            .ToList();
+                    }
+
                     return allPokemon;
                 }
                 else

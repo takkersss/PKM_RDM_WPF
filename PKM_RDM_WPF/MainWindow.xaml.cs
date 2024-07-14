@@ -158,7 +158,7 @@ namespace PKM_RDM_WPF
                 if (AllPokemon.NB_Pokemon != allPokemon.Results.Count)
                 {
                     //MessageBox.Show(AllPokemon.NB_POKEMON + " " + allPokemonData.Results.Count);
-                    allPokemon = await MainPokemonCalc.GetAllPokemonNameUrl();
+                    allPokemon = await MainPokemonCalc.GetAllPokemonNameUrl(AllPokemon.banPokemonsByName);
                 }
             }
             else // Si le fichier n'existe pas, on le crée et on lui assigne les données
@@ -167,7 +167,7 @@ namespace PKM_RDM_WPF
                 {
                     Directory.CreateDirectory("data");
                 }
-                string json = JsonConvert.SerializeObject(await MainPokemonCalc.GetAllPokemonNameUrl());
+                string json = JsonConvert.SerializeObject(await MainPokemonCalc.GetAllPokemonNameUrl(AllPokemon.banPokemonsByName));
                 File.WriteAllText(AllPokemon.CHEMIN_ALL_POKEMON_NAME, json);
                 allPokemon = JsonConvert.DeserializeObject<AllPokemon>(File.ReadAllText(AllPokemon.CHEMIN_ALL_POKEMON_NAME));
             }
