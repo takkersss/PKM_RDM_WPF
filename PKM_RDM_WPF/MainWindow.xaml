@@ -60,31 +60,30 @@
             <StackPanel Grid.Row="1">
                 <!-- TEAM NAME INPUT -->
                 <TextBox x:Name="tbTeamName" Margin="5,0,5,0" GotFocus="tbTeamName_GotFocus"/>
-                <!-- Spin Icon -->
-                <fa:ImageAwesome x:Name="iconLoading" Icon="Refresh" Spin="False" Height="48" Width="48" Visibility="Hidden" Margin="0,10,0,0"/>
                 <!-- Randomization checkboxes -->
-                <Label Grid.Row="1" Height="50" VerticalAlignment="Top">
-                    <materialDesign:Card Padding="2">
-                        <TextBlock>
+                <materialDesign:Card Padding="2" Margin="0,20,0,0">
+                    <StackPanel>
+                        <TextBlock FontWeight="Bold">
                             Randomization
                             <LineBreak/>
                             Options :
                         </TextBlock>
-                    </materialDesign:Card>
-                </Label>
-                <StackPanel Grid.Row="1" Margin="5,5,5,0" VerticalAlignment="Top">
-                    <!-- Pokemon with BST > 420 -->
-                    <StackPanel Orientation="Horizontal" ToolTip="Only pokemons with a BST > 420">
-                        <Label Content="POKEMONS"></Label>
-                        <CheckBox Margin="5,0,0,0" Name="cbRandomStrongPokemons" Click="cb_randomStrongPokemons_Click"></CheckBox>
+                        <!-- Pokemon with BST > 420 -->
+                        <StackPanel Orientation="Horizontal" ToolTip="Only pokemons with a BST > 420">
+                            <Label Content="POKEMONS"></Label>
+                            <CheckBox Margin="5,0,0,0" Name="cbRandomStrongPokemons" Click="cb_randomStrongPokemons_Click"></CheckBox>
+                        </StackPanel>
+                        <!-- Pokemon with Smart Moveppol -->
+                        <StackPanel Orientation="Horizontal" ToolTip="Match moves corresponding the item">
+                            <Label Content="MOVES"></Label>
+                            <CheckBox Margin="5,0,0,0" Name="cbRandomSmartMoves" Click="cb_randomSmartMoves_Click" Width="20"></CheckBox>
+                        </StackPanel>
                     </StackPanel>
-                    <!-- Pokemon with Smart Moveppol -->
-                    <StackPanel Orientation="Horizontal" ToolTip="Match moves corresponding the item">
-                        <Label Content="MOVES"></Label>
-                        <CheckBox Margin="5,0,0,0" Name="cbRandomSmartMoves" Click="cb_randomSmartMoves_Click"></CheckBox>
-                    </StackPanel>
-                </StackPanel>
+                </materialDesign:Card>
+                <!-- Spin Icon -->
+                <fa:ImageAwesome x:Name="iconLoading" Icon="Refresh" Spin="False" Height="48" Width="48" Visibility="Hidden" Margin="0,10,0,0"/>
             </StackPanel>
+            
 
             <Grid Grid.Row="0" Grid.Column="1">
                 <Grid.RowDefinitions>
