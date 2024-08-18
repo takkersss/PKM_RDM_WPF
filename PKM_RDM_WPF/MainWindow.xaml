@@ -63,10 +63,12 @@
                 <!-- Randomization checkboxes -->
                 <materialDesign:Card Padding="2" Margin="0,20,0,0">
                     <StackPanel>
-                        <TextBlock FontWeight="Bold">
+                        <TextBlock FontWeight="Bold" TextAlignment="Center">
+                            Smart
+                            <LineBreak/>
                             Randomization
                             <LineBreak/>
-                            Options :
+                            Options
                         </TextBlock>
                         <!-- Pokemon with BST > 420 -->
                         <StackPanel Orientation="Horizontal" ToolTip="Only pokemons with a BST > 420">

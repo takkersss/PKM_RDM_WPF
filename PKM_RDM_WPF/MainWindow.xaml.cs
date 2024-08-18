@@ -9,17 +9,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using Microsoft.WindowsAPICodePack.Dialogs;
-using static System.Net.Mime.MediaTypeNames;
-using System.Windows.Data;
-using System.Windows.Shapes;
 using Path = System.IO.Path;
 using System.Text.RegularExpressions;
 using static PKM_RDM_WPF.utils.Utils;
-using Microsoft.VisualBasic.Devices;
 using PKM_RDM_WPF.engine;
-using MaterialDesignThemes.Wpf;
 
 namespace PKM_RDM_WPF
 {
@@ -452,6 +446,7 @@ namespace PKM_RDM_WPF
         #endregion SHOWDOWN EXPORT
 
         private bool canUpdate;
+        private bool teamListFirstLoad = true;
 
         // Event lors du changement (SWITCH) du pokémon sélectionné
         private void teamListImageView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -459,7 +454,15 @@ namespace PKM_RDM_WPF
             canUpdate = false;
             ListView lv = ((ListView)sender);
             if (lv.SelectedItem == null) return;
-            
+
+            // Empêcher switch de pokemon si fenêtre occupé
+            if(isWindowBusy && !teamListFirstLoad) {
+                lv.SelectedIndex = 0;
+                cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
+                return; 
+            }
+            else if(teamListFirstLoad) teamListFirstLoad = false;
+
             currentPokemon = applicationData.PokemonTeam[applicationData.PokemonTeam.ToList().FindIndex(x => x.GetHashCode() == ((Pokemon)lv.SelectedItem).GetHashCode())];
             cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
             cbTera.SelectedIndex = GetIndexOfWantedTera(currentPokemon);
@@ -497,6 +500,7 @@ namespace PKM_RDM_WPF
         {
             if (currentPokemon == null) return;
             if(cbAbility.SelectedIndex == -1) return;
+
             currentPokemon.WantedAbility = currentPokemon.Abilities[cbAbility.SelectedIndex].Ability.Name;
             cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
 
@@ -505,7 +509,7 @@ namespace PKM_RDM_WPF
         private void SwitchTooltip()
         {
             //tooltips
-            if(currentPokemon == null) return;
+            if(currentPokemon == null || cbAbility.SelectedIndex == -1) return;
             if(currentPokemon.Abilities[cbAbility.SelectedIndex].Effect != null || currentPokemon.Abilities[cbAbility.SelectedIndex].EffectEntries != null)
             {
                 tbAbilityTooltip.Text = currentPokemon.Abilities[cbAbility.SelectedIndex].GetDescription();
@@ -1011,6 +1015,7 @@ namespace PKM_RDM_WPF
             else iconLoading.Visibility = Visibility.Hidden;
 
             iconLoading.Spin = isLoading;
+            this.Cursor = isLoading ? Cursors.AppStarting : null;
             isWindowBusy = isLoading;
         }
 
