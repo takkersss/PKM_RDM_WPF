@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PKM_RDM_WPF"
         mc:Ignorable="d"
-        Title="About the app" Height="270" Width="440" Icon="/img/exclamation_mark.png" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        Title="About the app" Height="300" Width="440" Icon="/img/exclamation_mark.png" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
         Style="{StaticResource MaterialDesignWindow}">
     <Grid>
         <StackPanel>

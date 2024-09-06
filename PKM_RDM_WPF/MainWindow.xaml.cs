@@ -61,6 +61,7 @@ namespace PKM_RDM_WPF
             if (isWindowBusy) return;
             LoadingIcon(); // Notifier du chargement
             isLoadingNewRandomTeam = true;
+            firstPokemonUpdate = true; // Permet de mettre à jour l'affichage du pokémon changé
             applicationData.PokemonTeam = new ObservableCollection<Pokemon>(await MainPokemonCalc.GetRandomPokemonTeam(appOptions.RandStrongPokemons));
             ReSetWindowAndTeam(0);
         }
@@ -445,8 +446,9 @@ namespace PKM_RDM_WPF
         }
         #endregion SHOWDOWN EXPORT
 
-        private bool canUpdate;
-        private bool teamListFirstLoad = true;
+        private bool canUpdate; // Empecher le switch sur d'autres pokes quand chargement
+        private bool teamListFirstLoad = true; 
+        private bool firstPokemonUpdate = false; // Permettre la mise à jour de l'affichage du 1er poke 
 
         // Event lors du changement (SWITCH) du pokémon sélectionné
         private void teamListImageView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -457,9 +459,13 @@ namespace PKM_RDM_WPF
 
             // Empêcher switch de pokemon si fenêtre occupé
             if(isWindowBusy && !teamListFirstLoad) {
-                lv.SelectedIndex = 0;
-                cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
-                return; 
+                if (!firstPokemonUpdate)
+                {
+                    lv.SelectedIndex = 0;
+                    cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
+                    return;
+                }
+                else firstPokemonUpdate = false;
             }
             else if(teamListFirstLoad) teamListFirstLoad = false;
 
