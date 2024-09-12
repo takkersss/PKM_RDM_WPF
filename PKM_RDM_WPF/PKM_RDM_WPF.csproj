@@ -5,6 +5,7 @@
     <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+	<ApplicationIcon>img\icon_x64.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +14,7 @@
     <None Remove="img\exclamation_mark.png" />
     <None Remove="img\icon.ico" />
     <None Remove="img\icon.png" />
+    <None Remove="img\icon_x64.ico" />
     <None Remove="img\load.png" />
     <None Remove="img\moov_cat\PhysicalIC.png" />
     <None Remove="img\moov_cat\SpecialIC.png" />
@@ -80,6 +82,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="img\icon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="img\icon_x64.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
     <Resource Include="img\load.png">
