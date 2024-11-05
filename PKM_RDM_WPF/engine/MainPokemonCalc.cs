@@ -751,6 +751,8 @@ namespace PKM_RDM_WPF.engine
             return $"pack://application:,,,/{Assembly.GetExecutingAssembly().GetName().Name};component/{path}";
         }
     }
+
+    // TAKKERS 2024
 }
 
 

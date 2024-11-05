@@ -67,7 +67,7 @@ namespace PKM_RDM_WPF
         }
 
         // SET properties of a pokemon
-        private async Task SetPokemonProperties(Pokemon p)
+        private async Task SetPokemonProperties(Pokemon p, bool loadMoves = true)
         {
             // p.SetFrName();
             p.SetDoubleTypesSpecifiations();
@@ -86,6 +86,14 @@ namespace PKM_RDM_WPF
             p.TeraType = (TypeP)Enum.Parse(typeof(TypeP), applicationData.AllType[r.Next(0, 18)]);
             p.ChooseBestItemButRandom(applicationData.AllItems.ToList()); // todo: Item en fonction des stats
 
+            if (loadMoves)
+            {
+                await LoadMoves(p);
+            }
+        }
+
+        private async Task LoadMoves(Pokemon p)
+        {
             // MOVES
             if (moovSystemEnabled)
             {
@@ -99,8 +107,14 @@ namespace PKM_RDM_WPF
         {
             foreach (Pokemon p in applicationData.PokemonTeam)
             {
-                await SetPokemonProperties(p);
+                await SetPokemonProperties(p, false);
             }
+            // Load moves à la fin
+            foreach(Pokemon p in applicationData.PokemonTeam)
+            {
+                await LoadMoves(p);
+            }
+
             currentPokemon = applicationData.PokemonTeam[0];
             ActualizeFourMovesDisplay();
             LoadingIcon(false);
@@ -331,6 +345,8 @@ namespace PKM_RDM_WPF
         private void lvOpenSwitchWindow(object sender, MouseButtonEventArgs e)
         {
             if (!MainPokemonCalc.IsInternetConnected()) { ShowConnexionError("You must be connected to internet"); return; }
+            if (isWindowBusy) return;
+            
             var item = sender as ListViewItem;
             if (item != null && item.IsSelected)
             {
@@ -446,28 +462,14 @@ namespace PKM_RDM_WPF
         }
         #endregion SHOWDOWN EXPORT
 
-        private bool canUpdate; // Empecher le switch sur d'autres pokes quand chargement
         private bool teamListFirstLoad = true; 
         private bool firstPokemonUpdate = false; // Permettre la mise à jour de l'affichage du 1er poke 
 
         // Event lors du changement (SWITCH) du pokémon sélectionné
         private void teamListImageView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            canUpdate = false;
             ListView lv = ((ListView)sender);
             if (lv.SelectedItem == null) return;
-
-            // Empêcher switch de pokemon si fenêtre occupé
-            if(isWindowBusy && !teamListFirstLoad) {
-                if (!firstPokemonUpdate)
-                {
-                    lv.SelectedIndex = 0;
-                    cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
-                    return;
-                }
-                else firstPokemonUpdate = false;
-            }
-            else if(teamListFirstLoad) teamListFirstLoad = false;
 
             currentPokemon = applicationData.PokemonTeam[applicationData.PokemonTeam.ToList().FindIndex(x => x.GetHashCode() == ((Pokemon)lv.SelectedItem).GetHashCode())];
             cbAbility.SelectedIndex = currentPokemon.GetIndexOfWantedAbility();
@@ -497,7 +499,6 @@ namespace PKM_RDM_WPF
             // MOVES
             sp_FourMoves.DataContext = teamListImageView.SelectedItem; // Permet de mettre à jour les 4 moves (patch behinding)
             if (getFocusedTextBox() == null) ReloadDisplayPokemonMovepool();
-            canUpdate = true;
         }
 
         #region ABILITY
@@ -584,7 +585,6 @@ namespace PKM_RDM_WPF
         }
         private void tbEv_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (canUpdate != true) return;   
             TextBox tb = (TextBox)sender;
             if (String.IsNullOrEmpty(tb.Text)) return;
 
@@ -625,8 +625,7 @@ namespace PKM_RDM_WPF
         }
 
         private void slEv_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (canUpdate != true) return;   
+        {  
             Slider slider = (Slider)sender;
             if (currentPokemon == null) return;
 
@@ -1038,4 +1037,6 @@ namespace PKM_RDM_WPF
             WriteAppOptionsInData();
         }
     }
+
+    // TAKKERS 2024
 }

@@ -5,16 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PKM_RDM_WPF"
         mc:Ignorable="d"
-        Title="About the app" Height="300" Width="440" Icon="/img/exclamation_mark.png" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        Title="About the app" Height="300" Width="500" Icon="/img/exclamation_mark.png" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
         Style="{StaticResource MaterialDesignWindow}">
     <Grid>
         <StackPanel>
             <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
                 <Image Source="/img/icon.png" Width="100" Height="100"/>
-                <Label Content="Random Teambuilder" FontSize="29" VerticalContentAlignment="Center" FontWeight="Bold"></Label>
+                <Label FontSize="29" VerticalContentAlignment="Center" FontWeight="Bold" Margin="10,0,0,0">
+                    <Label.Content>
+                        <TextBlock>
+                            Pokemon Random
+                        <LineBreak/>
+                            Teambuilder
+                        </TextBlock>
+                    </Label.Content>
+                </Label>
             </StackPanel>
-            <TextBlock Margin="10,20,0,0">
-                <Hyperlink NavigateUri="https://creativecommons.org/licenses/by-nc-sa/4.0/">
+            <TextBlock Margin="10,10,0,0">
+                <Hyperlink NavigateUri="https://creativecommons.org/licenses/by-nc-sa/4.0/" RequestNavigate="hyperlink_RequestNavigate">
                 Creative Commons
                 </Hyperlink>
                 <LineBreak/>
@@ -22,9 +30,14 @@
                 <LineBreak/>
                 - Not affiliated with The Pokémon Company
                 <LineBreak/>
-                - Main window icons by Freepik
+                - Some main window icons are made by Freepik
             </TextBlock>
-            <Label Content="Made by takkers" FontWeight="Bold" FontSize="17" Margin="5,20,0,0"></Label>
+            <TextBlock Margin="10,10,0,0" FontSize="15">
+                <Hyperlink NavigateUri="https://github.com/takkersss/PKM_RDM_WPF/issues" RequestNavigate="hyperlink_RequestNavigate">
+                Report an issue
+                </Hyperlink>
+            </TextBlock>
+            <Label Content="Made by takkers" FontWeight="Bold" FontSize="17" Margin="5,10,0,0"></Label>
         </StackPanel>
     </Grid>
 </Window>

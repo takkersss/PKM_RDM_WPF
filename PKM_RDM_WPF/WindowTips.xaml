@@ -5,13 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PKM_RDM_WPF"
         mc:Ignorable="d"
-        Title="Tips" Height="270" Width="420" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
+        Title="Tips" Height="270" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterOwner"
         Style="{StaticResource MaterialDesignWindow}">
     <Grid>
-        <TextBlock Margin="10,10,10,10">
-            - You can double-click on a Pokémon to change it using <LineBreak/> a dropdown list and a search bar.
+        <TextBlock Margin="10,10,10,10" FontSize="15">
+            - Double-click on a Pokémon to switch it. You can search your <LineBreak/>
+            Pokémon by name or you can also randomize it. Then click Switch.
             <LineBreak/>- You can hover your mouse over the ability to see its effect.
             <LineBreak/>- The "Copy Team" button copies the team in Showdown! format <LineBreak/> into the clipboard
+            <LineBreak/>- You can sort moves by power or STAB types by clicking on the <LineBreak/>
+            header of the move list.
+            <LineBreak/>- You can save and load your team by clicking top right buttons. <LineBreak/>
+            Don't forget to set a team name below.
+            <LineBreak/>- Each button/checkbox has a tooltip, you can make it appear <LineBreak/>
+            by hover it.
         </TextBlock>
     </Grid>
 </Window>
