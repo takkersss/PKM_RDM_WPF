@@ -36,3 +36,5 @@ I use https://pokeapi.co/ to retrieve Pokémon datas but there's many APIs that 
 - Not affiliated with The Pokémon Company
 
 ### Made by takkers
+
+[![APP PREVIEW](https://img.youtube.com/vi/mFRCXq8hb6I/0.jpg)](https://youtu.be/mFRCXq8hb6I?si=JWoRq8OCvAzw1anA&t=472)
